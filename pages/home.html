@@ -1,0 +1,308 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Статистика</h3>
+  </div>
+  <div class="panel-body">
+	<ul class="nav nav-pills">
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Висота блокчейну, тобто загальна кількість блоків у ланцюжку блоків, включно з нульовим."><i class="fa fa-bars"></i> Висота: <span id="networkHeight"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швидкість: <span id="networkHashrate"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Коефіцієнт при якому за поточної швидкості хешування блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Складність: <span id="networkDifficulty"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість проведених транзакцій у мережі (не враховуючи виплати винагороди за карбування)."><i class="fa fa fa-exchange"></i> Транзакції: <span id="networkTransactions"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість карбованців, випущена в обіг."><i class="fa fa-money"></i> Емісія: <span id="totalCoins"></span></a></li>
+	</ul>
+  </div>
+</div>
+
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+  
+	<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Непідтвержені транзакції 
+  
+	<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Свіжі транзакції які ще потрапили у блок та очікують підтвердження. Коли потраплять - стануть підтвердженими."><i class="fa fa-question-circle"></i></span>
+    </h3>
+	
+  </div>
+  <div class="panel-body">
+    
+	<div>
+		<div class="table-responsive">
+			<table class="table table-hover" id="mem_pool_table">
+				<thead>
+				<tr>
+					<th width="20%"><i class="fa fa-clock-o"></i> Дата і час</th>
+					<th width="15%"><i class="fa fa-money"></i> Сума</th>
+					<th width="10%"><i class="fa fa-tag"></i> Комісія</th>
+					<th width="10%"><i class="fa fa-archive"></i> Розмір</th>
+					<th width="45%"><i class="fa fa-paw"></i> Хеш</th>
+				</tr>
+				</thead>
+				<tbody id="mem_pool_rows">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+  </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Останні блоки</h3>
+  </div>
+  <div class="panel-body">
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th><strong>№</strong></th>
+				<th><i class="fa fa-archive"></i> Розмір</th>
+				<th><i class="fa fa-paw"></i> Хеш блоку</th>
+				<th><i class="fa fa-clock-o"></i> Дата і час</th>
+				<th><i class="fa fa-bars"></i> Транзакції</th>
+			</tr>
+			</thead>
+			<tbody id="blocks_rows">
+
+			</tbody>
+		</table>
+	</div>
+
+	<p class="text-center">
+		<button type="button" class="btn btn-default" id="loadMoreBlocks">Завантажити більше</button>
+	</p>
+	
+  </div>
+</div>
+<script>
+
+    currentPage = {
+        destroy: function(){
+            if (xhrGetBlocks) xhrGetBlocks.abort();
+        },
+        init: function(){
+			renderLastBlock();
+            renderInitialBlocks();
+			getPoolTransactions();
+        },
+        update: function(){
+            updateText('networkHeight', lastStats.height.toString());
+            updateText('networkTransactions', lastStats.tx_count.toString());
+            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/s');
+            updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
+			
+			renderLastBlock();
+            renderInitialBlocks();
+			getPoolTransactions();
+        }
+    };
+	
+var block;
+
+function renderLastBlock(){
+$.ajax({
+    url: api + '/json_rpc',
+    method: "POST",
+    data: JSON.stringify({
+          jsonrpc:"2.0",
+          id: "test",
+          method:"getlastblockheader",
+          params: {
+  
+                }
+    }),
+    dataType: 'json',
+    cache: 'false',
+    success: function(data){
+		last_block_hash = data.result.block_header.hash;
+		$.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"f_block_json",
+				params: {
+				    hash: last_block_hash
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			block = data.result.block;
+				updateText('totalCoins', getReadableCoins(block.alreadyGeneratedCoins,2));
+			}
+		});
+    }
+});				
+}
+	
+var xhrGetBlocks;
+$('#loadMoreBlocks').click(function(){
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+        xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: $('#blocks_rows').children().last().data('height')
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+                renderBlocks(data.result.blocks);
+            }
+    });
+});	
+	
+	
+    function renderInitialBlocks(){
+        if (xhrGetBlocks) xhrGetBlocks.abort();
+		
+		
+        xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: lastStats.last_known_block_index
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+                renderBlocks(data.result.blocks);
+            }
+        });
+    };
+
+
+   
+
+
+    function getBlockRowElement(block, jsonString){
+
+        
+        var row = document.createElement('tr');
+        row.setAttribute('data-json', jsonString);
+        row.setAttribute('data-height', block.height);
+        row.setAttribute('id', 'blockRow' + block.height);
+        row.setAttribute('title', block.hash);
+        var columns =
+            '<td>' + block.height + '</td>' +
+            '<td>' + block.cumul_size + '</td>' +
+            '<td>' + formatBlockLink(block.hash) + '</td>' +
+            '<td>' + formatDate(block.timestamp) + '</td>' +
+            '<td>' + block.tx_count + '</td>';
+
+        row.innerHTML = columns;
+
+        return row;
+    }
+
+    function renderBlocks(blocksResults){
+
+        var $blocksRows = $('#blocks_rows');
+
+        for (var i = 0; i < blocksResults.length; i ++){
+
+            var block = blocksResults[i];
+
+            var blockJson = JSON.stringify(block);
+
+            var existingRow = document.getElementById('blockRow' + block.height);
+
+            if (existingRow && existingRow.getAttribute('data-json') !== blockJson){
+                $(existingRow).replaceWith(getBlockRowElement(block, blockJson));
+            }
+            else if (!existingRow){
+
+                var blockElement = getBlockRowElement(block, blockJson);
+
+                var inserted = false;
+                var rows = $blocksRows.children().get();
+                for (var f = 0; f < rows.length; f++) {
+                    var bHeight = parseInt(rows[f].getAttribute('data-height'));
+                    if (bHeight < block.height){
+                        inserted = true;
+                        $(rows[f]).before(blockElement);
+                        break;
+                    }
+                }
+                if (!inserted)
+                    $blocksRows.append(blockElement);
+            }
+
+        }
+    }
+
+
+//  Karbovanets MemPool Transactions
+function getPoolTransactions(){
+
+var xhrGetPool = $.ajax({
+			
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_pool_json",
+                params: {
+  
+                }
+            }),
+            dataType: 'text',
+            cache: 'false',
+            success: function(data){
+			
+				var txsRows = document.getElementById('mem_pool_rows');
+				while (txsRows.firstChild) {
+					txsRows.removeChild(txsRows.firstChild);
+				}
+			
+				var rawTxs = data.split('"transactions":"').pop();
+				rawTxs = rawTxs.split('"}}')[0];
+				var txsArray = [];
+				txsArray = rawTxs.split('\n\n');
+				txsArray.forEach(function(tx, i) {
+					var arrayOfLines = tx.split('\n');
+					var hash = arrayOfLines[0].split(': ').pop();
+					if(hash != "") {
+						var timestamp = arrayOfLines[10].split(':').pop();
+						var amount = arrayOfLines[8].split(':').pop();
+						var fee = arrayOfLines[9].split(':').pop();
+						var size = arrayOfLines[1].split(':').pop();
+						var row;
+						var row = document.createElement('tr');
+							var columns =
+								'<td>' + formatDate(timestamp) + '</td>' +
+								'<td>' + getReadableCoins(amount, 4, true) + '</td>' +
+								'<td>' + getReadableCoins(fee, 4, true) + '</td>' +
+								'<td>' + size + '</td>' +
+								'<td>' + formatPaymentLink(hash) + '</td>';
+						row.innerHTML = columns;
+						txsRows.append(row);
+					}
+				});
+			}
+    });
+};
+
+
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+	
+</script>

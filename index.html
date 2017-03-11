@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="icon" type="image/icon" href="favicon.ico" >
+    <title>Карбованець (&#1180;) Оглядач блокчейну</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <link href="css/themes/hero/bootstrap.min.css" rel="stylesheet">
+    <link href="css/karbowanec.css" rel="stylesheet">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <script src="config.js"></script>
+</head>
+<body>
+<script>
+	
+	var blockchainExplorer = "/?hash={id}#blockchain_block";
+	var transactionExplorer = "/?hash={id}#blockchain_transaction";
+
+    function getTransactionUrl(id) {
+        return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
+    }
+    
+    $.fn.update = function(txt){
+        var el = this[0];
+        if (el.textContent !== txt)
+            el.textContent = txt;
+        return this;
+    };
+
+    function updateTextClasses(className, text){
+        var els = document.getElementsByClassName(className);
+        for (var i = 0; i < els.length; i++){
+            var el = els[i];
+            if (el.textContent !== text)
+                el.textContent = text;
+        }
+    }
+
+    function updateText(elementId, text){
+        var el = document.getElementById(elementId);
+        if (el.textContent !== text){
+            el.textContent = text;
+        }
+        return el;
+    }
+
+    function updateTextLinkable(elementId, text){
+        var el = document.getElementById(elementId);
+        if (el.innerHTML !== text){
+            el.innerHTML = text;
+        }
+        return el;
+    }
+
+    var currentPage;
+    var lastStats;
+
+
+    function getReadableHashRateString(hashrate){
+        var i = 0;
+        var byteUnits = [' H', ' KH', ' MH', ' GH', ' TH', ' PH' ];
+        while (hashrate > 1024){
+            hashrate = hashrate / 1024;
+            i++;
+        }
+        return hashrate.toFixed(2) + byteUnits[i];
+    }
+	
+	function getReadableDifficultyString(difficulty, precision){
+		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
+		if (typeof precision === 'undefined') precision = 0;
+		var units = ['', 'k', 'M', 'G', 'T', 'P'],
+            number = Math.floor(Math.log(difficulty) / Math.log(1000));
+		if (units[number] === undefined || units[number] === null) {
+            return 0
+        }
+        return (difficulty / Math.pow(1000, Math.floor(number))).toFixed(precision) + ' ' +  units[number];
+    }
+	
+    function formatBlockLink(hash){
+        return '<a href="' + getBlockchainUrl(hash) + '">' + hash + '</a>';
+    }
+
+    function getReadableCoins(coins, digits, withoutSymbol){
+        var amount = (parseInt(coins || 0) / coinUnits).toFixed(digits || coinUnits.toString().length - 1);
+        return amount + (withoutSymbol ? '' : (' ' + symbol));
+    }
+
+    function formatDate(time){
+        if (!time) return '';
+        return new Date(parseInt(time) * 1000).toLocaleString();
+    }
+	
+	function formatPaymentLink(hash){
+        return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
+    }
+	
+    function pulseLiveUpdate(){
+        var stats_update = document.getElementById('stats_updated');
+        stats_update.style.transition = 'opacity 100ms ease-out';
+        stats_update.style.opacity = 1;
+        setTimeout(function(){
+            stats_update.style.transition = 'opacity 7000ms linear';
+            stats_update.style.opacity = 0;
+        }, 500);
+    }
+
+    window.onhashchange = function(){
+        routePage();
+    };
+
+
+    function fetchLiveStats() {
+        $.ajax({
+            url: api + '/getinfo',
+            dataType: 'json',
+			type: 'GET',
+            cache: 'false'
+        }).done(function(data){
+            pulseLiveUpdate();
+            lastStats = data;
+            updateIndex();
+            currentPage.update();
+        }).always(function () {
+			setTimeout(function() {
+				fetchLiveStats();
+			}, refreshDelay);
+        });
+    }
+
+    function floatToString(float) {
+        return float.toFixed(6).replace(/[0\.]+$/, '');
+    }
+
+
+    var xhrPageLoading;
+    function routePage(loadedCallback) {
+
+        if (currentPage) currentPage.destroy();
+        $('#page').html('');
+        $('#loading').show();
+
+        if (xhrPageLoading)
+            xhrPageLoading.abort();
+
+        $('.hot_link').parent().removeClass('active');
+        var $link = $('a.hot_link[href="' + (window.location.hash || '#') + '"]');
+
+        $link.parent().addClass('active');
+        var page = $link.data('page');
+
+        xhrPageLoading = $.ajax({
+            url: 'pages/' + page,
+            cache: false,
+            success: function (data) {
+                $('#loading').hide();
+                $('#page').show().html(data);
+                currentPage.init();
+                currentPage.update();
+                if (loadedCallback) loadedCallback();
+            }
+        });
+    }
+
+    function getBlockchainUrl(id) {
+        return blockchainExplorer.replace('{id}', id);
+    }
+
+    $(function(){
+        $.get(api + '/getinfo', function(data){
+            lastStats = JSON.parse(data);
+            routePage(fetchLiveStats);
+        });
+    });
+	
+	function updateIndex(){
+    
+    }
+
+    // Blockexplorer functions
+    urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+           return null;
+        }
+        else{
+           return results[1] || 0;
+        }
+    }
+
+	$(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Меню</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand " href="/"><span id="coinIcon">&#1180;</span> <strong>Карбо</strong>ванець</a>
+			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
+        </div>
+		
+        <div class="collapse navbar-collapse">
+		 
+            <ul class="nav navbar-nav navbar-left explorer_menu">
+
+			    <li><a class="hot_link" data-page="home.html" href="#">
+                    <i class="fa fa-cubes" aria-hidden="true"></i> Оглядач
+                </a></li>
+				
+				<li><a class="hot_link" data-page="pools.html" href="#pools">
+                    <i class="fa fa-gavel" aria-hidden="true"></i> Пули
+                </a></li>
+
+ 			    <li><a  class="hot_link" href="/en">
+                    <i class="fa fa-language" aria-hidden="true"></i> English
+                </a></li>
+	<!-- //-->			
+
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Блок
+                </a></li>
+
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Транзакція
+                </a></li>
+
+                <li><a style="display:none;" class="hot_link" data-page="support.html" href="#support">
+                    <i class="fa fa-comments"></i> Допомога
+                </a></li> 
+
+<!-- //-->
+            </ul>
+            
+					
+			<div class="nav col-md-6 navbar-right explorer-search">
+				<div class="input-group">
+					<input class="form-control" placeholder="Пошук за номером блоку / хешем блоку / хешем транзакції" id="txt_search">
+					<span class="input-group-btn"><button class="btn btn-default" type="button" id="btn_search">
+						<span><i class="fa fa-search"></i> Шукати</span>
+					</button></span>
+				</div>
+			</div>
+		  
+		  
+		  
+		</div>
+	  </div>
+</div>
+
+	
+<script>
+
+$('#btn_search').click(function(e) {
+
+var text = document.getElementById('txt_search').value;
+// window.location.href = getBlockchainUrl(text);
+
+function GetSearchBlockbyHeight(){
+
+	var block, xhrGetSearchBlockbyHeight;
+    if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
+	  
+			xhrGetSearchBlockbyHeight = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "blockbyheight",
+                method:"getblockheaderbyheight",
+                params: {
+                   height: parseInt(text)
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+                block = data.result.block_header;
+				window.location.href = getBlockchainUrl(block.hash);
+            }
+        });
+}
+
+function GetSearchBlock(){
+var block, xhrGetSearchBlock;
+	if (xhrGetSearchBlock) xhrGetSearchBlock.abort();
+			xhrGetSearchBlock = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "GetSearchBlock",
+                method:"f_block_json",
+                params: {
+                   hash: text // document.getElementById('txt_search').value // $('#txt_search').attr('value')
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+			success: function(data){
+				if(data.result){
+					block = data.result.block;
+					// window.location.href = getBlockchainUrl(text);
+					window.location.href = getBlockchainUrl(block.hash);
+				} else if(data.error) {
+					window.location.href = transactionExplorer.replace('{id}', text);
+				}	
+			}		
+    });
+}
+
+if ( text.length < 64 ) {
+	GetSearchBlockbyHeight();
+}
+if ( text.length == 64 ) {
+GetSearchBlock();
+}
+
+e.preventDefault();
+
+});
+
+$('#txt_search').keyup(function(e){
+        if(e.keyCode === 13)
+            $('#btn_search').click();
+});
+</script>
+
+
+<div class="container">
+
+    <div id="page"></div>
+
+    <p id="loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
+
+</div>
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-4 col-sm-6">
+				<p>
+					<small>
+						&copy; 2017 Карбованець. 
+					</small>
+				</p>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-6">
+				<p>
+					<small>
+					<!-- This copyright should be left intact -->
+				
+					Працює на <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a><br />
+		
+					<span class="text-muted">Частково використовує <strong>cryptonote-universal-pool</strong><br />
+					який роповсюджується за ліцензією <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
+				</small>
+			</p>
+		
+		</div>
+    </div>
+	<a href="#" class="scrollup"><i class="fa fa-chevron-circle-up"></i></a>
+	<script type="text/javascript">
+			jQuery(function($) { $(document).ready(function() {
+				$(window).scroll(function(){
+					if ($(this).scrollTop() > 500) {
+						$('.scrollup').fadeIn();
+					} else {
+						$('.scrollup').fadeOut();
+					}
+				}); 
+		
+				$('.scrollup').click(function(){
+					$("html, body").animate({ scrollTop: 0 }, 600);
+					return false;
+				});
+
+				$('.scrollup').css('opacity','0.3');
+		 
+				$('.scrollup').hover(function(){
+					$(this).stop().animate({opacity: 0.9}, 400);
+				 }, function(){
+					$(this).stop().animate({opacity: 0.3}, 400);
+				});  
+					
+			});});
+	</script>
+</footer>
+
+
+</body>
+</html>
