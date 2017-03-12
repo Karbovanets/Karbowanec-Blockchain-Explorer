@@ -12,37 +12,33 @@
 	}
 </style>
 
-
-	<div class="row">
-		<div class="col-lg-12">
+<div class="container">
+        <div class="row">
+			<div class="col-lg-12">
 			<div class="blocksStatHolder">
-				<span><i class="fa fa-tachometer"></i> Швидкість мережі*: <span id="totalPoolsHashrate"></span></span>
+				<span><i class="fa fa-tachometer"></i> Network hashrate*: <span id="totalPoolsHashrate"></span></span>
 			</div>
 		</div>
-	</div>
-
-<div class="container">
-	<div class="row">
-		<div class="table-responsive">
-			<table id="network-hash" class="table table-hover">
-				<thead>
-					<tr>
-						<th><span id="symbol"></span> Пули</th>
-						<th><i class="fa fa-bars"></i> Висота</th>
-						<th><i class="fa fa-tachometer"></i> Хешрейт</th>
-						<th><i class="fa fa-group"></i> Майнери</th>
-						<th><i class="fa fa-money"></i> Комісії</th>
-						<th><i class="fa fa-clock-o"></i> Останній блок</th>
-					</tr>
-				</thead>
-				<tbody id="pools_rows">
-				</tbody>
-			</table>
-		</div>
-	</div>
 </div>
 
+<br />
 
+<div class="table-responsive">
+    <table id="network-hash" class="table table-hover">
+        <thead>
+            <tr>
+                <th><span id="symbol"></span> Pools</th>
+                <th><i class="fa fa-bars"></i> Height</th>
+                <th><i class="fa fa-tachometer"></i> Hashrate</th>
+                <th><i class="fa fa-group"></i> Miners</th>
+                <th><i class="fa fa-money"></i> Total Fee</th>
+                <th><i class="fa fa-clock-o"></i> Last block found</th>
+            </tr>
+        </thead>
+        <tbody id="pools_rows">
+        </tbody>
+    </table>
+</div>
 
 
 <div class="container">
@@ -58,13 +54,12 @@
 <div class="container">
         <div class="row">
 			<div class="col-lg-12">
-				<small style="font-size: 0.55em;">* Загальна швидкість усіх відомих пулів, перелічених вище.</small>
+				<small style="font-size: 0.55em;">* Total known pools hashrate.</small>
 			</div>
 		</div>
 </div>
 
-
-<script src="js/Chart.bundle.min.js"></script>
+<script src="/js/Chart.bundle.min.js"></script>
 <script>
 window.NETWORK_STAT_MAP = new Map(networkStat[symbol.toLowerCase()]);
 window.poolNames = [];
