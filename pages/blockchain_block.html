@@ -29,7 +29,7 @@
         <thead>
         <tr>
             <th><i class="fa fa-paw"></i> Хеш</th>
-            <th><i class="fa fa-paw"></i> Комісія</th>
+            <th><i class="fa fa-percent"></i> Комісія</th>
             <th><i class="fa fa-money"></i> Сума</th>
             <th><i class="fa fa-arrows"></i> Розмір</th>
         </tr>
@@ -56,26 +56,30 @@
 
     function getBlock(){
         if (xhrGetBlock) xhrGetBlock.abort();
-        xhrGetBlock = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_block_json",
-                params: {
-                    hash: urlParam('hash')
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-                block = data.result.block;
-				
-				renderBlock(block);
-
-			}
-		});
+		var searchBlk = $.parseJSON(sessionStorage.getItem('searchBlock'));
+		if (searchBlk) {
+			renderBlock(searchBlk);
+		} else {
+			xhrGetBlock = $.ajax({
+				url: api + '/json_rpc',
+				method: "POST",
+				data: JSON.stringify({
+					jsonrpc:"2.0",
+					id: "test",
+					method:"f_block_json",
+					params: {
+						hash: urlParam('hash')
+					}
+				}),
+				dataType: 'json',
+				cache: 'false',
+				success: function(data){
+					block = data.result.block;
+					renderBlock(block);
+				}
+			});
+		}
+		sessionStorage.removeItem('searchBlock');
     }
 	
 	function renderBlock(block){

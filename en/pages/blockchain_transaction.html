@@ -53,50 +53,63 @@
 </div>
 
 <script>
-    var xhrGetTransaction;
+    var xhrGetTransaction, transaction;
 
     currentPage = {
         destroy: function(){
             if (xhrGetTransaction) xhrGetTransaction.abort();
         },
         init: function(){
-            renderTransaction();
+            getTransaction();
         },
         update: function(){
         }
     };
 
-    function renderTransaction(){
+    function getTransaction(){
         if (xhrGetTransaction) xhrGetTransaction.abort();
-        xhrGetTransaction = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_transaction_json",
-                params: {
-                    hash: urlParam('hash')
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-                transaction = data.result.txDetails;
-                inputs = data.result.tx.vin;
-                outputs = data.result.tx.vout;
-                block = data.result.block;
+		var searchTx = $.parseJSON(sessionStorage.getItem('searchTransaction'));
+		if (searchTx) {
+			renderTransaction(searchTx);
+		} else {
+			xhrGetTransaction = $.ajax({
+				url: api + '/json_rpc',
+				method: "POST",
+				data: JSON.stringify({
+					jsonrpc:"2.0",
+					id: "test",
+					method:"f_transaction_json",
+					params: {
+						hash: urlParam('hash')
+					}
+				}),
+				dataType: 'json',
+				cache: 'false',
+				success: function(data){
+					var tx = data.result;
+					renderTransaction(tx);
+				}
+			});
+		}
+		sessionStorage.removeItem('searchTransaction');
+	}
+
+	function renderTransaction(transaction){
+				var details = transaction.txDetails;
+                inputs = transaction.tx.vin;
+                outputs = transaction.tx.vout;
+                block = transaction.block;
 				
-                updateText('transaction.hash', transaction.hash);
-                updateText('transaction.amount_out', getReadableCoins(transaction.amount_out));
-                updateText('transaction.fee', getReadableCoins(transaction.fee));
-                updateText('transaction.mixin', transaction.mixin);
-                if (!transaction.mixin)
+                updateText('transaction.hash', details.hash);
+                updateText('transaction.amount_out', getReadableCoins(details.amount_out));
+                updateText('transaction.fee', getReadableCoins(details.fee));
+                updateText('transaction.mixin', details.mixin);
+                if (!details.mixin)
                     $('#div_transaction_mixin').hide();
-                updateText('transaction.paymentId', transaction.paymentId);
-                if (!transaction.paymentId)
+                updateText('transaction.paymentId', details.paymentId);
+                if (!details.paymentId)
                     $('#div_transaction_paymentId').hide();
-                updateText('transaction.size', transaction.size);
+                updateText('transaction.size', details.size);
 
 				if (!block.hash){
 					$('#tx_block').hide();
@@ -109,10 +122,7 @@
 				
                 renderInputs(inputs);
                 renderOutputs(outputs);
-            }
-        });
-    }
-
+	}
 
     function getInputCells(input){
         return '<td>' + getReadableCoins(input.value.amount) + '</td>' +

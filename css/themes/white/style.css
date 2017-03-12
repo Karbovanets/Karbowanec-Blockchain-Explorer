@@ -48,11 +48,7 @@ h6,
   -webkit-font-smoothing: antialiased;
   font-family: 'Roboto Condensed', Arial, sans-serif;
 }
-h3,
-.h3 {
-  font-size: 32px;
-  margin-bottom: 14px;
-}
+
 .navbar-inverse {
   background-color: #2D5768;
   border-color: #f9f9f8;

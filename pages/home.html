@@ -92,7 +92,7 @@
         update: function(){
             updateText('networkHeight', lastStats.height.toString());
             updateText('networkTransactions', lastStats.tx_count.toString());
-            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/s');
+            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
             updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
 			
 			renderLastBlock();

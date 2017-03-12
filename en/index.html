@@ -9,18 +9,18 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="/css/themes/white/style.css" rel="stylesheet">
+    <link href="/css/themes/dark/style.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
     <script src="/config.js"></script>
 </head>
 <body>
 <script>
 
-	var blockchainExplorer = "/en/?hash={id}#blockchain_block";
+	var blockchainExplorer 	= "/en/?hash={id}#blockchain_block";
 	var transactionExplorer = "/en/?hash={id}#blockchain_transaction";
-
+	var paymentIdExplorer 	= "/en/?hash={id}#blockchain_payment_id";
 	
     function getTransactionUrl(id) {
         return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
@@ -234,7 +234,9 @@
 
                 <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
                 </a></li>
-
+				
+				<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html" href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
+                </a></li>
 
                 <li><a  style="display:none;" class="hot_link" data-page="support.html" href="#support">
                     <i class="fa fa-comments"></i> Help
@@ -246,7 +248,7 @@
 					
 			<div class="nav col-md-6 navbar-right explorer-search">
 				<div class="input-group">
-					<input class="form-control" placeholder="Search by block height / block hash / transaction hash" id="txt_search">
+					<input class="form-control" placeholder="Search by block height / hash, transaction hash, payment id" id="txt_search">
 					<span class="input-group-btn"><button class="btn btn-default" type="button" id="btn_search">
 						<span><i class="fa fa-search"></i> Search</span>
 					</button></span>
@@ -261,11 +263,9 @@
 
 	
 <script>
-
 $('#btn_search').click(function(e) {
 
 var text = document.getElementById('txt_search').value;
-// window.location.href = getBlockchainUrl(text);
 
 function GetSearchBlockbyHeight(){
 
@@ -286,8 +286,12 @@ function GetSearchBlockbyHeight(){
             dataType: 'json',
             cache: 'false',
             success: function(data){
-                block = data.result.block_header;
-				window.location.href = getBlockchainUrl(block.hash);
+				if(data.result){
+					block = data.result.block_header;
+					window.location.href = getBlockchainUrl(block.hash);
+				} else if(data.error) {
+					wrongSearchAlert();
+				}
             }
         });
 }
@@ -295,7 +299,7 @@ function GetSearchBlockbyHeight(){
 function GetSearchBlock(){
 var block, xhrGetSearchBlock;
 	if (xhrGetSearchBlock) xhrGetSearchBlock.abort();
-			xhrGetSearchBlock = $.ajax({
+		xhrGetSearchBlock = $.ajax({
             url: api + '/json_rpc',
             method: "POST",
             data: JSON.stringify({
@@ -303,7 +307,7 @@ var block, xhrGetSearchBlock;
                 id: "GetSearchBlock",
                 method:"f_block_json",
                 params: {
-                   hash: text // document.getElementById('txt_search').value // $('#txt_search').attr('value')
+                   hash: text
                 }
             }),
             dataType: 'json',
@@ -311,25 +315,88 @@ var block, xhrGetSearchBlock;
 			success: function(data){
 				if(data.result){
 					block = data.result.block;
-					// window.location.href = getBlockchainUrl(text);
+					sessionStorage.setItem('searchBlock', JSON.stringify(block));
 					window.location.href = getBlockchainUrl(block.hash);
 				} else if(data.error) {
-					window.location.href = transactionExplorer.replace('{id}', text);
-				}	
-			}		
-    });
+					$.ajax({
+						url: api + '/json_rpc',
+						method: "POST",
+						data: JSON.stringify({
+							jsonrpc:"2.0",
+							id: "test",
+							method:"f_transaction_json",
+							params: {
+								hash: text
+							}
+						}),
+						dataType: 'json',
+						cache: 'false',
+						success: function(data){
+							  if(data.result){
+								sessionStorage.setItem('searchTransaction', JSON.stringify(data.result));
+								window.location.href = transactionExplorer.replace('{id}', text);
+							  } else if(data.error) {
+								xhrGetTsx =  $.ajax({
+									url: api + '/json_rpc',
+									method: "POST",
+									data: JSON.stringify({
+										jsonrpc:"2.0",
+										id: "test",
+										method:"k_transactions_by_payment_id",
+										params: {
+											payment_id: text
+										}
+									}),
+									dataType: 'json',
+									cache: 'false',
+									success: function(data){
+										if(data.result){
+											txsByPaymentId = data.result.transactions;
+											sessionStorage.setItem('txsByPaymentId', JSON.stringify(txsByPaymentId));
+											window.location.href = paymentIdExplorer.replace('{id}', text);
+										} else if(data.error) {
+											$('#page').after(
+												'<div class="alert alert-warning alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
+													'<button type="button" class="close" ' + 
+															'data-dismiss="alert" aria-hidden="true">' + 
+														'&times;' + 
+													'</button>' + 
+													'We could not find anything.' + 
+												 '</div>');
+										}
+									}
+								});
+							  
+							  }
+						}
+					});
+				}
+			}	
+		});
 }
 
 if ( text.length < 64 ) {
 	GetSearchBlockbyHeight();
-}
-if ( text.length == 64 ) {
-GetSearchBlock();
+} else if ( text.length == 64 ) {
+	GetSearchBlock();
+} else {
+	wrongSearchAlert();
 }
 
 e.preventDefault();
 
 });
+
+function wrongSearchAlert() {
+	$('#page').after(
+		'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
+		'<button type="button" class="close" ' + 
+		'data-dismiss="alert" aria-hidden="true">' + 
+		'&times;' + 
+		'</button>' + 
+		'<strong>Wrong search query!</strong><br /> Please enter block height or hash, transaction hash, or payment id.' + 
+		'</div>');
+}
 
 $('#txt_search').keyup(function(e){
         if(e.keyCode === 13)
