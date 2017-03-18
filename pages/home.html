@@ -9,6 +9,7 @@
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швидкість: <span id="networkHashrate"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Коефіцієнт при якому за поточної швидкості хешування блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Складність: <span id="networkDifficulty"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість проведених транзакцій у мережі (не враховуючи виплати винагороди за карбування)."><i class="fa fa fa-exchange"></i> Транзакції: <span id="networkTransactions"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Поточна винагорода (за останній викарбуваний блок)."><i class="fa fa-money"></i> Нагорода: <span id="currentReward"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість карбованців, випущена в обіг."><i class="fa fa-money"></i> Емісія: <span id="totalCoins"></span></a></li>
 	</ul>
   </div>
@@ -32,8 +33,8 @@
 			<table class="table table-hover" id="mem_pool_table">
 				<thead>
 				<tr>
-					<th width="20%"><i class="fa fa-clock-o"></i> Дата і час</th>
-					<th width="15%"><i class="fa fa-money"></i> Сума</th>
+					<th width="25%"><i class="fa fa-clock-o"></i> Дата і час</th>
+					<th width="10%"><i class="fa fa-money"></i> Сума</th>
 					<th width="10%"><i class="fa fa-tag"></i> Комісія</th>
 					<th width="10%"><i class="fa fa-archive"></i> Розмір</th>
 					<th width="45%"><i class="fa fa-paw"></i> Хеш</th>
@@ -48,7 +49,6 @@
   </div>
 </div>
 
-
 <div class="panel panel-default">
   <div class="panel-heading">
 	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Останні блоки</h3>
@@ -60,9 +60,10 @@
 			<thead>
 			<tr>
 				<th><strong>№</strong></th>
+				<th><i class="fa fa-clock-o"></i> Дата і час</th>
 				<th><i class="fa fa-archive"></i> Розмір</th>
 				<th><i class="fa fa-paw"></i> Хеш блоку</th>
-				<th><i class="fa fa-clock-o"></i> Дата і час</th>
+				<th><i class="fa fa-unlock-alt"></i> Складність</th>
 				<th><i class="fa fa-bars"></i> Транзакції</th>
 			</tr>
 			</thead>
@@ -85,9 +86,7 @@
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
-			renderLastBlock();
-            renderInitialBlocks();
-			getPoolTransactions();
+
         },
         update: function(){
             updateText('networkHeight', lastStats.height.toString());
@@ -98,6 +97,7 @@
 			renderLastBlock();
             renderInitialBlocks();
 			getPoolTransactions();
+
         }
     };
 	
@@ -135,12 +135,13 @@ $.ajax({
 			success: function(data){
 			block = data.result.block;
 				updateText('totalCoins', getReadableCoins(block.alreadyGeneratedCoins,2));
+				updateText('currentReward', getReadableCoins(block.baseReward,4));
 			}
 		});
     }
 });				
 }
-	
+
 var xhrGetBlocks;
 $('#loadMoreBlocks').click(function(){
     if (xhrGetBlocks) xhrGetBlocks.abort();
@@ -161,12 +162,17 @@ $('#loadMoreBlocks').click(function(){
                 renderBlocks(data.result.blocks);
             }
     });
-});	
-	
-	
+});
+
     function renderInitialBlocks(){
         if (xhrGetBlocks) xhrGetBlocks.abort();
 		
+		var loadHeight;
+		
+		if (urlParam('height')) 
+				loadHeight = parseInt(urlParam('height'));
+            else
+				loadHeight = lastStats.last_known_block_index;
 		
         xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -176,7 +182,7 @@ $('#loadMoreBlocks').click(function(){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    height: lastStats.last_known_block_index
+                    height: loadHeight
                 }
             }),
             dataType: 'json',
@@ -187,27 +193,24 @@ $('#loadMoreBlocks').click(function(){
         });
     };
 
-
-   
-
-
     function getBlockRowElement(block, jsonString){
 
-        
         var row = document.createElement('tr');
         row.setAttribute('data-json', jsonString);
         row.setAttribute('data-height', block.height);
         row.setAttribute('id', 'blockRow' + block.height);
         row.setAttribute('title', block.hash);
+		var dateTime = new Date(block.timestamp * 1000).toISOString();
         var columns =
             '<td>' + block.height + '</td>' +
-            '<td>' + block.cumul_size + '</td>' +
-            '<td>' + formatBlockLink(block.hash) + '</td>' +
-            '<td>' + formatDate(block.timestamp) + '</td>' +
+            '<td>' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
+			'<td>' + block.cumul_size + '</td>' +
+			'<td>' + formatBlockLink(block.hash) + '</td>' +
+            '<td>' + block.difficulty + '</td>' +
             '<td>' + block.tx_count + '</td>';
-
+			
         row.innerHTML = columns;
-
+		
         return row;
     }
 
@@ -240,11 +243,12 @@ $('#loadMoreBlocks').click(function(){
                         break;
                     }
                 }
-                if (!inserted)
+                if (!inserted) {
                     $blocksRows.append(blockElement);
+				}
             }
-
         }
+		$("time.timeago").timeago();
     }
 
 
@@ -284,16 +288,16 @@ var xhrGetPool = $.ajax({
 						var amount = arrayOfLines[8].split(':').pop();
 						var fee = arrayOfLines[9].split(':').pop();
 						var size = arrayOfLines[1].split(':').pop();
-						var row;
 						var row = document.createElement('tr');
-							var columns =
-								'<td>' + formatDate(timestamp) + '</td>' +
+						var columns =
+								'<td>' + formatDate(timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
 								'<td>' + getReadableCoins(amount, 4, true) + '</td>' +
 								'<td>' + getReadableCoins(fee, 4, true) + '</td>' +
 								'<td>' + size + '</td>' +
 								'<td>' + formatPaymentLink(hash) + '</td>';
 						row.innerHTML = columns;
-						txsRows.append(row);
+						txsRows.prepend(row);
+						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
 				});
 			}

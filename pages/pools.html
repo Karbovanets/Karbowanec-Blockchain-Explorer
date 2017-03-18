@@ -7,7 +7,13 @@
 		text-align: center;
     }
 	
+	#pools_header > tr > th:first-child,
 	#pools_rows > tr > td:first-child {
+		text-align: left;
+	}
+	
+	#pools_header > tr > th:last-child,
+	#pools_rows > tr > td:last-child {
 		text-align: left;
 	}
 </style>
@@ -26,7 +32,7 @@
 		<div class="table-responsive">
 			<table id="network-hash" class="table table-hover">
 				<thead>
-					<tr>
+					<tr id="pools_header">
 						<th><span id="symbol"></span> Пули</th>
 						<th><i class="fa fa-bars"></i> Висота</th>
 						<th><i class="fa fa-tachometer"></i> Хешрейт</th>
@@ -58,7 +64,7 @@
 <div class="container">
         <div class="row">
 			<div class="col-lg-12">
-				<small style="font-size: 0.55em;">* Загальна швидкість усіх відомих пулів, перелічених вище.</small>
+				<small>* Загальна швидкість усіх відомих пулів, перелічених вище.</small>
 			</div>
 		</div>
 </div>
@@ -78,12 +84,15 @@ var poolsRefreshed = 0;
 				$.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
 					var d = new Date(parseInt(data.pool.lastBlockFound));
 					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-					$('#pools_rows').append('<tr><td id=host'+host+'><a target=blank href=http://'+host+'>'+host+'</a></td><td id=height'+host+'>'+data.network.height+'</td><td id=hashrate'+host+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners'+host+'>'+data.pool.miners+'</td><td id=totalFree'+host+'>'+calculateTotalFree(data)+'%</td><td id=lastFound'+host+'>'+datestring+'</td><</tr>');
+					
+					var agostring = $.timeago(d);
+					
+					$('#pools_rows').append('<tr><td id=host'+host+'><a target=blank href=http://'+host+'>'+host+'</a></td><td id=height'+host+'>'+data.network.height+'</td><td id=hashrate'+host+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners'+host+'>'+data.pool.miners+'</td><td id=totalFree'+host+'>'+calculateTotalFree(data)+'%</td><td><span id=lastFound'+host+'>'+datestring+'</span> (<span class="timeago" id="ago-'+host+'">'+agostring+'</span>)</td><</tr>');
+					
 					totalHashrate += parseInt(data.pool.hashrate);
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
 					poolNames.push(host);
 					poolHashrates.push(parseInt(data.pool.hashrate));
-					
 					window.colors.push(getRandomColor());
 					
 				});
@@ -97,14 +106,8 @@ var poolsRefreshed = 0;
         destroy: function(){
         },
         init: function(){
-		
-			
-			
         },
         update: function(){
-			
-
-			
         }
     };
 	
@@ -171,8 +174,13 @@ setInterval(function(){
                     updateText('miners'+host, data.pool.miners);
                     updateText('totalFree'+host, calculateTotalFree(data)+'%');
 					var d = new Date(parseInt(data.pool.lastBlockFound));
+					
 					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
                     updateText('lastFound'+host, datestring);
+					 
+                    var agostring = $.timeago(d);
+					updateText('ago-'+host, agostring);
+					
 					totalHashrate += parseInt(data.pool.hashrate);
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
                 });
@@ -183,7 +191,7 @@ setInterval(function(){
 
             });
 
-	}, 300000);
+	}, 240000);
 
 
 function refreshChart() {

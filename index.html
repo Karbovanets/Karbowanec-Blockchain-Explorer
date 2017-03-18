@@ -8,8 +8,8 @@
     <title>Карбованець (&#1180;) Оглядач блокчейну</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="/css/themes/dark/style.css" rel="stylesheet">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <link href="/css/themes/white/style.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
@@ -197,6 +197,42 @@
 	$(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
+	
+
+	// Ukrainian
+(function() {
+  function numpf(n, f, s, t) {
+    // f - 1, 21, 31, ...
+    // s - 2-4, 22-24, 32-34 ...
+    // t - 5-20, 25-30, ...
+    var n10 = n % 10;
+    if ( (n10 == 1) && ( (n == 1) || (n > 20) ) ) {
+      return f;
+    } else if ( (n10 > 1) && (n10 < 5) && ( (n > 20) || (n < 10) ) ) {
+      return s;
+    } else {
+      return t;
+    }
+  }
+
+  jQuery.timeago.settings.strings = {
+    prefixAgo: null,
+    prefixFromNow: "через",
+    suffixAgo: "тому",
+    suffixFromNow: null,
+    seconds: "кілька секунд",
+    minute: "хвилина",
+    minutes: function(value) { return numpf(value, "%d хвилина", "%d хвилини", "%d хвилин"); },
+    hour: "година",
+    hours: function(value) { return numpf(value, "%d година", "%d години", "%d годин"); },
+    day: "день",
+    days: function(value) { return numpf(value, "%d день", "%d дні", "%d днів"); },
+    month: "місяць",
+    months: function(value) { return numpf(value, "%d місяць", "%d місяці", "%d місяців"); },
+    year: "рік",
+    years: function(value) { return numpf(value, "%d рік", "%d роки", "%d років"); }
+  };
+})(); 
 </script>
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -222,6 +258,10 @@
 				
 				<li><a class="hot_link" data-page="pools.html" href="#pools">
                     <i class="fa fa-gavel" aria-hidden="true"></i> Пули
+                </a></li>
+				
+				<li><a class="hot_link" data-page="api.html" href="#api">
+                    <i class="fa fa-code" aria-hidden="true"></i> API
                 </a></li>
 
  			    <li><a  class="hot_link" href="/en">
@@ -405,13 +445,14 @@ $('#txt_search').keyup(function(e){
 });
 </script>
 
+<div id="content">
+	<div class="container">
 
-<div class="container">
+		<div id="page"></div>
 
-    <div id="page"></div>
+		<p id="loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
 
-    <p id="loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
-
+	</div>
 </div>
 
 <footer>
@@ -438,7 +479,8 @@ $('#txt_search').keyup(function(e){
 		
 		</div>
     </div>
-	<a href="#" class="scrollup"><i class="fa fa-chevron-circle-up"></i></a>
+</footer>
+<a href="#" class="scrollup"><i class="fa fa-chevron-circle-up"></i></a>
 	<script type="text/javascript">
 			jQuery(function($) { $(document).ready(function() {
 				$(window).scroll(function(){
@@ -464,8 +506,5 @@ $('#txt_search').keyup(function(e){
 					
 			});});
 	</script>
-</footer>
-
-
 </body>
 </html>

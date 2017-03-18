@@ -3,7 +3,7 @@ var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
-var ver = "1.0.1";
+var ver = "1.0.2";
 // pools stats by MainCoins
 var networkStat = {
     "krb": [

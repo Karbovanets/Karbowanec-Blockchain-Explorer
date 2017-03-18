@@ -9,6 +9,7 @@
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Difficulty: <span id="networkDifficulty"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks)."><i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions"></span></a></li>
+	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Current Base Reward (for last mined block)."><i class="fa fa-money"></i> Reward: <span id="currentReward"></span></a></li>
 	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins"></span></a></li>
 	</ul>
   </div>
@@ -60,9 +61,10 @@
 			<thead>
 			<tr>
 				<th><i class="fa fa-bars"></i> Height</th>
+				<th><i class="fa fa-clock-o"></i> Date &amp; time</th>
 				<th><i class="fa fa-archive"></i> Size</th>
 				<th><i class="fa fa-paw"></i> Block Hash</th>
-				<th><i class="fa fa-clock-o"></i> Date & time</th>
+				<th><i class="fa fa-unlock-alt"></i> Difficulty</th>
 				<th><i class="fa fa-bars"></i> Transactions</th>
 			</tr>
 			</thead>
@@ -85,9 +87,7 @@
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
-			renderLastBlock();
-            renderInitialBlocks();
-			getPoolTransactions();
+
         },
         update: function(){
             updateText('networkHeight', lastStats.height.toString());
@@ -135,6 +135,7 @@ $.ajax({
 			success: function(data){
 			block = data.result.block;
 				updateText('totalCoins', getReadableCoins(block.alreadyGeneratedCoins,2));
+				updateText('currentReward', getReadableCoins(block.baseReward,4));
 			}
 		});
     }
@@ -161,12 +162,17 @@ $('#loadMoreBlocks').click(function(){
                 renderBlocks(data.result.blocks);
             }
     });
-});	
-	
+});
 	
     function renderInitialBlocks(){
         if (xhrGetBlocks) xhrGetBlocks.abort();
 		
+		var loadHeight;
+		
+		if (urlParam('height')) 
+				loadHeight = parseInt(urlParam('height'));
+            else
+				loadHeight = lastStats.last_known_block_index;
 		
         xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -176,7 +182,7 @@ $('#loadMoreBlocks').click(function(){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    height: lastStats.last_known_block_index
+                    height: loadHeight
                 }
             }),
             dataType: 'json',
@@ -187,23 +193,20 @@ $('#loadMoreBlocks').click(function(){
         });
     };
 
-
-   
-
-
     function getBlockRowElement(block, jsonString){
-
         
         var row = document.createElement('tr');
         row.setAttribute('data-json', jsonString);
         row.setAttribute('data-height', block.height);
         row.setAttribute('id', 'blockRow' + block.height);
         row.setAttribute('title', block.hash);
+		var dateTime = new Date(block.timestamp * 1000).toISOString();
         var columns =
             '<td>' + block.height + '</td>' +
-            '<td>' + block.cumul_size + '</td>' +
-            '<td>' + formatBlockLink(block.hash) + '</td>' +
-            '<td>' + formatDate(block.timestamp) + '</td>' +
+            '<td>' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
+			'<td>' + block.cumul_size + '</td>' +
+			'<td>' + formatBlockLink(block.hash) + '</td>' +
+            '<td>' + block.difficulty + '</td>' +
             '<td>' + block.tx_count + '</td>';
 
         row.innerHTML = columns;
@@ -240,12 +243,13 @@ $('#loadMoreBlocks').click(function(){
                         break;
                     }
                 }
-                if (!inserted)
+                if (!inserted) {
                     $blocksRows.append(blockElement);
+				}
             }
-
         }
-    }
+		$("time.timeago").timeago();
+	}
 
 
 //  Karbovanets MemPool Transactions
@@ -287,13 +291,14 @@ var xhrGetPool = $.ajax({
 						var row;
 						var row = document.createElement('tr');
 							var columns =
-								'<td>' + formatDate(timestamp) + '</td>' +
+								'<td>' + formatDate(timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
 								'<td>' + getReadableCoins(amount, 4, true) + '</td>' +
 								'<td>' + getReadableCoins(fee, 4, true) + '</td>' +
 								'<td>' + size + '</td>' +
 								'<td>' + formatPaymentLink(hash) + '</td>';
 						row.innerHTML = columns;
-						txsRows.append(row);
+						txsRows.prepend(row);
+						$(row).find('.mtx-ago').timeago('update', new Date(block.timestamp * 1000).toISOString());
 					}
 				});
 			}
