@@ -1,21 +1,51 @@
 
-<div class="panel panel-default">
+<div class="panel panel-default" id="network-stats">
   <div class="panel-heading">
     <h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Stats</h3>
   </div>
   <div class="panel-body">
-	<ul class="nav nav-pills">
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Blockchain height, total amount of blocks starting from zero."><i class="fa fa-bars"></i> Height: <span id="networkHeight"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Difficulty: <span id="networkDifficulty"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks)."><i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Current Base Reward (for last mined block)."><i class="fa fa-money"></i> Reward: <span id="currentReward"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins"></span></a></li>
-	</ul>
+
+	<div class="row">
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Blockchain height, total amount of blocks starting from zero."><i class="fa fa-bars"></i> Height: <span id="networkHeight"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks)."><i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions"></span></a></li>
+				
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Current estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Average estimated network hash rate. Calculated by average difficulty."><i class="fa fa-clock-o"></i> Average Hash Rate: <span id="avgHashrate"></span></a></li>
+
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Difficulty: <span id="networkDifficulty"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Average difficulty by last 30 blocks."><i class="fa fa-lock"></i> Average Difficulty: <span id="avgDifficulty"></span></a></li>
+			
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Current Base Reward (for last mined block)."><i class="fa fa-certificate"></i> Reward: <span id="currentReward"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins"></span></a></li>
+			
+			</ul>
+		</div>
+	</div>
+    
   </div>
 </div>
-
-
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -33,11 +63,11 @@
 			<table class="table table-hover" id="mem_pool_table">
 				<thead>
 				<tr>
-					<th width="20%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
-					<th width="15%"><i class="fa fa-money"></i> Amount</th>
+					<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
+					<th width="10%"><i class="fa fa-money"></i> Amount</th>
 					<th width="10%"><i class="fa fa-tag"></i> Fee</th>
 					<th width="10%"><i class="fa fa-archive"></i> Size</th>
-					<th width="45%"><i class="fa fa-paw"></i> Hash</th>
+					<th width="40%"><i class="fa fa-paw"></i> Hash</th>
 				</tr>
 				</thead>
 				<tbody id="mem_pool_rows">
@@ -55,6 +85,17 @@
 	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Recent blocks</h3>
   </div>
   <div class="panel-body">
+	<div class="row">
+		<div class="col-sm-8 col-md-6 col-lg-5">
+			<div class="input-group">
+				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-arrow-left" aria-hidden="true"></i> Older</a>
+				<span class="input-group-addon">№</span>
+				<input id="goto-height" type="text" class="form-control" placeholder="Height">
+				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Go</a>
+				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+			</div>
+		</div>
+	</div>
 
 	<div class="table-responsive">
 		<table class="table table-hover">
@@ -87,20 +128,26 @@
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
-
+			renderInitialBlocks();
         },
         update: function(){
+			renderLastBlock();
             updateText('networkHeight', lastStats.height.toString());
             updateText('networkTransactions', lastStats.tx_count.toString());
-            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/s');
+            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
             updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
-			
-			renderLastBlock();
-            renderInitialBlocks();
+			$("time.timeago").timeago();
 			getPoolTransactions();
-        }
+			var currHeight = $('#blocks_rows').children().first().data('height');
+			if((currHeight + 31) > lastStats.last_known_block_index){
+				renderInitialBlocks();
+			}
+			if((currHeight + 31) < lastStats.last_known_block_index){
+				$('#next-page').removeClass('disabled');
+			}
+		}
     };
-	
+
 var block;
 
 function renderLastBlock(){
@@ -141,7 +188,7 @@ $.ajax({
     }
 });				
 }
-	
+
 var xhrGetBlocks;
 $('#loadMoreBlocks').click(function(){
     if (xhrGetBlocks) xhrGetBlocks.abort();
@@ -163,7 +210,84 @@ $('#loadMoreBlocks').click(function(){
             }
     });
 });
+
+$('#prev-page').click(function(e){
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	var currHeight = $('#blocks_rows').children().first().data('height');
+	var openHeight = (currHeight - 31 < 0) ? 0 : currHeight - 31;
 	
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: openHeight
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+                renderBlocks(data.result.blocks);
+            }
+    });
+	e.preventDefault();
+	
+	if((currHeight + 31) > lastStats.last_known_block_index){
+		$('#next-page').removeClass('disabled');
+	}
+	if((currHeight - 61) < 0){
+		$('#prev-page').addClass('disabled');
+	}
+});
+
+$('#next-page').click(function(e){
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	var currHeight = $('#blocks_rows').children().first().data('height');
+	var openHeight = (currHeight + 31 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + 31;
+	
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: openHeight
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+                renderBlocks(data.result.blocks);
+            }
+    });
+	e.preventDefault();
+	
+	if((currHeight + 61) > lastStats.last_known_block_index){
+		$('#next-page').addClass('disabled');
+	}
+	
+		$('#prev-page').removeClass('disabled');
+	
+});
+
+$('#goto-height-go').click(function() {
+	var height = document.getElementById('goto-height').value;
+	var newUrl = "/en/?height="+height;
+	window.location = newUrl;
+});
+
+$('#goto-height').keyup(function(e){
+        if(e.keyCode === 13)
+            $('#goto-height-go').click();
+});
+
     function renderInitialBlocks(){
         if (xhrGetBlocks) xhrGetBlocks.abort();
 		
@@ -174,27 +298,34 @@ $('#loadMoreBlocks').click(function(){
             else
 				loadHeight = lastStats.last_known_block_index;
 		
-        xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
-                params: {
-                    height: loadHeight
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-                renderBlocks(data.result.blocks);
-            }
-        });
+		if((loadHeight - 31) < 0){
+			$('#prev-page').addClass('disabled');
+			$('#next-page').removeClass('disabled');
+		}
+
+			xhrGetBlocks = $.ajax({
+				url: api + '/json_rpc',
+				method: "POST",
+				data: JSON.stringify({
+					jsonrpc:"2.0",
+					id: "test",
+					method:"f_blocks_list_json",
+					params: {
+						height: loadHeight
+					}
+				}),
+				dataType: 'json',
+				cache: 'false',
+				success: function(data){
+					renderBlocks(data.result.blocks);
+				}
+			});
     };
 
+var Difficulties = [];
+	
     function getBlockRowElement(block, jsonString){
-        
+
         var row = document.createElement('tr');
         row.setAttribute('data-json', jsonString);
         row.setAttribute('data-height', block.height);
@@ -206,11 +337,13 @@ $('#loadMoreBlocks').click(function(){
             '<td>' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
 			'<td>' + block.cumul_size + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
-            '<td>' + block.difficulty + '</td>' +
+            '<td class="blk-diff">' + block.difficulty + '</td>' +
             '<td>' + block.tx_count + '</td>';
 
+		Difficulties.push(parseInt(block.difficulty));
+		
         row.innerHTML = columns;
-
+		
         return row;
     }
 
@@ -249,9 +382,24 @@ $('#loadMoreBlocks').click(function(){
             }
         }
 		$("time.timeago").timeago();
+		calcAvgHashRate();
+    }
+
+	function calcAvgHashRate(){
+		var sum = Difficulties.reduce(add, 0);
+		function add(a, b) {
+			return a + b;
+		}
+		var avgDiff = Math.round(sum / Difficulties.length);
+		var avgHashRate = avgDiff / blockTargetInterval;
+		
+		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 0).toString());
+		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
+        
+
 	}
-
-
+	
+	
 //  Karbovanets MemPool Transactions
 function getPoolTransactions(){
 
@@ -288,23 +436,21 @@ var xhrGetPool = $.ajax({
 						var amount = arrayOfLines[8].split(':').pop();
 						var fee = arrayOfLines[9].split(':').pop();
 						var size = arrayOfLines[1].split(':').pop();
-						var row;
 						var row = document.createElement('tr');
-							var columns =
+						var columns =
 								'<td>' + formatDate(timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
 								'<td>' + getReadableCoins(amount, 4, true) + '</td>' +
 								'<td>' + getReadableCoins(fee, 4, true) + '</td>' +
 								'<td>' + size + '</td>' +
 								'<td>' + formatPaymentLink(hash) + '</td>';
 						row.innerHTML = columns;
-						txsRows.prepend(row);
-						$(row).find('.mtx-ago').timeago('update', new Date(block.timestamp * 1000).toISOString());
+						txsRows.append(row);
+						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
 				});
 			}
     });
 };
-
 
 $(function() {
     $('[data-toggle="tooltip"]').tooltip();

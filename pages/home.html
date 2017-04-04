@@ -1,17 +1,48 @@
 
-<div class="panel panel-default">
+<div class="panel panel-default" id="network-stats">
   <div class="panel-heading">
     <h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Статистика</h3>
   </div>
   <div class="panel-body">
-	<ul class="nav nav-pills">
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Висота блокчейну, тобто загальна кількість блоків у ланцюжку блоків, включно з нульовим."><i class="fa fa-bars"></i> Висота: <span id="networkHeight"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швидкість: <span id="networkHashrate"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Коефіцієнт при якому за поточної швидкості хешування блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Складність: <span id="networkDifficulty"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість проведених транзакцій у мережі (не враховуючи виплати винагороди за карбування)."><i class="fa fa fa-exchange"></i> Транзакції: <span id="networkTransactions"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Поточна винагорода (за останній викарбуваний блок)."><i class="fa fa-money"></i> Нагорода: <span id="currentReward"></span></a></li>
-	  <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Кількість карбованців, випущена в обіг."><i class="fa fa-money"></i> Емісія: <span id="totalCoins"></span></a></li>
-	</ul>
+	<div class="row">
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Висота блокчейну, тобто загальна кількість блоків у ланцюжку блоків, включно з нульовим."><i class="fa fa-bars"></i> Висота: <span id="networkHeight"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Кількість проведених транзакцій у мережі (не враховуючи виплати винагороди за карбування)."><i class="fa fa fa-exchange"></i> Транзакції: <span id="networkTransactions"></span></a></li>
+				
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Розрахункова поточна швидкість операцій хешування в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швидкість: <span id="networkHashrate"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі середньої складності."><i class="fa fa-clock-o"></i> Середня швидкість: <span id="avgHashrate"></span></a></li>
+
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Складність для наступного блоку. Це коефіцієнт, при якому за поточної швидкості хешування, блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Поточна складність: <span id="networkDifficulty"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Середня складність за період останніх 30 блоків."><i class="fa fa-lock"></i> Середня складність: <span id="avgDifficulty"></span></a></li>
+			
+			</ul>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<ul class="nav nav-pills nav-stacked">
+			
+				<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Поточна винагорода (за останній викарбуваний блок)."><i class="fa fa-certificate"></i> Нагорода: <span id="currentReward"></span></a></li>
+				
+				<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Кількість карбованців, випущена в обіг."><i class="fa fa-money"></i> Емісія: <span id="totalCoins"></span></a></li>
+			
+			</ul>
+		</div>
+	</div>
+    
   </div>
 </div>
 
@@ -33,11 +64,11 @@
 			<table class="table table-hover" id="mem_pool_table">
 				<thead>
 				<tr>
-					<th width="25%"><i class="fa fa-clock-o"></i> Дата і час</th>
+					<th width="30%"><i class="fa fa-clock-o"></i> Дата і час</th>
 					<th width="10%"><i class="fa fa-money"></i> Сума</th>
 					<th width="10%"><i class="fa fa-tag"></i> Комісія</th>
 					<th width="10%"><i class="fa fa-archive"></i> Розмір</th>
-					<th width="45%"><i class="fa fa-paw"></i> Хеш</th>
+					<th width="40%"><i class="fa fa-paw"></i> Хеш</th>
 				</tr>
 				</thead>
 				<tbody id="mem_pool_rows">
@@ -54,7 +85,18 @@
 	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Останні блоки</h3>
   </div>
   <div class="panel-body">
-
+	<div class="row">
+		<div class="col-sm-8 col-md-6 col-lg-5">
+			<div class="input-group">
+				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-arrow-left" aria-hidden="true"></i> <span class="large-screen">Старіші</span></a>
+				<span class="input-group-addon">№</span>
+				<input id="goto-height" type="text" class="form-control" placeholder="Висота">
+				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Йти</a>
+				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled"><span class="large-screen">Новіші</span> <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+			</div>
+		</div>
+	</div>
+	
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>
@@ -86,21 +128,26 @@
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
-
+			renderInitialBlocks();
         },
         update: function(){
+			renderLastBlock();
             updateText('networkHeight', lastStats.height.toString());
             updateText('networkTransactions', lastStats.tx_count.toString());
             updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
             updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
-			
-			renderLastBlock();
-            renderInitialBlocks();
+			$("time.timeago").timeago();
 			getPoolTransactions();
-
-        }
+			var currHeight = $('#blocks_rows').children().first().data('height');
+			if((currHeight + 31) > lastStats.last_known_block_index){
+				renderInitialBlocks();
+			}
+			if((currHeight + 31) < lastStats.last_known_block_index){
+				$('#next-page').removeClass('disabled');
+			}
+		}
     };
-	
+
 var block;
 
 function renderLastBlock(){
@@ -164,6 +211,83 @@ $('#loadMoreBlocks').click(function(){
     });
 });
 
+$('#prev-page').click(function(e){
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	var currHeight = $('#blocks_rows').children().first().data('height');
+	var openHeight = (currHeight - 31 < 0) ? 0 : currHeight - 31;
+	
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: openHeight
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+                renderBlocks(data.result.blocks);
+            }
+    });
+	e.preventDefault();
+	
+	if((currHeight + 31) > lastStats.last_known_block_index){
+		$('#next-page').removeClass('disabled');
+	}
+	if((currHeight - 61) < 0){
+		$('#prev-page').addClass('disabled');
+	}
+});
+
+$('#next-page').click(function(e){
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	var currHeight = $('#blocks_rows').children().first().data('height');
+	var openHeight = (currHeight + 31 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + 31;
+	
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    height: openHeight
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+                renderBlocks(data.result.blocks);
+            }
+    });
+	e.preventDefault();
+	
+	if((currHeight + 61) > lastStats.last_known_block_index){
+		$('#next-page').addClass('disabled');
+	}
+	
+		$('#prev-page').removeClass('disabled');
+	
+});
+
+$('#goto-height-go').click(function() {
+	var height = document.getElementById('goto-height').value;
+	var newUrl = "/?height="+height;
+	window.location = newUrl;
+});
+
+$('#goto-height').keyup(function(e){
+        if(e.keyCode === 13)
+            $('#goto-height-go').click();
+});
+
     function renderInitialBlocks(){
         if (xhrGetBlocks) xhrGetBlocks.abort();
 		
@@ -174,25 +298,32 @@ $('#loadMoreBlocks').click(function(){
             else
 				loadHeight = lastStats.last_known_block_index;
 		
-        xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
-                params: {
-                    height: loadHeight
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-                renderBlocks(data.result.blocks);
-            }
-        });
+		if((loadHeight - 31) < 0){
+			$('#prev-page').addClass('disabled');
+			$('#next-page').removeClass('disabled');
+		}
+		
+			xhrGetBlocks = $.ajax({
+				url: api + '/json_rpc',
+				method: "POST",
+				data: JSON.stringify({
+					jsonrpc:"2.0",
+					id: "test",
+					method:"f_blocks_list_json",
+					params: {
+						height: loadHeight
+					}
+				}),
+				dataType: 'json',
+				cache: 'false',
+				success: function(data){
+					renderBlocks(data.result.blocks);
+				}
+			});
     };
 
+var Difficulties = [];
+	
     function getBlockRowElement(block, jsonString){
 
         var row = document.createElement('tr');
@@ -206,9 +337,11 @@ $('#loadMoreBlocks').click(function(){
             '<td>' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
 			'<td>' + block.cumul_size + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
-            '<td>' + block.difficulty + '</td>' +
+            '<td class="blk-diff">' + block.difficulty + '</td>' +
             '<td>' + block.tx_count + '</td>';
-			
+
+		Difficulties.push(parseInt(block.difficulty));
+		
         row.innerHTML = columns;
 		
         return row;
@@ -249,9 +382,24 @@ $('#loadMoreBlocks').click(function(){
             }
         }
 		$("time.timeago").timeago();
+		calcAvgHashRate();
     }
 
+	function calcAvgHashRate(){
+		var sum = Difficulties.reduce(add, 0);
+		function add(a, b) {
+			return a + b;
+		}
+		var avgDiff = Math.round(sum / Difficulties.length);
+		var avgHashRate = avgDiff / blockTargetInterval;
+		
+		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 0).toString());
+		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
+        
 
+	}
+	
+	
 //  Karbovanets MemPool Transactions
 function getPoolTransactions(){
 
@@ -296,7 +444,7 @@ var xhrGetPool = $.ajax({
 								'<td>' + size + '</td>' +
 								'<td>' + formatPaymentLink(hash) + '</td>';
 						row.innerHTML = columns;
-						txsRows.prepend(row);
+						txsRows.append(row);
 						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
 				});
@@ -304,9 +452,8 @@ var xhrGetPool = $.ajax({
     });
 };
 
-
 $(function() {
     $('[data-toggle="tooltip"]').tooltip();
 });
-	
+
 </script>
