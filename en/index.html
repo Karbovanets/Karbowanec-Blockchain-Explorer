@@ -125,7 +125,6 @@
         }).done(function(data){
             pulseLiveUpdate();
             lastStats = data;
-            updateIndex();
             currentPage.update();
         }).always(function () {
 			setTimeout(function() {
@@ -179,10 +178,6 @@
         });
     });
 	
-	function updateIndex(){
-    
-    }
-
     // Blockexplorer functions
     urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -433,13 +428,20 @@ $('#txt_search').keyup(function(e){
 					<small>
 					<!-- This copyright should be left intact -->
 				
-					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a><br />
-		
+					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
+					v. 1.0.4.<br />
 					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
-				</small>
-			</p>
-		
+					</small>
+				</p>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-6">
+			
+				<ul>
+					<li><a href="http://karbowanec.com/en/">karbowanec.com</li>
+				</ul>
+				
+			</div>
 		</div>
     </div>
 </footer>

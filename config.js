@@ -3,7 +3,6 @@ var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
-var ver = "1.0.3";
 // pools stats by MainCoins
 var networkStat = {
     "krb": [
@@ -16,6 +15,7 @@ var networkStat = {
 		["krb.crypto-coins.club", "http://krb.crypto-coins.club:8118"],
 		["krb.sberex.com", "http://krb.sberex.com:7006"],
 		["amazon.sberex.com", "http://amazon.sberex.com:7006"],
-		["xcrypto.org", "http://xcrypto.org:8117"]
+		["xcrypto.org", "http://xcrypto.org:8117"],
+		["krb.cryptomine.pro", "http://krb.cryptomine.pro:8117"]
     ]
 };

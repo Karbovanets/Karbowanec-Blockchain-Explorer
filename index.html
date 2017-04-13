@@ -125,7 +125,6 @@
         }).done(function(data){
             pulseLiveUpdate();
             lastStats = data;
-            updateIndex();
             currentPage.update();
         }).always(function () {
 			setTimeout(function() {
@@ -179,10 +178,6 @@
         });
     });
 	
-	function updateIndex(){
-    
-    }
-
     // Blockexplorer functions
     urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -220,7 +215,7 @@
     prefixFromNow: "через",
     suffixAgo: "тому",
     suffixFromNow: null,
-    seconds: "кілька секунд",
+    seconds: "мить",
     minute: "хвилина",
     minutes: function(value) { return numpf(value, "%d хвилина", "%d хвилини", "%d хвилин"); },
     hour: "година",
@@ -470,13 +465,21 @@ $('#txt_search').keyup(function(e){
 					<small>
 					<!-- This copyright should be left intact -->
 				
-					Працює на <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a><br />
-		
+					Працює на <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
+					в. 1.0.4.<br />
 					<span class="text-muted">Частково використовує <strong>cryptonote-universal-pool</strong><br />
-					який роповсюджується за ліцензією <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
-				</small>
-			</p>
+					який розповсюджується за ліцензією <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
+					</small>
+				</p>
 		
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-6">
+			
+				<ul>
+					<li><a href="http://karbowanec.com">karbowanec.com</li>
+				</ul>
+				
+			</div>
 		</div>
     </div>
 </footer>
