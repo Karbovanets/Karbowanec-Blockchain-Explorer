@@ -9,7 +9,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="/css/themes/white/style.css" rel="stylesheet">
+    <link href="/css/themes/white/style.css" rel="stylesheet" id="theme_link">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
@@ -21,6 +21,58 @@
 	var blockchainExplorer 	= "/en/?hash={id}#blockchain_block";
 	var transactionExplorer = "/en/?hash={id}#blockchain_transaction";
 	var paymentIdExplorer 	= "/en/?hash={id}#blockchain_payment_id";
+	
+	var style_cookie_name = "style";
+	var style_cookie_duration = 365;
+	var style_domain = window.location.hostname;
+	
+	$(function(){
+		$('.theme-switch[rel="/css/themes/white/style.css"]').hide();
+		set_style_from_cookie();
+		
+		$('.theme-switch').click(function() {
+			swapStyleSheet($(this).attr('rel'));
+			$('.theme-switch').show();
+			$(this).hide();
+			return false;
+		});
+		
+		function swapStyleSheet(sheet){
+			$('#theme_link').attr('href',sheet);
+			$('.theme-switch').show();
+			$('.theme-switch[rel="'+sheet+'"]').hide();
+			set_cookie(style_cookie_name, sheet, style_cookie_duration, style_domain);
+		}
+	
+		function set_style_from_cookie(){
+			var style = get_cookie(style_cookie_name);
+			if (style.length){
+				swapStyleSheet(style);
+			}
+		}
+		function set_cookie (cookie_name, cookie_value, lifespan_in_days, valid_domain){
+			var domain_string = valid_domain ?
+							   ("; domain=" + valid_domain) : '';
+				document.cookie = cookie_name +
+							   "=" + encodeURIComponent(cookie_value) +
+							   "; max-age=" + 60 * 60 *
+							   24 * lifespan_in_days +
+							   "; path=/" + domain_string;
+		}
+		function get_cookie (cookie_name){
+			var cookie_string = document.cookie;
+			if (cookie_string.length != 0){
+				var cookie_value = cookie_string.match(
+							  '(^|;)[\s]*' +
+							  cookie_name +
+							  '=([^;]*)' );
+				if(cookie_value != null && cookie_value.length>0) {
+					return decodeURIComponent (cookie_value[2]);
+				}
+			}
+			return '';
+		}
+	});
 	
     function getTransactionUrl(id) {
         return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
@@ -224,8 +276,12 @@
                 </a></li>
 
  			    <li><a  class="hot_link" href="/">
-                    <i class="fa fa-language" aria-hidden="true"></i> Ukrainian
+                    <i class="fa fa-language" aria-hidden="true"></i> UA
                 </a></li>
+				
+				<button rel="/css/themes/dark/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Night Mode"><i class="fa fa-moon-o"></i></button>
+				<button rel="/css/themes/white/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Day Mode"><i class="fa fa-sun-o"></i></button>
+				
 	<!-- //-->			
 
                 <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
@@ -429,7 +485,7 @@ $('#txt_search').keyup(function(e){
 					<!-- This copyright should be left intact -->
 				
 					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					v. 1.0.4.<br />
+					v. 1.0.5.<br />
 					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>

@@ -92,7 +92,6 @@ hr {
 .stats > div > span {
   font-weight: 500;
   padding: 0 2px;
-  color: #336A80;
 }
 .nav .form-control {
   border: 1px solid #00A0E3;
@@ -154,10 +153,16 @@ hr {
   color: #00A0E3;
   background-color: #ffffff;
 }
-.table th,
-.table .miningAppTitle {
-  font-weight: 500;
+
+.navbar .theme-switch {
+	background: transparent;
+	border: none;
+	line-height: 20px;
+	padding-top: 15px;
+    padding-bottom: 15px;
+	border-radius: 0;
 }
+
 code {
   padding: 2px 10px;
   color: #DB2B24;
@@ -184,6 +189,7 @@ code {
   background-color: #336A80;
   color: #fff;
 }
+
 .table > thead > tr > td.success,
 .table > tbody > tr > td.success,
 .table > tfoot > tr > td.success,
@@ -352,7 +358,7 @@ b {
 	
 .blocksStatHolder > span > span{
     font-weight: bold;
-   }
+}
 
 
 @media (max-width: 768px) {
@@ -366,3 +372,14 @@ b {
 
 }
 
+@media (max-width: 480px) {
+.large-screen {
+	display: none;
+}
+
+#stats_updated {
+	right: 80px;
+}
+
+
+}

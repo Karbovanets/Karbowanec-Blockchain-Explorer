@@ -56,10 +56,8 @@
 			</h3>
 			
 		  </div>
-		  <div class="panel-body">
-			<div>
-				<canvas id="difficultyChart" height="210"></canvas>
-			</div>
+		  <div class="panel-body chart-wrapper">
+			<canvas id="difficultyChart" height="210"></canvas>
 		  </div>
 		</div>
 	</div>
@@ -69,7 +67,7 @@
   <div class="panel-heading">
   
 	<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Непідтвержені транзакції 
-  
+	<span id="mempool_count" class="badge"></span>
 	<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Свіжі транзакції які ще потрапили у блок та очікують підтвердження. Коли потраплять - стануть підтвердженими."><i class="fa fa-question-circle"></i></span>
     </h3>
 	
@@ -145,6 +143,7 @@ var block,
 	Rewards = [],
 	Txses = [],
 	Sizes = [],
+	Timestamps = [],
 	diffChart;
 
 
@@ -385,9 +384,10 @@ $('#goto-height').keyup(function(e){
         row.setAttribute('id', 'blockRow' + block.height);
         row.setAttribute('title', block.hash);
 		var dateTime = new Date(block.timestamp * 1000).toISOString();
+		row.setAttribute('data-dt', dateTime);
         var columns =
             '<td>' + block.height + '</td>' +
-            '<td>' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
+            '<td class="date-time">' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
 			'<td>' + block.cumul_size + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
             '<td class="blk-diff">' + block.difficulty + '</td>' +
@@ -397,7 +397,8 @@ $('#goto-height').keyup(function(e){
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
-				
+		Timestamps.push(dateTime);
+		
         row.innerHTML = columns;
 		
         return row;
@@ -474,7 +475,7 @@ var xhrGetPool = $.ajax({
             cache: 'false',
             success: function(data){
 			
-				var txsRows = document.getElementById('mem_pool_rows');
+				var txsRows = $('#mem_pool_rows');
 				while (txsRows.firstChild) {
 					txsRows.removeChild(txsRows.firstChild);
 				}
@@ -503,6 +504,7 @@ var xhrGetPool = $.ajax({
 						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
 				});
+				updateText('mempool_count', document.querySelectorAll('#mem_pool_rows tr').length);
 			}
     });
 };
@@ -511,13 +513,26 @@ var xhrGetPool = $.ajax({
 function displayDiffChart() {
 	var ctx = document.getElementById("difficultyChart");
 	var chartData = {
-			labels: [].concat(Blocks).reverse(),
+		//	labels: [].concat(Blocks).reverse(),
+			labels: [].concat(formatDate(Timestamps)).reverse(),
 			datasets: [
 			  {
+				data: [].concat(Blocks).reverse(),
+				yAxisID: "Height",
+				label: "№ блоку",
+				backgroundColor: "rgba(0,0,0,0)",
+				borderColor: 'rgba(0,0,0,0)',
+				borderWidth: 0,
+				pointBorderWidth: 0,
+				pointRadius: 0,
+				pointHoverRadius: 0,
+				pointHitRadius: 0,
+				display: false
+			  },{
 				data: [].concat(Difficulties).reverse(),
 				yAxisID: "Difficulty",
 				label: "Складність",
-				backgroundColor: "rgba(220,220,220,0.2)",
+				backgroundColor: "rgba(220,220,220,0.3)",
 				borderColor: '#2FA4E7',
 				borderWidth: 2,
 				pointColor : "#2FA4E7",
@@ -527,12 +542,12 @@ function displayDiffChart() {
 				pointBorderWidth: 2,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 20
+				pointHitRadius: 10
 			  },{
 				data: [].concat(Txses).reverse(),
 				yAxisID: "Transactions",
 				label: "Транзакції",
-				backgroundColor: "rgba(255,242,0,0.1)",
+				backgroundColor: "rgba(255,242,0,0.05)",
 				borderColor: '#B5E61D',
 				borderWidth: 1,
 				pointColor : "#B5E61D",
@@ -542,12 +557,12 @@ function displayDiffChart() {
 				pointBorderWidth: 1,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 20
+				pointHitRadius: 10
 			  },{
 				data: [].concat(Sizes).reverse(),
 				yAxisID: "Sizes",
 				label: "Розмір",
-				backgroundColor: "rgba(65,172,0,0.1)",
+				backgroundColor: "rgba(65,172,0,0.05)",
 				borderColor: '#99D9EA',
 				borderWidth: 1,
 				pointColor : "#99D9EA",
@@ -557,13 +572,18 @@ function displayDiffChart() {
 				pointBorderWidth: 1,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 20
+				pointHitRadius: 10
 			  }
 			]
 		};
 	var options = {
 			responsive: true,
 			maintainAspectRatio: false,
+			elements: {
+				line: {
+					tension: 0
+				}
+			},
 			title: {
 				display: false
 			},
@@ -572,6 +592,22 @@ function displayDiffChart() {
 			},
 			scales: {
 			  yAxes: [{
+				id: 'Height',
+				type: 'linear',
+				position: 'left',
+				scaleLabel: {
+					display: false,
+					labelString: '№ блоку'
+				},
+				gridLines: {
+					display:false
+				},
+				ticks: {
+					fontSize: 9,
+					display:false
+				},
+				display: false
+			  },{
 				id: 'Difficulty',
 				type: 'linear',
 				position: 'left',
@@ -623,16 +659,74 @@ function displayDiffChart() {
 			  
 			  ],
 			  xAxes: [{
+				type: "time",
+				time: {
+                    parser: false,
+					unit: 'minute',
+					unitStepSize: 60,
+					round: 'second',
+					displayFormats: {
+                                        'millisecond': 'SSS [ms]',
+                                        'second': 'HH:mm:ss', // 11:20:01 AM
+                                        'minute': 'HH:mm', // 11:20:01 AM
+                                        'hour': 'HH:mm', // Sept 4, 5PM
+                                        'day': 'MMM Do', // Sep 4 2015
+                                        'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
+                                        'month': 'MMM YYYY', // Sept 2015
+                                        'quarter': '[Q]Q - YYYY', // Q3
+                                        'year': 'YYYY', // 2017
+                                    },
+				},
 				gridLines: {
 					display:false
 				},
 				ticks: {
-					fontSize: 9
+					fontSize: 9,
+					fontColor: "#CCC",
+					autoSkip: true,
+					//maxRotation: 90,
+					//minRotation: 90
 					//display:false
 				}
 				//display: false
 			  }]
-			}	
+			},
+			tooltips: {
+				mode: 'index',
+				//displayColors: false,
+				callbacks: {
+					title: function(tooltipItem, data) {
+						var height	= data.datasets[3].data[tooltipItem[0].index];
+						var time = new Date(data.labels[tooltipItem[0].index]).toLocaleString();
+						//return 'Блок №: ' + height + ' - ' + time + '';
+						return time + '';
+					},/*
+					label: function(tooltipItem, data) { 
+						var diff		= data.datasets[0].data[tooltipItem.index];
+						var txcount	= data.datasets[1].data[tooltipItem.index];
+						var size		= data.datasets[2].data[tooltipItem.index];
+						
+						var diff_swatch_color = data.datasets[0].borderColor;
+						
+						console.log(diff_swatch_color);
+						
+						var diff_swatch = '<span style="color="'+ diff_swatch_color +'">&bullet;</span>';
+						
+						var multistringText = [];
+  
+						var str1 = diff_swatch + 'Складність: ' + diff + '';
+						var str2 = 'Розмір: ' + size + '';
+						var str3 = 'Транзакції: ' + txcount + '';
+  
+						multistringText.push(str1);
+						multistringText.push(str2);
+						multistringText.push(str3);
+  
+						return multistringText;
+					}*/
+				}
+			  }
+			
 		};
 		
 	diffChart = new Chart(ctx,{
@@ -643,34 +737,44 @@ function displayDiffChart() {
 }
 
 function refreshChart() {
-	var brows = $('#blocks_rows').children(),
-		labels = [],
-		diffs = [],
-		sizes = [],
-		txsnr = [];
+	var brows   = $('#blocks_rows').children(),
+		labels  = [],
+		diffs   = [],
+		sizes   = [],
+		times   = [],
+		heights = [],
+		txsnr   = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label  = parseInt(row.find('td:first').text());
 			var diff   = parseInt(row.find('td.blk-diff').text());
 			var txses  = parseInt(row.find('td:last').text());
 			var size   = parseInt(row.find('td:nth-child(3)').text());
+			var time   = row.attr('data-dt');
+			
 				labels.push(label);
 				diffs.push(diff);
 				txsnr.push(txses);
 				sizes.push(size);				
+				times.push(time);				
 		}
-		diffChart.data.labels = labels.reverse();
-		diffChart.data.datasets[0].data = diffs.reverse();
-		diffChart.data.datasets[1].data = txsnr.reverse();
-		diffChart.data.datasets[2].data = sizes.reverse();
+		//diffChart.data.labels = labels.reverse();
+		diffChart.data.labels = times.reverse();
+		diffChart.data.datasets[0].data = labels.reverse();
+		diffChart.data.datasets[1].data = diffs.reverse();
+		diffChart.data.datasets[2].data = txsnr.reverse();
+		diffChart.data.datasets[3].data = sizes.reverse();
+		
 		diffChart.update();
 }	
 
 function loadMoreChart() {
-	diffChart.data.labels = [].concat(Blocks).reverse();
-	diffChart.data.datasets[0].data = [].concat(Difficulties).reverse();
-	diffChart.data.datasets[1].data = [].concat(Txses).reverse();
-	diffChart.data.datasets[2].data = [].concat(Sizes).reverse();
+	//diffChart.data.labels = [].concat(Blocks).reverse();
+	diffChart.data.labels = [].concat(Timestamps).reverse();
+	diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
+	diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
+	diffChart.data.datasets[2].data = [].concat(Txses).reverse();
+	diffChart.data.datasets[3].data = [].concat(Sizes).reverse();
 	diffChart.update();
 }
 

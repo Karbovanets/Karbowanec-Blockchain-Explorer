@@ -20,9 +20,7 @@
             padding-bottom: 80px;
             overflow-y: scroll;
         }
-        .container{
-            font-size: 1.1em;
-        }
+
         #loading{
             font-size: 2em;
         }
@@ -50,12 +48,13 @@
         }
         #stats_updated{
             opacity: 0;
-            float: right;
             height: 40px;
 			line-height: 40px;
-			margin: 0 10px;
             color: #e8e8e8;
             font-size: 0.9em;
+			position: absolute; 
+			right: 10px;
+			top: 0;
         }
 
         footer{
@@ -93,4 +92,29 @@
 		
 		#block.hash, #transaction.hash {
 			word-break: break-all;
+		}
+		
+		.panel-default>.panel-heading .badge {
+			background-color: #2B3E50;
+		}
+		
+		.form-control {
+			background-color: #485563;
+			color: #FFF;
+		}
+		
+		.chart-wrapper {
+			background-color: #384B5C;
+		}
+		
+		.navbar .theme-switch {
+			background: transparent;
+			border: none;
+			line-height: 21px;
+			padding-top: 9.5px;
+			padding-bottom: 9.5px;
+		}
+		
+		.nav-pills>li>a {
+			padding: 10px 10px;
 		}
