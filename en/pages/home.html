@@ -476,7 +476,7 @@ var xhrGetPool = $.ajax({
             cache: 'false',
             success: function(data){
 			
-				var txsRows = $('#mem_pool_rows');
+				var txsRows = document.getElementById('mem_pool_rows');
 				while (txsRows.firstChild) {
 					txsRows.removeChild(txsRows.firstChild);
 				}
@@ -501,7 +501,7 @@ var xhrGetPool = $.ajax({
 								'<td>' + size + '</td>' +
 								'<td>' + formatPaymentLink(hash) + '</td>';
 						row.innerHTML = columns;
-						txsRows.append(row);
+						$(txsRows).append(row);
 						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
 				});
