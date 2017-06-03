@@ -37,7 +37,8 @@
 						<th><i class="fa fa-bars"></i> Висота</th>
 						<th><i class="fa fa-tachometer"></i> Хешрейт</th>
 						<th><i class="fa fa-group"></i> Майнери</th>
-						<th><i class="fa fa-money"></i> Комісії</th>
+						<th><i class="fa fa-money"></i> Комісія</th>
+						<th><i class="fa fa-sign-out"></i> Мін. виплата</th>
 						<th><i class="fa fa-clock-o"></i> Останній блок</th>
 					</tr>
 				</thead>
@@ -87,11 +88,19 @@ var poolsRefreshed = 0;
 					
 					var agostring = $.timeago(d);
 					
-					$('#pools_rows').append('<tr><td id=host'+host+'><a target=blank href=http://'+host+'>'+host+'</a></td><td id=height'+host+'>'+data.network.height+'</td><td id=hashrate'+host+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners'+host+'>'+data.pool.miners+'</td><td id=totalFree'+host+'>'+calculateTotalFree(data)+'%</td><td><span id=lastFound'+host+'>'+datestring+'</span> (<span class="timeago" id="ago-'+host+'">'+agostring+'</span>)</td><</tr>');
+					var index = host.indexOf("/");
+					var result;
+					if (index < 0) {
+						result = host;
+					} else {
+						result = host.substr(0, index);
+					}
+					
+					$('#pools_rows').append('<tr><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td id=height'+result+'>'+data.network.height+'</td><td id=hashrate'+result+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners'+result+'>'+data.pool.miners+'</td><td id=totalFree'+result+'>'+calculateTotalFree(data)+'%</td><td id=minPayout'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFound'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
 					
 					totalHashrate += parseInt(data.pool.hashrate);
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
-					poolNames.push(host);
+					poolNames.push(result);
 					poolHashrates.push(parseInt(data.pool.hashrate));
 					window.colors.push(getRandomColor());
 					
@@ -168,18 +177,27 @@ setInterval(function(){
 		var poolsRefreshed = 0;
 		
             NETWORK_STAT_MAP.forEach((url, host, map) => {
+				
+				var index = host.indexOf("/");
+				var result;
+				if (index < 0) {
+					result = host;
+				} else {
+					result = host.substr(0, index);
+				}
+					
                 $.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
-                    updateText('height'+host, data.network.height);
-                    updateText('hashrate'+host, data.pool.hashrate);
-                    updateText('miners'+host, data.pool.miners);
-                    updateText('totalFree'+host, calculateTotalFree(data)+'%');
+                    updateText('height'+result, data.network.height);
+                    updateText('hashrate'+result, data.pool.hashrate);
+                    updateText('miners'+result, data.pool.miners);
+                    updateText('totalFree'+result, calculateTotalFree(data)+'%');
 					var d = new Date(parseInt(data.pool.lastBlockFound));
 					
 					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-                    updateText('lastFound'+host, datestring);
+                    updateText('lastFound'+result, datestring);
 					 
                     var agostring = $.timeago(d);
-					updateText('ago-'+host, agostring);
+					updateText('ago-'+result, agostring);
 					
 					totalHashrate += parseInt(data.pool.hashrate);
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
