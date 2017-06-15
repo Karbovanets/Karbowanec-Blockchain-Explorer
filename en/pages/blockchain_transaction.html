@@ -2,6 +2,7 @@
 <div class="row" id="tx_info">
     <div class="col-md-12 stats">
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Unique fingerprint of the transaction."><i class="fa fa-question-circle"></i></span> Hash: <span id="transaction.hash" style="word-break: break-all;"></span></div>
+		<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Money that goes to the miner, who included this transaction into block."><i class="fa fa-question-circle"></i></span> Fee: <span id="transaction.fee"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="It does not mean that this is the amount that is actually transferred."><i class="fa fa-question-circle"></i></span> Sum of outputs: <span id="transaction.amount_out"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the transaction in bytes."><i class="fa fa-question-circle"></i></span> Size: <span id="transaction.size"></span></div>
@@ -101,6 +102,12 @@
                 block = transaction.block;
 				
                 updateText('transaction.hash', details.hash);
+                if (block.hash){
+					$('#confirmations').show();
+					updateText('transaction.confirmations', lastStats.height - block.height);
+					updateText('transaction.timestamp', formatDate(block.timestamp));
+					$(".transaction-timeago").timeago('update', new Date(block.timestamp * 1000).toISOString());
+				}
                 updateText('transaction.amount_out', getReadableCoins(details.amount_out));
                 updateText('transaction.fee', getReadableCoins(details.fee));
                 updateText('transaction.mixin', details.mixin);

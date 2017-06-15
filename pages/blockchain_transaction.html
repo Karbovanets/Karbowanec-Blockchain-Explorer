@@ -2,6 +2,7 @@
 <div class="row" id="tx_info">
     <div class="col-md-12 stats">
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Унікальний ідентифікатор транзакції."><i class="fa fa-question-circle"></i></span> Хеш: <span id="transaction.hash" style="word-break: break-all;"></span></div>
+        <div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Кількість підтверджень мережі."><i class="fa fa-question-circle"></i></span> Підтверджень: <span id="transaction.confirmations"></span>, Час першого підтвердження: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Плата за вміщення транзакції в блок."><i class="fa fa-question-circle"></i></span> Комісія: <span id="transaction.fee"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Зовсім не означає, що це сума, яка насправді переказується, котрийсь із виходів переказується, але невідомо котрий саме."><i class="fa fa-question-circle"></i></span> Сума виходів: <span id="transaction.amount_out"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Розмір транзакції у байтах."><i class="fa fa-question-circle"></i></span> Розмір: <span id="transaction.size"></span></div>
@@ -101,6 +102,12 @@
                 block = transaction.block;
 				
                 updateText('transaction.hash', details.hash);
+				if (block.hash){
+					$('#confirmations').show();
+					updateText('transaction.confirmations', lastStats.height - block.height);
+					updateText('transaction.timestamp', formatDate(block.timestamp));
+					$(".transaction-timeago").timeago('update', new Date(block.timestamp * 1000).toISOString());
+				}
                 updateText('transaction.amount_out', getReadableCoins(details.amount_out));
                 updateText('transaction.fee', getReadableCoins(details.fee));
                 updateText('transaction.mixin', details.mixin);

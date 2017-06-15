@@ -19,7 +19,9 @@ var networkStat = {
 		["krb.cryptomine.pro", "http://krb.cryptomine.pro:8117"],
 		["bityce.ddns.net", "http://bityce.ddns.net:9884"],
 		["pool.karbowanec.com.ua", "http://zacent.com.ua:8117"],
-		["krb-pool.pp.ua", "http://krb-pool.pp.ua:25417"]
+		["krb-pool.pp.ua", "http://krb-pool.pp.ua:25417"],
+		["54.223.133.248", "http://54.223.133.248:8117"],
+		["bitcache.cc", "http://bitcache.cc:8117"]
 		
     ]
 };
