@@ -116,9 +116,9 @@
 
     function getReadableHashRateString(hashrate){
         var i = 0;
-        var byteUnits = [' H', ' KH', ' MH', ' GH', ' TH', ' PH' ];
-        while (hashrate > 1024){
-            hashrate = hashrate / 1024;
+        var byteUnits = [' H', ' kH', ' MH', ' GH', ' TH', ' PH', ' EH', ' ZH', ' YH' ];
+        while (hashrate > 1000){
+            hashrate = hashrate / 1000;
             i++;
         }
         return hashrate.toFixed(2) + byteUnits[i];
@@ -127,7 +127,7 @@
 	function getReadableDifficultyString(difficulty, precision){
 		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
 		if (typeof precision === 'undefined') precision = 0;
-		var units = ['', 'k', 'M', 'G', 'T', 'P'],
+		var units = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
             number = Math.floor(Math.log(difficulty) / Math.log(1000));
 		if (units[number] === undefined || units[number] === null) {
             return 0
