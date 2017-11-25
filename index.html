@@ -127,7 +127,7 @@
 	function getReadableDifficultyString(difficulty, precision){
 		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
 		if (typeof precision === 'undefined') precision = 0;
-		var units = ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
+		var units = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
             number = Math.floor(Math.log(difficulty) / Math.log(1000));
 		if (units[number] === undefined || units[number] === null) {
             return 0
