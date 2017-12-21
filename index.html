@@ -127,7 +127,7 @@
 	function getReadableDifficultyString(difficulty, precision){
 		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
 		if (typeof precision === 'undefined') precision = 0;
-		var units = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
+		var units = ['', 'k', 'M', 'G', 'T', 'P'],
             number = Math.floor(Math.log(difficulty) / Math.log(1000));
 		if (units[number] === undefined || units[number] === null) {
             return 0
@@ -279,7 +279,17 @@
     year: "рік",
     years: function(value) { return numpf(value, "%d рік", "%d роки", "%d років"); }
   };
-})(); 
+})();
+
+
+function hex2a(hexx) {
+	var hex = hexx.toString();//force conversion
+	var str = '';
+	for (var i = 0; i < hex.length; i += 2)
+		str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+	return str;
+}
+
 </script>
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -523,7 +533,7 @@ $('#txt_search').keyup(function(e){
 					<!-- This copyright should be left intact -->
 				
 					Працює на <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					в. 1.0.7.<br />
+					в. 1.0.9.<br />
 					<span class="text-muted">Частково використовує <strong>cryptonote-universal-pool</strong><br />
 					який розповсюджується за ліцензією <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>

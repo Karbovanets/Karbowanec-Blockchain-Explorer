@@ -6,7 +6,9 @@
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Money that goes to the miner, who included this transaction into block."><i class="fa fa-question-circle"></i></span> Fee: <span id="transaction.fee"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="It does not mean that this is the amount that is actually transferred."><i class="fa fa-question-circle"></i></span> Sum of outputs: <span id="transaction.amount_out"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the transaction in bytes."><i class="fa fa-question-circle"></i></span> Size: <span id="transaction.size"></span></div>
-        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId"></span></div>
+        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId"></span>
+		<br />
+		Patment ID decoding: <em id="transaction.paymentIdDecifer"></em></div>
         <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."><i class="fa fa-question-circle"></i></span> Mixin count: <span id="transaction.mixin"></span></div>
 		<div id="tx_unconfirmed" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction is not included into block yet and therefore is not wtitten into blockchain."><i class="fa fa-question-circle"></i></span> <span class="text-warning">Unconfirmed transaction</span></div>
     </div>
@@ -114,6 +116,7 @@
                 if (!details.mixin)
                     $('#div_transaction_mixin').hide();
                 updateText('transaction.paymentId', details.paymentId);
+				updateText('transaction.paymentIdDecifer', hex2a(details.paymentId));
                 if (!details.paymentId)
                     $('#div_transaction_paymentId').hide();
                 updateText('transaction.size', details.size);

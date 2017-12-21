@@ -6,9 +6,12 @@
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Плата за вміщення транзакції в блок."><i class="fa fa-question-circle"></i></span> Комісія: <span id="transaction.fee"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Зовсім не означає, що це сума, яка насправді переказується, котрийсь із виходів переказується, але невідомо котрий саме."><i class="fa fa-question-circle"></i></span> Сума виходів: <span id="transaction.amount_out"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Розмір транзакції у байтах."><i class="fa fa-question-circle"></i></span> Розмір: <span id="transaction.size"></span></div>
-        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Унікальний ідентифікатор платежу який включається в транзакцію і дозволяє розрізняти платежі."><i class="fa fa-question-circle"></i></span> Ідентифікатор платежу: <span id="transaction.paymentId"></span></div>
+        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Унікальний ідентифікатор платежу який включається в транзакцію і дозволяє розрізняти платежі."><i class="fa fa-question-circle"></i></span> Ідентифікатор платежу: <span id="transaction.paymentId"></span>
+		<br />
+		Розшифровка ідентифікатора: <em id="transaction.paymentIdDecifer"></em>
+		</div>
         <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Вказує скільки випадкових входів змішуються в межах цієї транзакції, для того, щоб досягти бажаного рівня анонімності. Число 1 означає що ніяких додаткових входів не змішуються і, таким чином, кожен вхід може бути простежено."><i class="fa fa-question-circle"></i></span> Ступінь приватності: <span id="transaction.mixin"></span></div>
-		<div id="tx_unconfirmed" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Транзакція ще потрапила в блок і не записана в блокчейні."><i class="fa fa-question-circle"></i></span> <span class="text-warning">Непідтверджена транзакція</span></div>
+		<div id="tx_unconfirmed" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Транзакція ще не потрапила в блок і не записана в блокчейні."><i class="fa fa-question-circle"></i></span> <span class="text-warning">Непідтверджена транзакція</span></div>
     </div>
 </div>
 <div id="tx_block">
@@ -114,6 +117,7 @@
                 if (!details.mixin)
                     $('#div_transaction_mixin').hide();
                 updateText('transaction.paymentId', details.paymentId);
+				updateText('transaction.paymentIdDecifer', hex2a(details.paymentId));
                 if (!details.paymentId)
                     $('#div_transaction_paymentId').hide();
                 updateText('transaction.size', details.size);
@@ -222,7 +226,7 @@
 		
 		updateText('outputs_count', document.querySelectorAll('#outputs_rows tr').length);
     }
-	
+
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
