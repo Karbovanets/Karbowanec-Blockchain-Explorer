@@ -6,7 +6,7 @@ var refreshDelay = 30000;
 // pools stats by MainCoins
 var networkStat = {
     "krb": [
-	//	["ecoin.ddns.us:18236", "ecoin.ddns.us:18236"],	
+	//	["ecoin.ddns.us", "http://ecoin.ddns.us:18236"],	
     ]
 };
 
