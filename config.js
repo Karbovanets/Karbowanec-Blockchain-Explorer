@@ -1,4 +1,4 @@
-var api = 'http://45.32.232.11:32348';
+var api = 'http://108.61.198.115:32348';
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
@@ -6,6 +6,7 @@ var refreshDelay = 30000;
 // pools stats by MainCoins
 var networkStat = {
     "krb": [
+		["karbo.hashvault.pro", "https://karbo.hashvault.pro/api"],
 		["krb.mypool.name", "http://krb.mypool.name:32351"],
 		["democats.org/pool/?name=karbowanec", "http://pool2.democats.org:7673"],
 		["pool.karbowanec.com", "http://pool.karbowanec.com:8117"],
@@ -20,7 +21,6 @@ var networkStat = {
 		["bityce.ddns.net", "http://bityce.ddns.net:9884"],
 		["pool.karbowanec.com.ua", "http://zacent.com.ua:8117"],
 		["krb-pool.pp.ua", "http://krb-pool.pp.ua:25417"],
-	//	["54.223.133.248", "http://54.223.133.248:8117"],
 		["bitcache.cc", "http://bitcache.cc:8117"],
 		["krb.sick.al", "http://krb.s1ck.ws:99"],
 		["krb.btcgo.org", "http://btcgo.org:8117"],
@@ -37,7 +37,7 @@ var networkStat = {
 		["karbowanec.zpool.fun", "http://karbowanec.zpool.fun:8117"],
 		["karbowanec.hashparty.io", "http://karbowanec.hashparty.io:8117"],
 		["krb.coinminer.space", "http://krb.coinminer.space:8101"],
-		["krb.miningpool.org.ua", "http://165.227.163.153:7118"],
+		["karbo.farm", "https://eu1.karbo.farm/api"],
 		["karbowanec.cryptopool.in", "http://karbowanec.cryptopool.in:8117"],
 		["krbpool.com", "http://pool.krbpool.com:8117"],
 		["karbo.top", "http://karbo.top:8117"],
@@ -46,13 +46,23 @@ var networkStat = {
 		["krb.mininggood.com", "http://us2.mininggood.com:8137"],
 		["krb.miner.rocks", "https://krb.miner.rocks/api"],
 		["pool.karbo.co.in", "http://pool.karbo.co.in:8117"],
-		["krb.dreampool.info", "https://krb.dreampool.info/api"]
+		["krb.dreampool.info", "https://krb.dreampool.info/api"],
+		["krb.hashing.rocks", "http://krb.hashing.rocks:8117"],
+		["krb.soyminero.es", "http://krb.soyminero.es:8119"],
+		["krb.mininglamp.ml", "http://35.197.65.235:8117"],
+		["karbo.coinwire.eu", "http://karbo.coinwire.eu:8118"],
+		["krb.minepool.ch", "http://krb.minepool.ch:8117"],
+		["karbunkul.ga", "http://karbunkul.ga:3389"],
+		["krb.ocukminingpool.com", "http://ocukminingpool.com:8118"],
+		["krb.i-holder.net", "http://krb.i-holder.net:8117"],
+		["krb.fastpool.io", "http://krb.fastpool.io:8185"],
+		["karbowanec.hashparty.io", "http://karbowanec-pool.hashparty.io:8117"],
+		["pool.krb-ua.tk", "http://pool.krb-ua.tk:8117"],
+		["krb.pool.ualinux.com", "http://krb.pool.ualinux.com:8117"],
+		["krb.fastpool.eu", "http://krb.fastpool.eu:8118"]
+		
+		
+		
 		
     ]
-};
-
-var networkStat2 = {
-    "krb": [
-		["karbowanec.hashvault.pro", "https://karbowanec.hashvault.pro/api"]
-		]
 };

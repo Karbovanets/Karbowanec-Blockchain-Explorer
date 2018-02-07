@@ -3,21 +3,21 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-	<link rel="shortcut icon" href="favicon.ico">
-	<link rel="icon" type="image/icon" href="favicon.ico" >
-    <title>Карбованець (&#1180;) Оглядач блокчейну</title>
+	<link rel="shortcut icon" href="../favicon.ico">
+	<link rel="icon" type="image/icon" href="../favicon.ico" >
+    <title>Karbowanec (&#1180;) [KRB] Block Explorer</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="/css/themes/white/style.css" rel="stylesheet"  id="theme_link">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <link href="/css/themes/white/style.css" rel="stylesheet" id="theme_link">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
-    <script src="config.js"></script>
+    <script src="/config.js"></script>
 </head>
 <body>
 <script>
-	
+
 	var blockchainExplorer 	= "/?hash={id}#blockchain_block";
 	var transactionExplorer = "/?hash={id}#blockchain_transaction";
 	var paymentIdExplorer 	= "/?hash={id}#blockchain_payment_id";
@@ -25,7 +25,7 @@
 	var style_cookie_name = "style";
 	var style_cookie_duration = 365;
 	var style_domain = window.location.hostname;
-
+	
 	$(function(){
 		$('.theme-switch[rel="/css/themes/white/style.css"]').hide();
 		set_style_from_cookie();
@@ -149,6 +149,10 @@
         return new Date(parseInt(time) * 1000).toLocaleString();
     }
 	
+	function formatBytes(a,b) {
+		if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+	}
+	
 	function formatPaymentLink(hash){
         return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
     }
@@ -245,63 +249,25 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 	
-
-	// Ukrainian
-(function() {
-  function numpf(n, f, s, t) {
-    // f - 1, 21, 31, ...
-    // s - 2-4, 22-24, 32-34 ...
-    // t - 5-20, 25-30, ...
-    var n10 = n % 10;
-    if ( (n10 == 1) && ( (n == 1) || (n > 20) ) ) {
-      return f;
-    } else if ( (n10 > 1) && (n10 < 5) && ( (n > 20) || (n < 10) ) ) {
-      return s;
-    } else {
-      return t;
-    }
-  }
-
-  jQuery.timeago.settings.strings = {
-    prefixAgo: null,
-    prefixFromNow: "через",
-    suffixAgo: "тому",
-    suffixFromNow: null,
-    seconds: "мить",
-    minute: "хвилина",
-    minutes: function(value) { return numpf(value, "%d хвилина", "%d хвилини", "%d хвилин"); },
-    hour: "година",
-    hours: function(value) { return numpf(value, "%d година", "%d години", "%d годин"); },
-    day: "день",
-    days: function(value) { return numpf(value, "%d день", "%d дні", "%d днів"); },
-    month: "місяць",
-    months: function(value) { return numpf(value, "%d місяць", "%d місяці", "%d місяців"); },
-    year: "рік",
-    years: function(value) { return numpf(value, "%d рік", "%d роки", "%d років"); }
-  };
-})();
-
-
-function hex2a(hexx) {
-	var hex = hexx.toString();//force conversion
-	var str = '';
-	for (var i = 0; i < hex.length; i += 2)
-		str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-	return str;
-}
-
+	function hex2a(hexx) {
+		var hex = hexx.toString();//force conversion
+		var str = '';
+		for (var i = 0; i < hex.length; i += 2)
+			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+		return str;
+	}
 </script>
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Меню</span>
+                <span class="sr-only">Menu</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand " href="/"><span id="coinIcon">&#1180;</span> <strong>Карбо</strong>ванець</a>
+            <a class="navbar-brand " href="/en/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong>vanets</a>
 			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
         </div>
 		
@@ -310,38 +276,37 @@ function hex2a(hexx) {
             <ul class="nav navbar-nav navbar-left explorer_menu">
 
 			    <li><a class="hot_link" data-page="home.html" href="#">
-                    <i class="fa fa-cubes" aria-hidden="true"></i> Оглядач
+                    <i class="fa fa-cubes" aria-hidden="true"></i> Block Explorer
                 </a></li>
 				
 				<li><a class="hot_link" data-page="pools.html" href="#pools">
-                    <i class="fa fa-gavel" aria-hidden="true"></i> Пули
+                    <i class="fa fa-gavel" aria-hidden="true"></i> Pools
                 </a></li>
 				
 				<li><a class="hot_link" data-page="api.html" href="#api">
                     <i class="fa fa-code" aria-hidden="true"></i> API
                 </a></li>
 
- 			    <li><a  class="hot_link" href="/en">
-                    <i class="fa fa-language" aria-hidden="true"></i> EN
-                </a></li>
+ 			    <!--li><a  class="hot_link" href="/">
+                    <i class="fa fa-language" aria-hidden="true"></i> UA
+                </a></li-->
 				
-				<button rel="/css/themes/dark/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Нічний режим"><i class="fa fa-moon-o"></i></button>
-				<button rel="/css/themes/white/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Денний режим"><i class="fa fa-sun-o"></i></button>
-				
+				<button rel="/css/themes/dark/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Night Mode"><i class="fa fa-moon-o"></i></button>
+				<button rel="/css/themes/white/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Day Mode"><i class="fa fa-sun-o"></i></button>
 				
 	<!-- //-->			
 
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Блок
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
                 </a></li>
 
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Транзакція
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
                 </a></li>
 				
-				<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html" href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Транзакції з Payment ID
+				<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html" href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
                 </a></li>
 
-                <li><a style="display:none;" class="hot_link" data-page="support.html" href="#support">
-                    <i class="fa fa-comments"></i> Допомога
+                <li><a  style="display:none;" class="hot_link" data-page="support.html" href="#support">
+                    <i class="fa fa-comments"></i> Help
                 </a></li> 
 
 <!-- //-->
@@ -350,10 +315,9 @@ function hex2a(hexx) {
 					
 			<div class="nav col-md-6 navbar-right explorer-search">
 				<div class="input-group">
-					<input type="hidden" id="requestId" />
-					<input class="form-control" placeholder="Номер чи хеш блоку, хеш транзакції, ідентифікатор платежу" id="txt_search">
+					<input class="form-control" placeholder="Search by block height / hash, transaction hash, payment id" id="txt_search">
 					<span class="input-group-btn"><button class="btn btn-default" type="button" id="btn_search">
-						<span><i class="fa fa-search"></i> Шукати</span>
+						<span><i class="fa fa-search"></i> Search</span>
 					</button></span>
 				</div>
 			</div>
@@ -464,7 +428,7 @@ var block, xhrGetSearchBlock;
 															'data-dismiss="alert" aria-hidden="true">' + 
 														'&times;' + 
 													'</button>' + 
-													'Нічого не знайдено' + 
+													'We could not find anything.' + 
 												 '</div>');
 										}
 									}
@@ -497,7 +461,7 @@ function wrongSearchAlert() {
 		'data-dismiss="alert" aria-hidden="true">' + 
 		'&times;' + 
 		'</button>' + 
-		'<strong>Неправильний запит!</strong><br /> Впишіть номер чи хеш блоку, хеш транзакції, або ідентифікатор платежу.' + 
+		'<strong>Wrong search query!</strong><br /> Please enter block height or hash, transaction hash, or payment id.' + 
 		'</div>');
 }
 
@@ -523,7 +487,7 @@ $('#txt_search').keyup(function(e){
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
 					<small>
-						&copy; 2017 Карбованець. 
+						&copy; 2017 <strong>Karbo</strong>vanets. 
 					</small>
 				</p>
 			</div>
@@ -532,18 +496,18 @@ $('#txt_search').keyup(function(e){
 					<small>
 					<!-- This copyright should be left intact -->
 				
-					Працює на <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					в. 1.0.9.<br />
-					<span class="text-muted">Частково використовує <strong>cryptonote-universal-pool</strong><br />
-					який розповсюджується за ліцензією <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
+					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
+					v. 1.1.0.<br />
+					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
+					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>
 				</p>
-		
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-6">
 			
 				<ul>
-					<li><a href="http://karbowanec.com">karbowanec.com</li>
+					<li><a href="http://karbo.io/">karbo.io</li>
+					<li><a href="http://karbo.org/">karbo.org</li>
 				</ul>
 				
 			</div>
@@ -575,6 +539,6 @@ $('#txt_search').keyup(function(e){
 				});  
 					
 			});});
-	</script>
+	</script>	
 </body>
 </html>

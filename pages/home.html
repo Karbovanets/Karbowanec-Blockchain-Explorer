@@ -1,42 +1,48 @@
+<style>
+
+	#mem_pool_rows tr td:first-child {
+		text-align: left;
+	}
+</style>
+
 <div class="row">
 	<div class="col-sm-12 col-md-6">
 		<div class="panel panel-default" id="network-stats">
 		  <div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Статистика</h3>
+			<h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Stats</h3>
 		  </div>
 		  <div class="panel-body">
 			<div class="row">
 				<div class="col-sm-6 col-md-6">
-					<ul class="nav nav-pills nav-stacked">
+					<ul class="list-group">
 					
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Висота блокчейну, тобто загальна кількість блоків у ланцюжку блоків, включно з нульовим."><i class="fa fa-bars"></i> Висота: <span id="networkHeight"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Blockchain height, total amount of blocks starting from zero."><i class="fa fa-list-ol"></i> Height: <span id="networkHeight"></span></li>
+				
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks)."><i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions"></span></li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Кількість проведених транзакцій у мережі (не враховуючи виплати винагороди за карбування)."><i class="fa fa fa-exchange"></i> Транзакції: <span id="networkTransactions"></span></a></li>
+			
 						
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Current Base Reward (for last mined block)."><i class="fa fa-certificate"></i> Reward: <span id="currentReward"></span></li>
 						
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins"></span></li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Поточна винагорода (за останній викарбуваний блок)."><i class="fa fa-certificate"></i> Нагорода: <span id="currentReward"></span></a></li>
-						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Кількість карбованців, випущена в обіг."><i class="fa fa-money"></i> В обігу: <span id="totalCoins"></span></a></li>
-						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Співідношення кількості карбованців, випущених в обіг до запланованої початкової кількості."><i class="fa fa-percent" aria-hidden="true"></i> Емісія: <span id="emissionPercent"></span> %</a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Percent of already emitted coins related to Initial supply before Tail emission."><i class="fa fa-university" aria-hidden="true"></i> Emission: <span id="emissionPercent"></span> %</li>
 						
 					</ul>
 				</div>
 				<div class="col-sm-6 col-md-6">
-					<ul class="nav nav-pills nav-stacked">
+					<ul class="list-group">
 					
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Складність для наступного блоку. Це коефіцієнт, при якому за поточної швидкості хешування, блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Поточна складність: <span id="networkDifficulty"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Difficulty: <span id="networkDifficulty"></span></li>
+				
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average difficulty by last 30 blocks."><i class="fa fa-lock"></i> Average Difficulty: <span id="avgDifficulty"></span></li>
+					
+					
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Current estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"></span></li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Середня складність за період останніх 30 блоків."><i class="fa fa-lock"></i> Середня складність: <span id="avgDifficulty"></span></a></li>
-						
-						
-						
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Розрахункова поточна швидкість операцій хешування в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швидкість: <span id="networkHashrate"></span></a></li>
-						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі середньої складності."><i class="fa fa-clock-o"></i> Сер. швидкість: <span id="avgHashrate"></span></a></li>
-						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Розрахунковий час знаходження блоку при поточній складності і розрахунковій швидкості мережі."><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Інтервал: <span id="blockSolveTime"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average estimated network hash rate. Calculated by average difficulty."><i class="fa fa-clock-o"></i> Average Hash Rate: <span id="avgHashrate"></span></li>
+
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Estimated block solve time at estimated network speed and current difficulty."><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Solve time: <span id="blockSolveTime"></span></li>
 					
 					</ul>
 				</div>
@@ -50,9 +56,9 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		  
-			<h3 class="panel-title"><i class="fa fa-area-chart" aria-hidden="true"></i> Графік 
+			<h3 class="panel-title"><i class="fa fa-area-chart" aria-hidden="true"></i> Charts
 		  
-			<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Графік складності на основі останніх блоків, з нижче наведеного списку. Винагорода за блок. Розмір блоку. К-ть транзакцій у блоці. Додайте більше блоків аби збільшити діапазон графіку."><i class="fa fa-question-circle"></i></span>
+			<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Difficulty based on last blocks from the list below. Block size, transactions count. Load more blocks to enlarge chart range."><i class="fa fa-question-circle"></i></span>
 			</h3>
 			
 		  </div>
@@ -63,27 +69,74 @@
 	</div>
 </div>
 
+
 <div class="panel panel-default">
   <div class="panel-heading">
   
-	<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Непідтверджені транзакції 
-	<span id="mempool_count" class="badge"></span>
-	<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Свіжі транзакції які ще потрапили у блок та очікують підтвердження. Коли потраплять - стануть підтвердженими."><i class="fa fa-question-circle"></i></span>
+	<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction pool 
+	<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i class="fa fa-question-circle"></i></span>
     </h3>
 	
   </div>
   <div class="panel-body">
-    
-	<div>
+		
+		<div class="row">
+		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+			<div class="panel panel-default tab-panel">
+			  <div class="panel-body">
+				
+				  <ul class="nav nav-pills nav-stacked">
+					<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Count: <span id="mempool_count"></span></li>
+				  </ul>
+				
+			  </div>
+			</div>
+		  </div>
+		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+			<div class="panel panel-default tab-panel">
+			  <div class="panel-body">
+				
+				  <ul class="nav nav-pills nav-stacked">
+					<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Amount: <span id="mempool_amount"></span></li>
+				  </ul>
+				
+			  </div>
+			</div>
+		  </div>
+		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+			<div class="panel panel-default tab-panel">
+			  <div class="panel-body">
+				
+				  <ul class="nav nav-pills nav-stacked">
+					<li href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Fees: <span id="mempool_fees"></span></a></li>
+				  </ul>
+				
+			  </div>
+			</div>
+		  </div>
+		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+		    <div class="panel panel-default tab-panel">
+		      <div class="panel-body">
+			    
+			      <ul class="nav nav-pills nav-stacked">
+				    <li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Size: <span id="mempool_sizes"></span></li>
+			      </ul>
+			   
+		      </div>
+			</div>
+		  </div>
+		</div>
+
+
 		<div class="table-responsive">
 			<table class="table table-hover" id="mem_pool_table">
 				<thead>
 				<tr>
-					<th width="30%"><i class="fa fa-clock-o"></i> Дата і час</th>
-					<th width="10%"><i class="fa fa-money"></i> Сума</th>
-					<th width="10%"><i class="fa fa-tag"></i> Комісія</th>
-					<th width="10%"><i class="fa fa-archive"></i> Розмір</th>
-					<th width="40%"><i class="fa fa-paw"></i> Хеш</th>
+					<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
+					<th width="10%"><i class="fa fa-money"></i> Amount</th>
+					<th width="10%"><i class="fa fa-tag"></i> Fee</th>
+					<th width="10%"><i class="fa fa-archive"></i> Size</th>
+					<th width="40%"><i class="fa fa-paw"></i> Hash</th>
 				</tr>
 				</thead>
 				<tbody id="mem_pool_rows">
@@ -92,36 +145,36 @@
 			</table>
 		</div>
 	</div>
-  </div>
 </div>
+
 
 <div class="panel panel-default">
   <div class="panel-heading">
-	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Останні блоки</h3>
+	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Recent blocks</h3>
   </div>
   <div class="panel-body">
 	<div class="row">
 		<div class="col-sm-8 col-md-6 col-lg-5">
 			<div class="input-group">
-				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-arrow-left" aria-hidden="true"></i> <span class="large-screen">Старіші</span></a>
+				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-arrow-left" aria-hidden="true"></i> Older</a>
 				<span class="input-group-addon">№</span>
-				<input id="goto-height" type="text" class="form-control" placeholder="Висота">
-				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Йти</a>
-				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled"><span class="large-screen">Новіші</span> <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				<input id="goto-height" type="text" class="form-control" placeholder="Height">
+				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Go</a>
+				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>
 			<tr>
-				<th><strong>№</strong></th>
-				<th><i class="fa fa-clock-o"></i> Дата і час</th>
-				<th><i class="fa fa-archive"></i> Розмір</th>
-				<th><i class="fa fa-paw"></i> Хеш блоку</th>
-				<th><i class="fa fa-unlock-alt"></i> Складність</th>
-				<th><i class="fa fa-bars"></i> Транзакції</th>
+				<th><i class="fa fa-bars"></i> Height</th>
+				<th><i class="fa fa-clock-o"></i> Date &amp; time</th>
+				<th><i class="fa fa-archive"></i> Size</th>
+				<th><i class="fa fa-paw"></i> Block Hash</th>
+				<th><i class="fa fa-unlock-alt"></i> Difficulty</th>
+				<th><i class="fa fa fa-exchange"></i> Txs</th>
 			</tr>
 			</thead>
 			<tbody id="blocks_rows">
@@ -131,7 +184,7 @@
 	</div>
 
 	<p class="text-center">
-		<button type="button" class="btn btn-default" id="loadMoreBlocks">Завантажити більше</button>
+		<button type="button" class="btn btn-default" id="loadMoreBlocks">Load More</button>
 	</p>
 	
   </div>
@@ -222,7 +275,7 @@ $.ajax({
 			}
 		});
     }
-});
+});				
 }
 
 var xhrGetBlocks;
@@ -388,7 +441,7 @@ $('#goto-height').keyup(function(e){
         var columns =
             '<td>' + block.height + '</td>' +
             '<td class="date-time">' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
-			'<td>' + block.cumul_size + '</td>' +
+			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
             '<td class="blk-diff">' + block.difficulty + '</td>' +
             '<td>' + block.tx_count + '</td>';
@@ -398,7 +451,7 @@ $('#goto-height').keyup(function(e){
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
 		Timestamps.push(dateTime);
-		
+				
         row.innerHTML = columns;
 		
         return row;
@@ -458,68 +511,68 @@ $('#goto-height').keyup(function(e){
 	
 //  Karbovanets MemPool Transactions
 function getPoolTransactions(){
-
-var xhrGetPool = $.ajax({
-			
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_pool_json",
-                params: {
-  
-                }
-            }),
-            dataType: 'text',
-            cache: 'false',
-            success: function(data){
-			
-				var txsRows = document.getElementById('mem_pool_rows');
-				while (txsRows.firstChild) {
-					txsRows.removeChild(txsRows.firstChild);
-				}
-			
-				var rawTxs = data.split('"transactions":"').pop();
-				rawTxs = rawTxs.split('"}}')[0];
-				var txsArray = [];
-				txsArray = rawTxs.split('\n\n');
-				txsArray.forEach(function(tx, i) {
-					var arrayOfLines = tx.split('\n');
-					var hash = arrayOfLines[0].split(': ').pop();
-					if(hash != "") {
-						var timestamp = arrayOfLines[10].split(':').pop();
-						var amount = arrayOfLines[8].split(':').pop();
-						var fee = arrayOfLines[9].split(':').pop();
-						var size = arrayOfLines[1].split(':').pop();
-						var row = document.createElement('tr');
-						var columns =
-								'<td>' + formatDate(timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
-								'<td>' + getReadableCoins(amount, 4, true) + '</td>' +
-								'<td>' + getReadableCoins(fee, 4, true) + '</td>' +
-								'<td>' + size + '</td>' +
-								'<td>' + formatPaymentLink(hash) + '</td>';
-						row.innerHTML = columns;
-						$(txsRows).append(row);
-						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
-					}
-				});
-				updateText('mempool_count', document.querySelectorAll('#mem_pool_rows tr').length);
+  var xhrGetPool = $.ajax({
+	url: api + '/json_rpc',
+	method: "POST",
+	data: JSON.stringify({
+		jsonrpc: "2.0",
+		id: "test",
+		method: "f_mempool_json",
+		params: {}
+	}),
+	dataType: 'json',
+	cache: 'false',
+	success: function(newdata) {
+		var data = newdata.result.mempool;
+		var totalAmount = 0;
+		var totalFee = 0;
+		var totalSize = 0;
+		var txcount = 0;
+		var txsRows = document.getElementById('mem_pool_rows');
+		  if (txsRows) {
+			while (txsRows.firstChild) {
+			  txsRows.removeChild(txsRows.firstChild);
 			}
-    });
-};
+		  }
+		for (var i = 0; i < data.length; i ++){
+			var tx = data[i];
+				
+			var row = document.createElement('tr');
+			var columns =
+				'<td>' + formatDate(tx.receiveTime) + ' (<span class="mtx-ago"></span>)' + '</td>' +
+				'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
+				'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
+				'<td>' + formatBytes(parseInt(tx.size)) + '</td>' +
+				'<td>' + formatPaymentLink(tx.hash) + '</td>';
+			row.innerHTML = columns;
+			$(txsRows).append(row);
+			$(row).find('.mtx-ago').timeago('update', new Date(tx.receiveTime * 1000).toISOString());
+			
+			txcount = txcount + 1;
+			totalAmount = tx.amount_out + totalAmount;
+			totalFee = totalFee + tx.fee;
+			totalSize = totalSize + tx.size;
+			
+		}
+		updateText('mempool_count', txcount);
+		updateText('mempool_amount', getReadableCoins(totalAmount,4));
+		updateText('mempool_fees', getReadableCoins(totalFee, 8));
+		updateText('mempool_sizes', formatBytes(parseInt(totalSize)));
+	}
+  });
+}
 
 // Difficulty chart
 function displayDiffChart() {
 	var ctx = document.getElementById("difficultyChart");
 	var chartData = {
-		//	labels: [].concat(Blocks).reverse(),
+			//labels: [].concat(Blocks).reverse(),
 			labels: [].concat(formatDate(Timestamps)).reverse(),
 			datasets: [
 			  {
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
-				label: "№ блоку",
+				label: "Height",
 				backgroundColor: "rgba(0,0,0,0)",
 				borderColor: 'rgba(0,0,0,0)',
 				borderWidth: 0,
@@ -531,8 +584,8 @@ function displayDiffChart() {
 			  },{
 				data: [].concat(Difficulties).reverse(),
 				yAxisID: "Difficulty",
-				label: "Складність",
-				backgroundColor: "rgba(220,220,220,0.3)",
+				label: "Difficulty",
+				backgroundColor: "rgba(220,220,220,0.2)",
 				borderColor: '#2FA4E7',
 				borderWidth: 2,
 				pointColor : "#2FA4E7",
@@ -542,12 +595,12 @@ function displayDiffChart() {
 				pointBorderWidth: 2,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 10
+				pointHitRadius: 20
 			  },{
 				data: [].concat(Txses).reverse(),
 				yAxisID: "Transactions",
-				label: "Транзакції",
-				backgroundColor: "rgba(255,242,0,0.05)",
+				label: "Transactions",
+				backgroundColor: "rgba(255,242,0,0.1)",
 				borderColor: '#B5E61D',
 				borderWidth: 1,
 				pointColor : "#B5E61D",
@@ -557,12 +610,12 @@ function displayDiffChart() {
 				pointBorderWidth: 1,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 10
+				pointHitRadius: 20
 			  },{
 				data: [].concat(Sizes).reverse(),
 				yAxisID: "Sizes",
-				label: "Розмір",
-				backgroundColor: "rgba(65,172,0,0.05)",
+				label: "Size",
+				backgroundColor: "rgba(65,172,0,0.1)",
 				borderColor: '#99D9EA',
 				borderWidth: 1,
 				pointColor : "#99D9EA",
@@ -572,7 +625,7 @@ function displayDiffChart() {
 				pointBorderWidth: 1,
 				pointRadius: 1,
 				pointHoverRadius: 3,
-				pointHitRadius: 10
+				pointHitRadius: 20
 			  }
 			]
 		};
@@ -597,7 +650,7 @@ function displayDiffChart() {
 				position: 'left',
 				scaleLabel: {
 					display: false,
-					labelString: '№ блоку'
+					labelString: 'Height'
 				},
 				gridLines: {
 					display:false
@@ -613,7 +666,7 @@ function displayDiffChart() {
 				position: 'left',
 				scaleLabel: {
 					display: false,
-					labelString: 'Складність'
+					labelString: 'Difficulty'
 				},
 				gridLines: {
 					display:false
@@ -629,7 +682,7 @@ function displayDiffChart() {
 				position: 'right',
 				scaleLabel: {
 					display: false,
-					labelString: 'К-ть транзакцій'
+					labelString: 'Transactions'
 				},
 				gridLines: {
 					display:false
@@ -645,7 +698,7 @@ function displayDiffChart() {
 				position: 'right',
 				scaleLabel: {
 					display: false,
-					labelString: 'Розмір'
+					labelString: 'Size'
 				},
 				gridLines: {
 					display:false
@@ -726,8 +779,7 @@ function displayDiffChart() {
 					}*/
 				}
 			  }
-			
-		};
+		}; 
 		
 	diffChart = new Chart(ctx,{
     type: 'line',
@@ -758,7 +810,7 @@ function refreshChart() {
 				sizes.push(size);				
 				times.push(time);				
 		}
-		//diffChart.data.labels = labels.reverse();
+		
 		diffChart.data.labels = times.reverse();
 		diffChart.data.datasets[0].data = labels.reverse();
 		diffChart.data.datasets[1].data = diffs.reverse();
@@ -784,8 +836,8 @@ $(function() {
 
 function getReadableTime(seconds){
 
-        var units = [ [60, 'сек.'], [60, 'хв.'], [24, 'год.'],
-            [7, 'д.'], [4, 'тижд.'], [12, 'міс.'], [1, 'р.'] ];
+        var units = [ [60, 's.'], [60, 'min.'], [24, 'h.'],
+            [7, 'd.'], [4, 'w.'], [12, 'м.'], [1, 'y.'] ];
 
         function formatAmounts(amount, unit){
             var rounded = Math.round(amount);
@@ -802,4 +854,4 @@ function getReadableTime(seconds){
 }
 
 </script>
-<script src="js/Chart.bundle.min.js"></script>
+<script src="../js/Chart.bundle.min.js"></script>

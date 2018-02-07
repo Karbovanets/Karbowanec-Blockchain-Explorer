@@ -1,37 +1,37 @@
-<h2><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Транзакція</h2>
+<h2><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction</h2>
 <div class="row" id="tx_info">
     <div class="col-md-12 stats">
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Унікальний ідентифікатор транзакції."><i class="fa fa-question-circle"></i></span> Хеш: <span id="transaction.hash" style="word-break: break-all;"></span></div>
-        <div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Кількість підтверджень мережі."><i class="fa fa-question-circle"></i></span> Підтверджень: <span id="transaction.confirmations"></span>, Час першого підтвердження: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Плата за вміщення транзакції в блок."><i class="fa fa-question-circle"></i></span> Комісія: <span id="transaction.fee"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Зовсім не означає, що це сума, яка насправді переказується, котрийсь із виходів переказується, але невідомо котрий саме."><i class="fa fa-question-circle"></i></span> Сума виходів: <span id="transaction.amount_out"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Розмір транзакції у байтах."><i class="fa fa-question-circle"></i></span> Розмір: <span id="transaction.size"></span></div>
-        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Унікальний ідентифікатор платежу який включається в транзакцію і дозволяє розрізняти платежі."><i class="fa fa-question-circle"></i></span> Ідентифікатор платежу: <span id="transaction.paymentId"></span>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Unique fingerprint of the transaction."><i class="fa fa-question-circle"></i></span> Hash: <span id="transaction.hash" style="word-break: break-all;"></span></div>
+		<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Money that goes to the miner, who included this transaction into block."><i class="fa fa-question-circle"></i></span> Fee: <span id="transaction.fee"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="It does not mean that this is the amount that is actually transferred."><i class="fa fa-question-circle"></i></span> Sum of outputs: <span id="transaction.amount_out"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the transaction in bytes."><i class="fa fa-question-circle"></i></span> Size: <span id="transaction.size"></span></div>
+        <div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId"></span>
 		<br />
-		Розшифровка ідентифікатора: <em id="transaction.paymentIdDecifer"></em>
-		</div>
-        <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Вказує скільки випадкових входів змішуються в межах цієї транзакції, для того, щоб досягти бажаного рівня анонімності. Число 1 означає що ніяких додаткових входів не змішуються і, таким чином, кожен вхід може бути простежено."><i class="fa fa-question-circle"></i></span> Ступінь приватності: <span id="transaction.mixin"></span></div>
-		<div id="tx_unconfirmed" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Транзакція ще не потрапила в блок і не записана в блокчейні."><i class="fa fa-question-circle"></i></span> <span class="text-warning">Непідтверджена транзакція</span></div>
+		Patment ID decoding: <em id="transaction.paymentIdDecifer"></em></div>
+        <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."><i class="fa fa-question-circle"></i></span> Mixin count: <span id="transaction.mixin"></span></div>
+		<div id="tx_unconfirmed" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction is not included into block yet and therefore is not wtitten into blockchain."><i class="fa fa-question-circle"></i></span> <span class="text-warning">Unconfirmed transaction</span></div>
     </div>
 </div>
 <div id="tx_block">
-	<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> У блоці</h3>
+	<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h3>
 	<div class="row">
 		<div class="col-md-12 stats">
-			<div><i class="fa fa-circle-o"></i> Хеш: <span id="block.hash" style="word-break: break-all;"></span></div>
-			<div><i class="fa fa-circle-o"></i> Номер: <span id="block.height"></span></div>
-			<div><i class="fa fa-circle-o"></i> Дата і час: <span id="block.timestamp"></span></div>
+			<div><i class="fa fa-circle-o"></i> Hash: <span id="block.hash" style="word-break: break-all;"></span></div>
+			<div><i class="fa fa-circle-o"></i> Height: <span id="block.height"></span></div>
+			<div><i class="fa fa-circle-o"></i> Timestamp: <span id="block.timestamp"></span></div>
 		</div>
 	</div>
 </div>
 
-<h3 class="inputs">Входи (<span id="inputs_count"></span>)</h3>
+<h3 class="inputs">Inputs (<span id="inputs_count"></span>)</h3>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
         <tr>
-            <th><i class="fa fa-money"></i> Сума</th>
-            <th><i class="fa fa-paw"></i> Образ</th>
+            <th><i class="fa fa-money"></i> Amount</th>
+            <th><i class="fa fa-paw"></i> Image</th>
+			<th><i class="fa fa-arrows-alt"></i> Offset</th>
         </tr>
         </thead>
         <tbody id="inputs_rows">
@@ -41,13 +41,13 @@
 </div>
 
 
-<h3 class="outputs">Виходи (<span id="outputs_count"></span>)</h3>
+<h3 class="outputs">Outputs (<span id="outputs_count"></span>)</h3>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
         <tr>
-            <th><i class="fa fa-money"></i> Сума</th>
-            <th><i class="fa fa-key"></i> Ключ</th>
+            <th><i class="fa fa-money"></i> Amount</th>
+            <th><i class="fa fa-key"></i> Key</th>
         </tr>
         </thead>
         <tbody id="outputs_rows">
@@ -105,7 +105,7 @@
                 block = transaction.block;
 				
                 updateText('transaction.hash', details.hash);
-				if (block.hash){
+                if (block.hash){
 					$('#confirmations').show();
 					updateText('transaction.confirmations', lastStats.height - block.height);
 					updateText('transaction.timestamp', formatDate(block.timestamp));
@@ -120,7 +120,7 @@
 				updateText('transaction.paymentIdDecifer', hex2a(details.paymentId));
                 if (!details.paymentId)
                     $('#div_transaction_paymentId').hide();
-                updateText('transaction.size', details.size);
+                updateText('transaction.size', formatBytes(parseInt(details.size)));
 
 				if (!block.hash){
 					$('#tx_block').hide();
@@ -137,7 +137,8 @@
 
     function getInputCells(input){
         return '<td>' + getReadableCoins(input.value.amount) + '</td>' +
-            '<td>' + input.value.k_image + '</td>';
+            '<td>' + input.value.k_image + '</td>' +
+            '<td>' + input.value.key_offsets + '</td>';
     }
 
 
@@ -146,6 +147,7 @@
         var row = document.createElement('tr');
         row.setAttribute('data-json', jsonString);
         row.setAttribute('data-k_image', input.value.k_image);
+		row.setAttribute('data-key_offsets', input.value.key_offsets);
         row.setAttribute('id', 'inputRow' + input.value.k_image);
 
         row.innerHTML = getInputCells(input);
@@ -226,7 +228,7 @@
 		
 		updateText('outputs_count', document.querySelectorAll('#outputs_rows tr').length);
     }
-
+	
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});

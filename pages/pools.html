@@ -17,69 +17,85 @@
 	#pools_rows > tr > td:last-child {
 		text-align: left;
 	}
+	
 </style>
 
-
 <div class="row">
-	<div class="col-sm-12 col-md-6">
-		<div class="panel panel-default" id="network-stats">
-		  <div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-tachometer"></i> Статистика</h3>
-		  </div>
-		  <div class="panel-body">
-			<div class="row">
-				<div class="col-sm-6 col-md-6">
-					<ul class="nav nav-pills nav-stacked">
-					
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Загальна швидкість усіх відомих пулів, перелічених нижче."><i class="fa fa-tachometer"></i> Швидк. пулів: <span id="networkHashrate"></span></a></li>
+				<div class="col-sm-6 col-md-3">
+					<ul class="list-group">
+						<li class="list-group-item d-flex justify-content-between align-items-center active">
+							<i class="fa fa-tachometer"></i> Network Hashrate
+						</li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Розрахункова поточна швидкість в мережі. Розраховується на основі поточної складності."><i class="fa fa-tachometer"></i> Швид. мережі: <span id="totalPoolsHashrate"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Current estimated network hash rate. Calculated by current difficulty.">
+							By difficulty: <span id="totalPoolsHashrate"></span>
+						</li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="К-ть майнерів на всіх пулах."><i class="fa fa-group"></i> Всього майнерів: <span id="total_miners"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Average estimated network hash rate. Calculated by average difficulty.">
+							Average: <span id="avgHashrate"></span>
+						</li>
 						
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="The overall hash rate of all known pools listed below.">
+							By pools: <span id="networkHashrate"></span>
+						</li>
 						
 					</ul>
 				</div>
-				<div class="col-sm-6 col-md-6">
-					<ul class="nav nav-pills nav-stacked">
-					
-						<li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Складність для наступного блоку. Це коефіцієнт, при якому за поточної швидкості хешування, блок буде карбуватися з інтервалом&nbsp;4&nbsp;хв."><i class="fa fa-unlock-alt"></i> Поточна складність: <span id="networkDifficulty"></span></a></li>
+				<div class="col-sm-6 col-md-2">
+					<ul class="list-group">
+						<li class="list-group-item d-flex justify-content-between align-items-center active">
+							<i class="fa fa-unlock-alt"></i> Difficulty
+						</li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Середня складність за період останніх 30 блоків."><i class="fa fa-lock"></i> Середня складність: <span id="avgDifficulty"></span></a></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval.">
+							Current: <span id="networkDifficulty"></span>
+						</li>
 						
-						<li><a href="#" data-toggle="tooltip" data-placement="bottom" data-original-title="Розрахункова швидкість операцій хешування в мережі. Розраховується на основі середньої складності."><i class="fa fa-tachometer"></i> Сер. швидкість: <span id="avgHashrate"></span></a></li>
-						
-					
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Average difficulty by last 30 blocks.">
+							Average: <span id="avgDifficulty"></span>	
+						 </li>
+					</ul>
+
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<ul class="list-group">
+						<li class="list-group-item d-flex justify-content-between align-items-center active">
+							<i class="fa fa-group"></i> Total
+						</li>
+					  
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="The number of miners on all known pools.">
+							Miners: <span id="total_miners"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="The number of known pools.">
+							Pools: <span id="total_pools"></span>
+						</li>
 					</ul>
 				</div>
-			</div>
-			
-		  </div>
-		</div>
-	</div>
-	<div class="col-sm-12 col-md-6">
-		<div class="panel panel-default" id="network-stats">
+				
+						
+	<div class="col-sm-12 col-md-5">
+		<div class="panel panel-primary" id="network-stats">
 		  <div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-tachometer"></i> Калькулятор майнера</h3>
+			<h3 class="panel-title"><i class="fa fa-tachometer"></i> Estimate Mining Profits</h3>
 		  </div>
 		  <div class="panel-body">
 			<div class="row">
 				<div class="col-sm-12 col-md-12">
 					<div id="calcHashHolder">
 						<div class="input-group">
-							<input type="number" class="form-control" id="calcHashRate" placeholder="Вкажіть ваш хешрейт">
+							<input type="number" class="form-control" id="calcHashRate" placeholder="Enter your hash rate">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="calcHashDropdown">
 									<span id="calcHashUnit" data-mul="1">KH/s</span> <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" role="menu" id="calcHashUnits">
-									<li><a href="#" data-mul="0">H/s</a></li>
-									<li><a href="#" data-mul="1">KH/s</a></li>
-									<li><a href="#" data-mul="2">MH/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="0">H/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="1">KH/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="2">MH/s</a></li>
 								</ul>
 							</div>
 							<span class="input-group-addon">=</span>
-							<span class="input-group-addon" id="calcHashResultsHolder"><span id="calcHashAmount"></span> <span id="calcHashSymbol"></span> KRB / день</span>
+							<span class="input-group-addon" id="calcHashResultsHolder"><span id="calcHashAmount"></span> <span id="calcHashSymbol"></span> KRB / day</span>
 						</div>
 					</div>
 				</div>
@@ -89,85 +105,59 @@
 	</div>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="table-responsive">
-			<table id="network-hash" class="table table-hover sortable">
-				<thead>
-					<tr id="pools_header">
-						<th><span id="symbol"></span> Пули</th>
-						<th><i class="fa fa-bars"></i> Висота</th>
-						<th><i class="fa fa-tachometer"></i> Хешрейт</th>
-						<th><i class="fa fa-group"></i> Майнери</th>
-						<th><i class="fa fa-money"></i> Комісія</th>
-						<th><i class="fa fa-sign-out"></i> Мін. виплата</th>
-						<th><i class="fa fa-clock-o"></i> Останній блок</th>
-					</tr>
-				</thead>
-				<tbody id="pools_rows">
-				</tbody>
-			</table>
-		</div>
-	</div>
+<div class="table-responsive">
+    <table id="network-hash" class="table table-hover sortable">
+        <thead>
+            <tr>
+				<th><i class="fa fa-eyedropper"></i></th>
+                <th><span id="symbol"></span>&nbsp;Pools</th>
+                <th><i class="fa fa-bars"></i>&nbsp;Height</th>
+                <th><i class="fa fa-tachometer"></i>&nbsp;Hashrate,&nbsp;H/s</th>
+                <th><i class="fa fa-group"></i>&nbsp;Miners</th>
+                <th><i class="fa fa-money"></i>&nbsp;Total Fee</th>
+				<th><i class="fa fa-sign-out"></i>&nbsp;Min. Payout</th>
+                <th><i class="fa fa-cube"></i>&nbsp;Last Block</th>
+                <th><i class="fa fa-clock-o"></i>&nbsp;Found At</th>
+            </tr>
+        </thead>
+        <tbody id="pools_rows">
+        </tbody>
+    </table>
 </div>
+
 
 <div class="container">
         <div class="row">
 			<div class="col-lg-6 col-md-6">
 				<canvas id="poolsChart" style="margin: 0 auto;"></canvas>
 			</div>
+			<div class="col-lg-6 col-md-6">
+				<canvas id="minersChart" style="margin: 0 auto;"></canvas>
+			</div>
 		</div>
 </div>
 
 <br />
 
-<script src="js/Chart.bundle.min.js"></script>
+<script src="/js/Chart.bundle.min.js"></script>
 <script src="/js/sorttable.js"></script>
+
+
 <script>
 window.NETWORK_STAT_MAP = new Map(networkStat[symbol.toLowerCase()]);
-window.NETWORK_STAT_MAP2 = new Map(networkStat2[symbol.toLowerCase()]);
 window.poolNames = [];
 window.poolHashrates = [];
 window.colors = [];
 Difficulties = [];
+poolMiners = [];
 totalHashrate = 0;
 totalMiners = 0;
 lastReward = 0;
 avgDiff = 0;
-
+var it = -1;
 var poolsRefreshed = 0;
 			NETWORK_STAT_MAP.forEach((url, host, map) => {
-				$.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
-					var d = new Date(parseInt(data.pool.lastBlockFound));
-					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-					
-					var agostring = $.timeago(d);
-					
-					var index = host.indexOf("/");
-					var result;
-					if (index < 0) {
-						result = host;
-					} else {
-						result = host.substr(0, index);
-					}
-					
-					$('#pools_rows').append('<tr><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+data.network.height+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFree-'+result+'>'+calculateTotalFree(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
-					
-					totalHashrate += parseInt(data.pool.hashrate);
-					totalMiners += parseInt(data.pool.miners);
-					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
-					updateText('total_miners', totalMiners);
-					poolNames.push(result);
-					poolHashrates.push(parseInt(data.pool.hashrate));
-					window.colors.push(getRandomColor());
-					
-				});
-				poolsRefreshed++;
-					if (poolsRefreshed === NETWORK_STAT_MAP.size){ 
-						setTimeout(function(){ displayChart(); }, 1000);
-					}
-			});
-			NETWORK_STAT_MAP2.forEach((url, host, map) => {
+			
 				var index = host.indexOf("/");
 					var result;
 					if (index < 0) {
@@ -175,38 +165,81 @@ var poolsRefreshed = 0;
 					} else {
 						result = host.substr(0, index);
 					}
-			
-				$.getJSON(url + '/pool/stats', (data, textStatus, jqXHR) => {
-					var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
 				
-					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+				$.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
+					it = it + 1;
+					var d = new Date(parseInt(data.pool.lastBlockFound));
+					if(!isNaN(d)) {
+						var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+						
+						var agostring = $.timeago(d);
+					}
 					
-					var agostring = $.timeago(d);
+					window.colors.push(getRandomColor());
 					
-					$('#pools_rows').append('<tr><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+'</td><td id=hashrate-'+result+'>'+data.pool_statistics.hashRate+'&nbsp;H/s</td><td id=miners-'+result+'>'+data.pool_statistics.miners+'</td><td id=totalFree-'+result+'>'+'</td><td id=minPayout-'+result+'>'+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
+					//var blk = data.pool.blocks[0];
+					var poolBlocks = [];
+					for (var i = 0; i < data.pool.blocks.length; i++) {
+					  if (data.pool.blocks[i].length < 10) {
+						poolBlocks.push(parseInt(data.pool.blocks[i]));
+					  }
+					}
 					
-					totalHashrate += parseInt(data.pool_statistics.hashRate);
-					totalMiners += parseInt(data.pool_statistics.miners);
+
+					$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + window.colors[it] + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+data.network.height+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFee-'+result+'>'+calculateTotalFree(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFoundBlock-' + result + '>' + (!isNaN(d) ? poolBlocks.sort(cmp).reverse()[0] : 'none' ) + '</span></td><td><span id=lastFound-'+result+'>'+ (!isNaN(d) ? datestring : '-' ) +'</span> (<span class="timeago" id="ago-'+result+'">'+ (!isNaN(d) ? agostring : 'never' ) + '</span>)</td><</tr>');
+					
+					totalHashrate += parseInt(data.pool.hashrate);
+					totalMiners += parseInt(data.pool.miners);
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
 					updateText('total_miners', totalMiners);
 					poolNames.push(result);
-					poolHashrates.push(parseInt(data.pool_statistics.hashRate));
-					window.colors.push(getRandomColor());
+					poolHashrates.push(parseInt(data.pool.hashrate));
+					poolMiners.push(parseInt(data.pool.miners));
 					
-					$.getJSON(url + '/network/stats', (data, textStatus, jqXHR) => {
+					updateText('total_pools', poolNames.length);
+						
+				}).fail(function() {
+					
+					$.getJSON(url + '/pool/stats', (data, textStatus, jqXHR) => {
+						it = it + 1;
+						var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
+					
+						var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+						
+						var agostring = $.timeago(d);
+						
+						window.colors.push(getRandomColor());
+						
+						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + window.colors[it] + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+'</td><td id=hashrate-'+result+'>'+data.pool_statistics.hashRate+'</td><td id=miners-'+result+'>'+data.pool_statistics.miners+'</td><td id=totalFee-'+result+'>'+'</td><td id=minPayout-'+result+'>'+'</td><td>'+data.pool_statistics.lastBlockFound+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
+						
+						totalHashrate += parseInt(data.pool_statistics.hashRate);
+						totalMiners += parseInt(data.pool_statistics.miners);
+						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
+						updateText('total_miners', totalMiners);
+						poolNames.push(result);
+						poolHashrates.push(parseInt(data.pool_statistics.hashRate));
+						poolMiners.push(parseInt(data.pool_statistics.miners));
+						window.colors.push(getRandomColor());
+						
+						$.getJSON(url + '/network/stats', (data, textStatus, jqXHR) => {
 						updateText('height-'+result, data.height);
-					});
+						});
+							
+						$.getJSON(url + '/config', (data, textStatus, jqXHR) => {
+							updateText('totalFee-'+result, data.pplns_fee+"%");
+							updateText('minPayout-'+result, getReadableCoins(data.min_wallet_payout,4));						
+						});
+
 					
-					$.getJSON(url + '/config', (data, textStatus, jqXHR) => {
-						updateText('totalFree-'+result, "PPLNS: "+data.pplns_fee+"%,\nPPS: "+data.pps_fee+"%,\nSolo: "+data.solo_fee+"%");
-						updateText('minPayout-'+result, "Wallet: "+getReadableCoins(data.min_wallet_payout,2)+",\nExchange: "+getReadableCoins(data.min_exchange_payout,2));
+					
 					});
 				});
-				
-				
 				poolsRefreshed++;
-					if (poolsRefreshed === NETWORK_STAT_MAP2.size){ 
-						setTimeout(function(){ displayChart(); }, 1000);
+					if (poolsRefreshed === NETWORK_STAT_MAP.size){ 
+						setTimeout(function(){
+							displayChart();
+							displayChart2();
+						}, 1000);
 					}
 			});
 
@@ -235,6 +268,10 @@ function calculateTotalFree(config) {
     return totalFee;
 }
 
+  function cmp(a, b) {
+    return a - b;
+  }
+
 
 function displayChart() {
 	var ctx = document.getElementById("poolsChart");
@@ -243,15 +280,16 @@ function displayChart() {
 			labels: poolNames,
 			datasets: [{
 				data: poolHashrates,
-				backgroundColor: colors,
-				borderWidth: 1,
+				backgroundColor: window.colors,
+				borderWidth: 0,
 				segmentShowStroke: false
 			}]
 		};
 	var options = {
 			title: {
 				display: true,
-				text: 'Швидкість пулів'
+				text: 'Hashrate Distribution',
+				 fontSize: 25
 			},
 			tooltips: {
                 enabled: true,
@@ -264,14 +302,65 @@ function displayChart() {
                             return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
                     }
                 }
-            }
+            },
+			legend: {
+				display: false,
+				labels: {
+				fontColor: '#fff'
+				}
+			}
 		};
 	
 	window.poolsChart = new Chart(ctx,{
-    type: 'pie',
+    type: 'doughnut',
     data: chartData,
     options: options
 	});
+}
+
+function displayChart2() {
+    var ctx2 = document.getElementById("minersChart");
+
+    var chartData2 = {
+      labels: poolNames,
+      datasets: [{
+        data: poolMiners,
+        backgroundColor: colors,
+        borderWidth: 0,
+        segmentShowStroke: false
+      }]
+    };
+    var options2 = {
+      title: {
+        display: true,
+        text: 'Miner Distribution',
+        fontSize: 25
+      },
+      tooltips: {
+        enabled: true,
+        mode: 'single',
+        callbacks: {
+			title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+            label: function (tooltipItem, data) {
+				var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+                return amount + ' / ' + total + ' miners  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
+                }
+            }
+      },
+      legend: {
+        display: false,
+        labels: {
+          fontColor: '#fff'
+        }
+      }
+    };
+
+    window.poolsChart2 = new Chart(ctx2, {
+      type: 'doughnut',
+      data: chartData2,
+      options: options2
+    });
 }
 
 setInterval(function(){
@@ -280,7 +369,7 @@ setInterval(function(){
 	totalMiners = 0;
 	poolNames = [];
 	poolHashrates = [];
-	var poolsRefreshed = 0;
+	it = -1;
 		
             NETWORK_STAT_MAP.forEach((url, host, map) => {
 				
@@ -291,71 +380,70 @@ setInterval(function(){
 				} else {
 					result = host.substr(0, index);
 				}
+				
+				it = it + 1;
 					
                 $.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
-                    updateText('height-'+result, data.network.height);
-                    updateText('hashrate-'+result, data.pool.hashrate);
-                    updateText('miners-'+result, data.pool.miners);
-                    
-					var d = new Date(parseInt(data.pool.lastBlockFound));
+						updateText('height-'+result, data.network.height);
+						updateText('hashrate-'+result, data.pool.hashrate);
+						updateText('miners-'+result, data.pool.miners);
+						
+						var poolBlocks = [];
+						for (var i = 0; i < data.pool.blocks.length; i++) {
+						  if (data.pool.blocks[i].length < 10) {
+							poolBlocks.push(parseInt(data.pool.blocks[i]));
+						  }
+						}
+						updateText('lastFoundBlock-' + result, (typeof poolBlocks != "undefined" && poolBlocks != null && poolBlocks.length > 0 ? poolBlocks.sort(cmp).reverse()[0] : 'none' ));
+
+							
+						var d = new Date(parseInt(data.pool.lastBlockFound));
+						if (!isNaN(d)) {	
+							var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+							updateText('lastFound-'+result, datestring);
+							
+							var agostring = $.timeago(d);
+							updateText('ago-'+result, agostring);
+						}
+						
+						totalHashrate += parseInt(data.pool.hashrate);
+						totalMiners += parseInt(data.pool.miners);
+						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
+						updateText('total_miners', totalMiners);
+						updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/sec');
+						updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
+
+						
+                }).fail(function() {
+
+					$.getJSON(url + '/pool/stats', (data, textStatus, jqXHR) => {
+						var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
+						var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+						
+						var agostring = $.timeago(d);
+						
+						updateText('hashrate-'+result, data.pool_statistics.hashRate);
+						updateText('miners-'+result, data.pool_statistics.miners);
 					
-					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-                    updateText('lastFound'+result, datestring);
-					 
-                    var agostring = $.timeago(d);
-					updateText('ago-'+result, agostring);
+						totalHashrate += parseInt(data.pool_statistics.hashRate);
+						totalMiners += parseInt(data.pool_statistics.miners);
+						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
+						updateText('total_miners', totalMiners);
 					
-					totalHashrate += parseInt(data.pool.hashrate);
-					totalMiners += parseInt(data.pool.miners);
-					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
-					updateText('total_miners', totalMiners);
-					updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/sec');
-					updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 0).toString());
-                });
+					$.getJSON(url + '/network/stats', (data, textStatus, jqXHR) => {
+					   updateText('height-'+result, data.height);
+					});	
+					
+					});
+				});
 				poolsRefreshed++;
 				if (poolsRefreshed === NETWORK_STAT_MAP.size){ 
 					setTimeout(function(){ refreshChart(); }, 1000);
 				}	
-
+				$('#color-'+result).css("background-color",window.colors[it]);
             });
-			NETWORK_STAT_MAP2.forEach((url, host, map) => {
-			
-				var index = host.indexOf("/");
-				var result;
-				if (index < 0) {
-					result = host;
-				} else {
-					result = host.substr(0, index);
-				}
-				
-				
-				$.getJSON(url + '/pool/stats', (data, textStatus, jqXHR) => {
-					var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
-					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-					
-					var agostring = $.timeago(d);
-					
-                    updateText('hashrate-'+result, data.pool_statistics.hashRate);
-                    updateText('miners-'+result, data.pool_statistics.miners);
-                    //updateText('totalFree'+result, calculateTotalFree(data)+'%');
-				
-					totalHashrate += parseInt(data.pool_statistics.hashRate);
-					totalMiners += parseInt(data.pool_statistics.miners);
-					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
-					updateText('total_miners', totalMiners);
-					
-				});
-				$.getJSON(url + '/network/stats', (data, textStatus, jqXHR) => {
-				   updateText('height-'+result, data.height);
-				});
-				
-				poolsRefreshed++;
-					if (poolsRefreshed === NETWORK_STAT_MAP2.size){ 
-						setTimeout(function(){ displayChart(); }, 1000);
-					}
-			});
 
-}, 240000);
+}, 60000);
 
 
 function refreshChart() {
@@ -366,9 +454,12 @@ function refreshChart() {
 			var hashrate = 	row.find('td:nth-child(3)').text();
 			poolsChart.data.labels[i] = label;
 			poolsChart.data.datasets[0].data[i] = parseInt(hashrate);
+			poolsChart2.data.labels[i] = label;
+			poolsChart2.data.datasets[0].data[i] = parseInt(miners);
 		}
 		poolsChart.update();
-}	
+		poolsChart2.update();
+}
 	
 
 function getRandomColor() {
@@ -499,3 +590,4 @@ $.ajax({
     }
 
 </script>
+
