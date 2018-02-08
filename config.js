@@ -59,6 +59,7 @@ var networkStat = {
 		["karbowanec.hashparty.io", "http://karbowanec-pool.hashparty.io:8117"],
 		["pool.krb-ua.tk", "http://pool.krb-ua.tk:8117"],
 		["krb.pool.ualinux.com", "http://krb.pool.ualinux.com:8117"],
+		["krb.agilepools.com", "https://krb.agilepools.com/"],
 		["krb.fastpool.eu", "http://krb.fastpool.eu:8118"]
 		
 		
