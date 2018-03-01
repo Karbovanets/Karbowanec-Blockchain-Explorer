@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<link rel="shortcut icon" href="../favicon.ico">
 	<link rel="icon" type="image/icon" href="../favicon.ico" >
-    <title>Karbowanec (&#1180;) [KRB] Block Explorer</title>
+    <title>ChilePool - LuKa Block Explorer</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="/css/themes/white/style.css" rel="stylesheet" id="theme_link">
+    <link href="css/themes/white/style.css" rel="stylesheet" id="theme_link">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
-    <script src="/config.js"></script>
+    <script src="config.js"></script>
 </head>
 <body>
 <script>
 
-	var blockchainExplorer 	= "/?hash={id}#blockchain_block";
-	var transactionExplorer = "/?hash={id}#blockchain_transaction";
-	var paymentIdExplorer 	= "/?hash={id}#blockchain_payment_id";
+	var blockchainExplorer 	= "?hash={id}#blockchain_block";
+	var transactionExplorer = "?hash={id}#blockchain_transaction";
+	var paymentIdExplorer 	= "?hash={id}#blockchain_payment_id";
 	
 	var style_cookie_name = "style";
 	var style_cookie_duration = 365;
 	var style_domain = window.location.hostname;
 	
 	$(function(){
-		$('.theme-switch[rel="/css/themes/white/style.css"]').hide();
+		$('.theme-switch[rel="css/themes/white/style.css"]').hide();
 		set_style_from_cookie();
 		
 		$('.theme-switch').click(function() {
@@ -267,7 +267,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand " href="/en/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong>vanets</a>
+            <a class="navbar-brand " href="/"><img src="http://www.chilepool.cl/img/logo-dark.png" style="width:100px; height:auto"></a>
 			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
         </div>
 		
@@ -282,17 +282,17 @@
 				<li><a class="hot_link" data-page="pools.html" href="#pools">
                     <i class="fa fa-gavel" aria-hidden="true"></i> Pools
                 </a></li>
-				
+			<!--	
 				<li><a class="hot_link" data-page="api.html" href="#api">
                     <i class="fa fa-code" aria-hidden="true"></i> API
                 </a></li>
-
+			-->
  			    <!--li><a  class="hot_link" href="/">
                     <i class="fa fa-language" aria-hidden="true"></i> UA
                 </a></li-->
 				
-				<button rel="/css/themes/dark/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Night Mode"><i class="fa fa-moon-o"></i></button>
-				<button rel="/css/themes/white/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Day Mode"><i class="fa fa-sun-o"></i></button>
+				<button rel="css/themes/dark/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Night Mode"><i class="fa fa-moon-o"></i></button>
+				<button rel="css/themes/white/style.css" class="btn btn-default theme-switch" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Switch to Day Mode"><i class="fa fa-sun-o"></i></button>
 				
 	<!-- //-->			
 
@@ -487,7 +487,7 @@ $('#txt_search').keyup(function(e){
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
 					<small>
-						&copy; 2017 <strong>Karbo</strong>vanets. 
+						&copy; 2018 <strong>Chile</strong>Pool. 
 					</small>
 				</p>
 			</div>
