@@ -174,7 +174,7 @@
 
     function fetchLiveStats() {
         $.ajax({
-            url: api + '/getinfo',
+            url: api + '?mode=get',
             dataType: 'json',
 			type: 'GET',
             cache: 'false'
@@ -248,7 +248,7 @@
     }
 
     $(function(){
-        $.get(api + '/getinfo', function(data){
+        $.get(api + '?mode=get', function(data){
             lastStats = JSON.parse(data);
             routePage(fetchLiveStats);
         });
@@ -287,7 +287,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand " href="/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong>vanets</a>
+            <a class="navbar-brand " href="/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong></a>
 			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
         </div>
 		
@@ -507,7 +507,7 @@ $('#txt_search').keyup(function(e){
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
 					<small>
-						&copy; 2017-2018 <strong>Karbo</strong><em>vanets</em>
+						&copy; 2017-2018 <strong>Karbo</strong>
 					</small>
 				</p>
 				

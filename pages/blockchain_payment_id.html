@@ -41,7 +41,7 @@
 			renderTransactions(txsByPaymentId);
 		} else {
 			xhrGetTsx = $.ajax({
-				url: api + '/json_rpc',
+				url: api,
 				method: "POST",
 				data: JSON.stringify({
 					jsonrpc:"2.0",

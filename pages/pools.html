@@ -176,7 +176,7 @@ var poolsRefreshed = 0;
 						result = host.substr(0, index);
 					}
 				
-				$.getJSON(url, (data, textStatus, jqXHR) => {
+				$.getJSON('/api/?mode=get&url=' + url, (data, textStatus, jqXHR) => {
 					it = it + 1;
 					window.colors.push(getRandomColor());
 					
@@ -199,11 +199,11 @@ var poolsRefreshed = 0;
 						poolMiners.push(parseInt(data.pool_statistics.miners));
 						window.colors.push(getRandomColor());
 						
-						$.getJSON(url.split('/pool/stats')[0] + '/network/stats', (data, textStatus, jqXHR) => {
+						$.getJSON('/api/?mode=get&url=' + url.split('/pool/stats')[0] + '/network/stats', (data, textStatus, jqXHR) => {
 						updateText('height-'+result, data.height);
 						});
 							
-						$.getJSON(url.split('/pool/stats')[0] + '/config', (data, textStatus, jqXHR) => {
+						$.getJSON('/api/?mode=get&url=' + url.split('/pool/stats')[0] + '/config', (data, textStatus, jqXHR) => {
 							updateText('totalFee-'+result, data.pplns_fee+"%");
 							updateText('minPayout-'+result, getReadableCoins(data.min_wallet_payout,4));						
 						});
@@ -471,7 +471,7 @@ setInterval(function(){
 				
 				it = it + 1;
 					
-                $.getJSON(url, (data, textStatus, jqXHR) => {
+                $.getJSON('/api/?mode=get&url=' + url, (data, textStatus, jqXHR) => {
 				
 					if (data.pool === 'undefined'){
 						
@@ -488,7 +488,7 @@ setInterval(function(){
 						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
 						updateText('total_miners', totalMiners);
 					
-						$.getJSON(url.split('/pool/stats')[0] + '/network/stats', (data, textStatus, jqXHR) => {
+						$.getJSON('/api/?mode=get&url=' + url.split('/pool/stats')[0] + '/network/stats', (data, textStatus, jqXHR) => {
 						   updateText('height-'+result, data.height);
 						});	
 						
@@ -577,7 +577,7 @@ var xhrGetBlocks;
 function getBlocks() {
     if (xhrGetBlocks) xhrGetBlocks.abort();
         xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -624,7 +624,7 @@ function calcAvgHashRate(){
 
 function renderLastBlock(){
 $.ajax({
-    url: api + '/json_rpc',
+    url: api,
     method: "POST",
     data: JSON.stringify({
           jsonrpc:"2.0",
@@ -639,7 +639,7 @@ $.ajax({
     success: function(data){
 		last_block_hash = data.result.block_header.hash;
 		$.ajax({
-			url: api + '/json_rpc',
+			url: api,
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
