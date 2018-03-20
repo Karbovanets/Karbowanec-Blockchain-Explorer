@@ -338,7 +338,6 @@ function calculateTotalFee(config) {
 				mode: 'single',
 				callbacks: {
 					title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
-					label: function (tooltipItem, data) {
 						var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 						var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
 						return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
@@ -539,6 +538,8 @@ setInterval(function(){
 function refreshChart() {
 		sorttable.makeSortable(document.getElementById("network-hash"));
 		var pool_rows = $('#pools_rows').children();
+		var otherHashrate= 0;
+		var inx;
 		for (var i = 0; i < pool_rows.length; i++) {
 			var row = $(pool_rows[i]);
 			var label = row.find('td:nth-child(2)').text();
@@ -547,18 +548,23 @@ function refreshChart() {
 			if ((inx = poolsChart.data.labels.indexOf(label)) > -1)
 				poolsChart.data.datasets[0].data[inx] = parseInt(hashrate);
 
-			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1)
+			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1){
 				poolsSmallChart.data.datasets[0].data[inx] = parseInt(hashrate);
-
+			}
+			if(hashrate < bigHashrate)  otherHashrate += parseInt(hashrate);
 			poolsChart2.data.labels[i] = label;
 			poolsChart2.data.datasets[0].data[i] = parseInt(miners);
 		}
+
+		if ((inx = poolsChart.data.labels.indexOf("other")) > -1)
+			poolsChart.data.datasets[0].data[inx] = parseInt(otherHashrate);
+	
+	
 		poolsChart.update();
 		poolsChart2.update();
 		poolsSmallChart.update();
 }
 	
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -687,4 +693,3 @@ $.ajax({
     }
 
 </script>
-
