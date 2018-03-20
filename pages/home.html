@@ -240,7 +240,7 @@ currentPage = {
 
 function renderLastBlock(){
 $.ajax({
-    url: api + '/json_rpc',
+    url: api,
     method: "POST",
     data: JSON.stringify({
           jsonrpc:"2.0",
@@ -255,7 +255,7 @@ $.ajax({
     success: function(data){
 		last_block_hash = data.result.block_header.hash;
 		$.ajax({
-			url: api + '/json_rpc',
+			url: api,
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
@@ -282,7 +282,7 @@ var xhrGetBlocks;
 $('#loadMoreBlocks').click(function(){
     if (xhrGetBlocks) xhrGetBlocks.abort();
         xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -313,7 +313,7 @@ $('#prev-page').click(function(e){
 	var openHeight = (currHeight - 31 < 0) ? 0 : currHeight - 31;
 	
 	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -353,7 +353,7 @@ $('#next-page').click(function(e){
 	var openHeight = (currHeight + 31 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + 31;
 	
 	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -414,7 +414,7 @@ $('#goto-height').keyup(function(e){
 		}
 		
 			xhrGetBlocks = $.ajax({
-				url: api + '/json_rpc',
+				url: api,
 				method: "POST",
 				data: JSON.stringify({
 					jsonrpc:"2.0",
@@ -515,7 +515,7 @@ $('#goto-height').keyup(function(e){
 //  Karbovanets MemPool Transactions
 function getPoolTransactions(){
   var xhrGetPool = $.ajax({
-	url: api + '/json_rpc',
+	url: api,
 	method: "POST",
 	data: JSON.stringify({
 		jsonrpc: "2.0",

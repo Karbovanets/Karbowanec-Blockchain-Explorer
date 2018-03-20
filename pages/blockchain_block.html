@@ -61,7 +61,7 @@
 			renderBlock(searchBlk);
 		} else {
 			xhrGetBlock = $.ajax({
-				url: api + '/json_rpc',
+				url: api,
 				method: "POST",
 				data: JSON.stringify({
 					jsonrpc:"2.0",
@@ -105,7 +105,7 @@
 				makePrevBlockLink(block.prev_hash);
 				
 				$.ajax({
-					url: api + '/json_rpc',
+					url: api,
 					method: "POST",
 					data: JSON.stringify({
 					jsonrpc: "2.0",
