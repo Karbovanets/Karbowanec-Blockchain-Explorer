@@ -338,6 +338,7 @@ function calculateTotalFee(config) {
 				mode: 'single',
 				callbacks: {
 					title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+					label: function (tooltipItem, data) {
 						var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 						var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
 						return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
