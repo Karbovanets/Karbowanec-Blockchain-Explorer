@@ -197,8 +197,8 @@ var block,
 	Txses = [],
 	Sizes = [],
 	Timestamps = [],
-	diffChart;
-
+	diffChart,
+	refresh = true;
 
 currentPage = {
         destroy: function(){
@@ -223,7 +223,7 @@ currentPage = {
 			$("time.timeago").timeago();
 			getPoolTransactions();
 			var currHeight = $('#blocks_rows').children().first().data('height');
-			if((currHeight + 31) > lastStats.last_known_block_index){
+			if(refresh){
 				$.when(
 					renderInitialBlocks()
 				).then(function() {
@@ -275,7 +275,7 @@ $.ajax({
 			}
 		});
     }
-});				
+});
 }
 
 var xhrGetBlocks;
@@ -307,6 +307,7 @@ $('#loadMoreBlocks').click(function(){
 });
 
 $('#prev-page').click(function(e){
+	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
 	var openHeight = (currHeight - 31 < 0) ? 0 : currHeight - 31;
@@ -346,6 +347,7 @@ $('#prev-page').click(function(e){
 });
 
 $('#next-page').click(function(e){
+	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
 	var openHeight = (currHeight + 31 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + 31;
@@ -378,6 +380,7 @@ $('#next-page').click(function(e){
 	
 	if((currHeight + 61) > lastStats.last_known_block_index){
 		$('#next-page').addClass('disabled');
+		refresh = true;
 	}
 	
 		$('#prev-page').removeClass('disabled');
@@ -753,7 +756,7 @@ function displayDiffChart() {
 					title: function(tooltipItem, data) {
 						var height	= data.datasets[3].data[tooltipItem[0].index];
 						var time = new Date(data.labels[tooltipItem[0].index]).toLocaleString();
-						//return 'Блок №: ' + height + ' - ' + time + '';
+						//return 'Block: ' + height + ' - ' + time + '';
 						return time + '';
 					},/*
 					label: function(tooltipItem, data) { 
@@ -770,8 +773,8 @@ function displayDiffChart() {
 						var multistringText = [];
   
 						var str1 = diff_swatch + 'Складність: ' + diff + '';
-						var str2 = 'Розмір: ' + size + '';
-						var str3 = 'Транзакції: ' + txcount + '';
+						var str2 = 'Size: ' + size + '';
+						var str3 = 'Transactions: ' + txcount + '';
   
 						multistringText.push(str1);
 						multistringText.push(str2);
