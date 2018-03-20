@@ -126,7 +126,7 @@
 	
 	function getReadableDifficultyString(difficulty, precision){
 		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
-		if (typeof precision === 'undefined') precision = 0;
+		if (typeof precision === 'undefined') precision = 2;
 		var units = ['', 'k', 'M', 'G', 'T', 'P'],
             number = Math.floor(Math.log(difficulty) / Math.log(1000));
 		if (units[number] === undefined || units[number] === null) {
@@ -267,7 +267,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand " href="/en/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong>vanets</a>
+            <a class="navbar-brand " href="/"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong>vanets</a>
 			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
         </div>
 		
