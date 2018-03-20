@@ -111,12 +111,12 @@
             <tr>
 				<th><i class="fa fa-eyedropper"></i></th>
                 <th><span id="symbol"></span>&nbsp;Pools</th>
-                <th><i class="fa fa-bars"></i>&nbsp;Height</th>
-                <th><i class="fa fa-tachometer"></i>&nbsp;Hashrate,&nbsp;H/s</th>
-                <th><i class="fa fa-group"></i>&nbsp;Miners</th>
-                <th><i class="fa fa-money"></i>&nbsp;Total Fee</th>
-				<th><i class="fa fa-sign-out"></i>&nbsp;Min. Payout</th>
-                <th><i class="fa fa-cube"></i>&nbsp;Last Block</th>
+                <th class="sorttable_numeric"><i class="fa fa-bars"></i>&nbsp;Height</th>
+                <th class="sorttable_numeric"><i class="fa fa-tachometer"></i>&nbsp;Hashrate,&nbsp;H/s</th>
+                <th class="sorttable_numeric"><i class="fa fa-group"></i>&nbsp;Miners</th>
+                <th class="sorttable_numeric"><i class="fa fa-money"></i>&nbsp;Total Fee</th>
+				<th class="sorttable_numeric"><i class="fa fa-sign-out"></i>&nbsp;Min. Payout</th>
+                <th class="sorttable_numeric"><i class="fa fa-cube"></i>&nbsp;Last Block</th>
                 <th><i class="fa fa-clock-o"></i>&nbsp;Found At</th>
             </tr>
         </thead>
@@ -131,6 +131,11 @@
 			<div class="col-lg-6 col-md-6">
 				<canvas id="poolsChart" style="margin: 0 auto;"></canvas>
 			</div>
+			<div class="col-lg-6 col-md-6">
+				<canvas id="poolsSmallChart" style="margin: 0 auto;"></canvas>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-lg-6 col-md-6">
 				<canvas id="minersChart" style="margin: 0 auto;"></canvas>
 			</div>
@@ -237,7 +242,9 @@ var poolsRefreshed = 0;
 				poolsRefreshed++;
 					if (poolsRefreshed === NETWORK_STAT_MAP.size){ 
 						setTimeout(function(){
-							displayChart();
+							recalcBigSmallHashrate();
+							displayBigChart();
+							displaySmallChart();
 							displayChart2();
 						}, 1000);
 					}
@@ -273,50 +280,132 @@ function calculateTotalFree(config) {
   }
 
 
-function displayChart() {
-	var ctx = document.getElementById("poolsChart");
+	var bigLabels = [];
+	var bigHashrates = [];
+	var smallLabels = [];
+	var smallHashrates = [];
+	var bigHashrate = 300000;
 
-	var chartData = {
-			labels: poolNames,
+	function recalcBigSmallHashrate() {
+		bigLabels = [];
+		bigHashrates = [];
+		smallLabels = [];
+		smallHashrates = [];
+		var objpoolHashrates = poolNames.map(function callback(currentValue, index, array) {
+			return { name: currentValue, hashrates: poolHashrates[index] }
+		})
+		objpoolHashrates.forEach(function callback(currentValue, index, array) {
+			if (currentValue.hashrates < bigHashrate) {
+				smallLabels.push(currentValue.name);
+				smallHashrates.push(currentValue.hashrates);
+			} else {
+				bigHashrates.push(currentValue.hashrates);
+				bigLabels.push(currentValue.name);
+			}
+
+		});
+
+		bigLabels.push("other");
+
+		//push other Hashrate
+		bigHashrates.push(poolHashrates.reduce(function (previousValue, currentValue, index, array) {
+			if (currentValue < bigHashrate)
+				return previousValue + currentValue;
+			else
+				return previousValue
+		}, 0));
+
+	}
+	function displayBigChart() {
+		var ctx = document.getElementById("poolsChart");
+
+		var chartData = {
+			labels: bigLabels,
 			datasets: [{
-				data: poolHashrates,
+				data: bigHashrates,
 				backgroundColor: window.colors,
 				borderWidth: 0,
 				segmentShowStroke: false
 			}]
 		};
-	var options = {
+		var options = {
 			title: {
 				display: true,
-				text: 'Hashrate Distribution',
-				 fontSize: 25
+				text: 'Hashrate Distribution bigger then 300K',
+				fontSize: 25
 			},
 			tooltips: {
-                enabled: true,
-                mode: 'single',
-                callbacks: {
+				enabled: true,
+				mode: 'single',
+				callbacks: {
 					title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
-                    label: function (tooltipItem, data) {
-                            var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                            var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
-                            return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
-                    }
-                }
-            },
+					label: function (tooltipItem, data) {
+						var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+						var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+						return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
+					}
+				}
+			},
 			legend: {
 				display: false,
 				labels: {
-				fontColor: '#fff'
+					fontColor: '#fff'
 				}
 			}
 		};
-	
-	window.poolsChart = new Chart(ctx,{
-    type: 'doughnut',
-    data: chartData,
-    options: options
-	});
-}
+
+		window.poolsChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: chartData,
+			options: options
+		});
+	}
+
+	function displaySmallChart() {
+		var ctx = document.getElementById("poolsSmallChart");
+
+		var chartData = {
+			labels: smallLabels,
+			datasets: [{
+				data: smallHashrates,
+				backgroundColor: window.colors,
+				borderWidth: 0,
+				segmentShowStroke: false
+			}]
+		};
+		var options = {
+			title: {
+				display: true,
+				text: 'Hashrate Distribution smaller then 300K',
+				fontSize: 25
+			},
+			tooltips: {
+				enabled: true,
+				mode: 'single',
+				callbacks: {
+					title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+					label: function (tooltipItem, data) {
+						var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+						var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+						return amount + ' / ' + total + ' H/s  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
+					}
+				}
+			},
+			legend: {
+				display: false,
+				labels: {
+					fontColor: '#fff'
+				}
+			}
+		};
+
+		window.poolsSmallChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: chartData,
+			options: options
+		});
+	}
+
 
 function displayChart2() {
     var ctx2 = document.getElementById("minersChart");
@@ -362,9 +451,12 @@ function displayChart2() {
       options: options2
     });
 }
+	$.ajaxSetup({
+		timeout: 2000
+	});
 
 setInterval(function(){
-			
+	poolsRefreshed = 0;
 	var totalHashrate = 0;
 	totalMiners = 0;
 	poolNames = [];
@@ -447,18 +539,25 @@ setInterval(function(){
 
 
 function refreshChart() {
-	var pool_rows = $('#pools_rows').children();
+		sorttable.makeSortable(document.getElementById("network-hash"));
+		var pool_rows = $('#pools_rows').children();
 		for (var i = 0; i < pool_rows.length; i++) {
 			var row = $(pool_rows[i]);
-			var label = row.find('td:first').text();
-			var hashrate = 	row.find('td:nth-child(3)').text();
-			poolsChart.data.labels[i] = label;
-			poolsChart.data.datasets[0].data[i] = parseInt(hashrate);
+			var label = row.find('td:nth-child(2)').text();
+			var hashrate = 	row.find('td:nth-child(4)').text();
+			var miners = row.find('td:nth-child(5)').text();
+			if ((inx = poolsChart.data.labels.indexOf(label)) > -1)
+				poolsChart.data.datasets[0].data[inx] = parseInt(hashrate);
+
+			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1)
+				poolsSmallChart.data.datasets[0].data[inx] = parseInt(hashrate);
+
 			poolsChart2.data.labels[i] = label;
 			poolsChart2.data.datasets[0].data[i] = parseInt(miners);
 		}
 		poolsChart.update();
 		poolsChart2.update();
+		poolsSmallChart.update();
 }
 	
 
