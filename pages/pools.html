@@ -330,7 +330,7 @@ function calculateTotalFee(config) {
 		var options = {
 			title: {
 				display: true,
-				text: 'Hashrate Distribution bigger than 300K',
+				text: 'Hashrate Distribution bigger then 300K',
 				fontSize: 25
 			},
 			tooltips: {
@@ -375,7 +375,7 @@ function calculateTotalFee(config) {
 		var options = {
 			title: {
 				display: true,
-				text: 'Hashrate Distribution smaller than 300K',
+				text: 'Hashrate Distribution smaller then 300K',
 				fontSize: 25
 			},
 			tooltips: {
@@ -539,6 +539,8 @@ setInterval(function(){
 function refreshChart() {
 		sorttable.makeSortable(document.getElementById("network-hash"));
 		var pool_rows = $('#pools_rows').children();
+		var otherHashrate= 0;
+		var inx;
 		for (var i = 0; i < pool_rows.length; i++) {
 			var row = $(pool_rows[i]);
 			var label = row.find('td:nth-child(2)').text();
@@ -547,18 +549,23 @@ function refreshChart() {
 			if ((inx = poolsChart.data.labels.indexOf(label)) > -1)
 				poolsChart.data.datasets[0].data[inx] = parseInt(hashrate);
 
-			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1)
+			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1){
 				poolsSmallChart.data.datasets[0].data[inx] = parseInt(hashrate);
-
+			}
+			if(hashrate < bigHashrate)  otherHashrate += parseInt(hashrate);
 			poolsChart2.data.labels[i] = label;
 			poolsChart2.data.datasets[0].data[i] = parseInt(miners);
 		}
+
+		if ((inx = poolsChart.data.labels.indexOf("other")) > -1)
+			poolsChart.data.datasets[0].data[inx] = parseInt(otherHashrate);
+	
+	
 		poolsChart.update();
 		poolsChart2.update();
 		poolsSmallChart.update();
 }
 	
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -687,4 +694,3 @@ $.ajax({
     }
 
 </script>
-
