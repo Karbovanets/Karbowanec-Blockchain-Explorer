@@ -112,7 +112,7 @@
 
     var currentPage;
     var lastStats;
-
+    var nodeStatus;
 
     function getReadableHashRateString(hashrate){
         var i = 0;
@@ -178,10 +178,12 @@
             dataType: 'json',
 			type: 'GET',
             cache: 'false'
-        }).done(function(data){
+        }).done(function(data, success){
             pulseLiveUpdate();
             lastStats = data;
+			nodeStatus = success;
             currentPage.update();
+			nodeInfo();
         }).always(function () {
 			setTimeout(function() {
 				fetchLiveStats();
@@ -193,7 +195,25 @@
         return float.toFixed(6).replace(/[0\.]+$/, '');
     }
 
-
+	function nodeInfo() {
+        if(nodeStatus) {
+			$('#node_connection').html('Online').addClass('text-success').removeClass('text-danger');
+			$('#node_height').html(parseInt(lastStats['height']));
+			$('#node_block').html(parseInt(lastStats['last_known_block_index']));
+			$('#node_diff').html(parseInt(lastStats['difficulty']));
+			$('#node_alt').html(parseInt(lastStats['alt_blocks_count']));
+			$('#node_inc').html(parseInt(lastStats['incoming_connections_count']));
+			$('#node_out').html(parseInt(lastStats['outgoing_connections_count']));
+			$('#node_white').html(parseInt(lastStats['white_peerlist_size']));
+			$('#node_grey').html(parseInt(lastStats['grey_peerlist_size']));
+			if (lastStats['version'] !== 'undefined'){
+				$('#node_ver').html(lastStats['version']);
+			}
+		} else {
+			$('#node_connection').html('Offline').addClass('text-danger').removeClass('text-success');
+		}
+    }
+	
     var xhrPageLoading;
     function routePage(loadedCallback) {
 
@@ -487,9 +507,15 @@ $('#txt_search').keyup(function(e){
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
 					<small>
-						&copy; 2017 <strong>Karbo</strong>vanets. 
+						&copy; 2017-2018 <strong>Karbo</strong><em>vanets</em>
 					</small>
 				</p>
+				
+				<ul>
+					<li><a href="http://karbo.io/">karbo.io</li>
+					<li><a href="http://karbo.org/">karbo.org</li>
+				</ul>
+				
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
@@ -497,7 +523,7 @@ $('#txt_search').keyup(function(e){
 					<!-- This copyright should be left intact -->
 				
 					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					v. 1.1.0.<br />
+					v. 1.1.1.<br />
 					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>
@@ -505,11 +531,21 @@ $('#txt_search').keyup(function(e){
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-6">
 			
-				<ul>
-					<li><a href="http://karbo.io/">karbo.io</li>
-					<li><a href="http://karbo.org/">karbo.org</li>
-				</ul>
+				<strong class="text-info">Node info</strong>
 				
+				<ul class="text-info">
+					<li>Status: <span id="node_connection" class="text-danger">Offline</span></li>
+					<li>Version: <span id="node_ver">...</span></li>
+					<li>Height: <span id="node_height">...</span></li>
+					<li>Last block: <span id="node_block">...</span></li>
+					<li>Difficulty: <span id="node_diff">...</span></li>
+					<li>Alt. blocks: <span id="node_alt">...</span></li>
+					<li>Incoming connections: <span id="node_inc">...</span></li>
+					<li>Outgoing connects: <span id="node_out">...</span></li>
+					<li>White peers: <span id="node_white">...</span></li>
+					<li>Grey peers: <span id="node_grey">...</span></li>
+				</ul>
+
 			</div>
 		</div>
     </div>
