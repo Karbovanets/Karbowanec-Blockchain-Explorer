@@ -316,11 +316,8 @@ function calculateTotalFee(config) {
 	
 
 		//push other Hashrate
-		bigHashrates.push(poolHashrates.reduce(function (previousValue, currentValue, index, array) {
-			if (currentValue < bigHashrate)
+		bigHashrates.push(smallHashrates.reduce(function (previousValue, currentValue) {
 				return previousValue + currentValue;
-			else
-				return previousValue
 		}, 0));
 
 		//push other Miners
