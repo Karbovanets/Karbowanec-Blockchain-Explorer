@@ -21,7 +21,7 @@ var networkStat = {
 		["pool.karbowanec.com.ua", "http://zacent.com.ua:8117"],
 		["krb-pool.pp.ua", "http://krb-pool.pp.ua:25417"],
 		["54.223.133.248", "http://54.223.133.248:8117"],
-		["sebseb7.github.io/karbo/", "http://78.46.85.142:29999"],
+		["cryptoknight.cc/karbo", "https://cryptoknight.cc/karbo/rpc/karbo"],
 		["bitcache.cc", "http://bitcache.cc:8117"]
 		
     ]
