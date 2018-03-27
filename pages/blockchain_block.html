@@ -1,37 +1,37 @@
-<h2><i class="fa fa-cube fa-fw" aria-hidden="true"></i> Блок <small id="block.hash" style="word-break: break-all;"></small></h2>
+<h2><i class="fa fa-cube fa-fw" aria-hidden="true"></i> Block <small id="block.hash" style="word-break: break-all;"></small></h2>
 <div class="row">
-	<div class="col-md-6 stats">
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Індекс блоку в ланцюзі, рахуючи від нуля (тобто генезис блоку)."><i class="fa fa-question-circle"></i></span> Номер: <span id="block_height"><span id="block.height"></span></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Часова відмітка блоку. Точність залежить від того, хто викарбував блок."><i class="fa fa-question-circle"></i></span> Дата і час: <span id="block.timestamp"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="“major version”.“minor version”"><i class="fa fa-question-circle"></i></span> Версія: <span id="block.version"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Як важко знайти рішення для блоку. Більш конкретно, це математичне очікування кількості хешів які комусь потрібно розрахувати, щоб знайти правильне значення одноразового номера, яким вирішується блок."><i class="fa fa-question-circle"></i></span> Складність: <span id="block.difficulty"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Так, якщо блок належить до альтернативного ланцюга. У такому випадку всі операції, за винятком карбування (coinbase), видаляються з блоку і будуть включені в іншому блоці. Це означає, що за цей блок немає винагороди."><i class="fa fa-question-circle"></i></span> Сирота: <span id="block.orphan"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Кількість транзакцій в блоці, в тому числі транзакція карбування або coinbase (котра передає нагороду за блок тому хто його викарбував)."><i class="fa fa-question-circle"></i></span> Транзакції: <span id="block.transactions"></span></a></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Сукупна кількість монет, випущених у всіх блоках в блокчейні від генезису і до цього блоку."><i class="fa fa-question-circle"></i></span> Загальний обсяг грошової маси: <span id="block.totalCoins"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Сукупна кількість транзакцій в блокчейні, починаючи з блоку генезу і до цього блоку."><i class="fa fa-question-circle"></i></span> Загальна кількість транзакцій в мережі: <span id="block.totalTransactions"></span></div>
+    <div class="col-md-6 stats">
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Block index in the chain, counting from zero (i.e. genesis block)."><i class="fa fa-question-circle"></i></span> Height: <span id="block_height"><span id="block.height"></span></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Block timestamp displayed as UTC. The timestamp correctness it up to miner, who mined the block."><i class="fa fa-question-circle"></i></span> Timestamp: <span id="block.timestamp"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="“major version”.“minor version”"><i class="fa fa-question-circle"></i></span> Version: <span id="block.version"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="How difficult it is to find a solution for the block. More specifically, it`s mathematical expectation for number of hashes someone needs to calculate in order to find a correct nonce value solving the block."><i class="fa fa-question-circle"></i></span> Difficulty: <span id="block.difficulty"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="True, if the block belongs to an alternative chain. In such case all the transactions, excluding coinbase, are removed from the block back to transaction pool to be included in another block. It means there is no reward for the miner."><i class="fa fa-question-circle"></i></span> Orphan: <span id="block.orphan"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Number of transactions in the block, including coinbase transaction (which transfers block reward to the miner)."><i class="fa fa-question-circle"></i></span> Transactions: <span id="block.transactions"></span></a></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Cumulative amount of coins issued by all the blocks in blockchain from the genesis and up to this block."><i class="fa fa-question-circle"></i></span> Total coins in the network: <span id="block.totalCoins"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Cumulative number of transactions in the blockchain, from the genesis block and up to this block."><i class="fa fa-question-circle"></i></span> Total transactions in the network: <span id="block.totalTransactions"></span></div>
     </div>
 
     <div class="col-md-6 stats">
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Сукупний розмір усіх операцій в блоці, в тому числі coinbase (карбування). У разі, якщо він перевищує “діючу медіану”, з нагороди за блок стягується штраф, тобто той хто викарбував блок отримає менше."><i class="fa fa-question-circle"></i></span> Загальний розмір транзакцій, у байтах: <span id="block.transactionsSize"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Розмір всього блоку, тобто заголовок блоку плюс всі транзакції."><i class="fa fa-question-circle"></i></span> Загальний розмір блоку, у байтах: <span id="block.blockSize"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Середній розмір всіх транзакції у блоці серед n останніх блоків."><i class="fa fa-question-circle"></i></span> Поточна медіана tx, у байтах: <span id="block.currentTxsMedian"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Обмежене знизу медіанне значення, яке фактично використовується для розрахунку штрафу. Точніше, &lt;effective median&gt; = max(&lt;current median&gt;, 1000000)"><i class="fa fa-question-circle"></i></span> Діюча медіана tx, у байтах: <span id="block.effectiveTxsMedian"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Штраф за перевищення медіани. &lt;penalty&gt; = (&lt;total&nbsp;transactions&nbsp;size&gt; / &lt;effective&nbsp;tx&nbsp;median&gt; − 1) ^ 2. Якщо загальний розмір транзакцій менший ніж діюча медіана штрафу немає. Штраф близько 100% якщо загальний розмір транзакцій удвічі більший за діючу медіану. Більші блоки недозволяються."><i class="fa fa-question-circle"></i></span> Стягнення з виплати: <span id="block.rewardPenalty"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Базове значення для розрахунку нагороди за блок. Не залежить від кількості транзакцій у блоці. Дорівнює винагороді за блок, якщо у ньому не буде інших транзакцій крім coinbase (карбування)."><i class="fa fa-question-circle"></i></span> Базова виплата: <span id="block.baseReward"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Сума комісій за всі транзакції в блоці."><i class="fa fa-question-circle"></i></span> Комісія за транзакції: <span id="block.transactionsFee"></span></div>
-        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Фактична кількість монет яку отримано за знаходження блоку. &lt;reward&gt; = &lt;base reward&gt; × (1 − &lt;penalty&gt;) + &lt;transactions fee&gt;"><i class="fa fa-question-circle"></i></span> Виплата: <span id="block.reward"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Cumulative size of all transactions in the block, including coinbase. In case it's exceeding 'effective txs median' the reward penalty occurs and therefore miner receives less reward."><i class="fa fa-question-circle"></i></span> Total transactions size, bytes: <span id="block.transactionsSize"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the whole block, i.e. block header plus all transactions."><i class="fa fa-question-circle"></i></span> Total block size, bytes: <span id="block.blockSize"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Median value of block total transactions size among last n blocks."><i class="fa fa-question-circle"></i></span> Current txs median, bytes: <span id="block.currentTxsMedian"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Bounded from below median value that is actually used to calculate penalty. More specifically, &lt;effective median&gt; = max(&lt;current median&gt;, 20000)"><i class="fa fa-question-circle"></i></span> Effective txs median, bytes: <span id="block.effectiveTxsMedian"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Penalty for exceeding the median. &lt;penalty&gt; = (&lt;total&nbsp;transactions&nbsp;size&gt; / &lt;effective&nbsp;tx&nbsp;median&gt; − 1) ^ 2. No penalty if total transactions size is less then effective median. Penalty is near 100% if total txs size is twice the effective median. Greater blocks are not allowed."><i class="fa fa-question-circle"></i></span> Reward penalty: <span id="block.rewardPenalty"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Base value for calculating the block reward. Does not depend on how many transactions are included into the block. Also, this is how many coins the miner would receive if the block contains only coinbase transaction."><i class="fa fa-question-circle"></i></span> Base reward: <span id="block.baseReward"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Sum of fees for all transactions in the block."><i class="fa fa-question-circle"></i></span> Transactions fee: <span id="block.transactionsFee"></span></div>
+        <div><span data-toggle="tooltip" data-placement="right" data-original-title="Actual amount of coins the miner received for finding the block. &lt;reward&gt; = &lt;base reward&gt; × (1 − &lt;penalty&gt;) + &lt;transactions fee&gt;"><i class="fa fa-question-circle"></i></span> Reward: <span id="block.reward"></span></div>
     </div>
 </div>
 
-<h3 class="transactions"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Транзакції</h3>
+<h3 class="transactions"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Тransactions</h3>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
         <tr>
-            <th><i class="fa fa-paw"></i> Хеш</th>
-            <th><i class="fa fa-percent"></i> Комісія</th>
-            <th><i class="fa fa-money"></i> Сума</th>
-            <th><i class="fa fa-arrows"></i> Розмір</th>
+            <th><i class="fa fa-paw"></i> Hash</th>
+            <th><i class="fa fa-percent"></i> Fee</th>
+            <th><i class="fa fa-money"></i> Total Amount</th>
+            <th><i class="fa fa-arrows"></i> Size</th>
         </tr>
         </thead>
         <tbody id="transactions_rows">
@@ -90,10 +90,10 @@
 				updateText('block.difficulty', block.difficulty);
 				updateText('block.orphan', block.orphan_status ? "так" : "ні");
 				updateText('block.transactions', block.transactions.length);
-				updateText('block.transactionsSize', block.transactionsCumulativeSize);
-				updateText('block.blockSize', block.blockSize);
-				updateText('block.currentTxsMedian', block.sizeMedian);
-				updateText('block.effectiveTxsMedian', block.effectiveSizeMedian);
+				updateText('block.transactionsSize', formatBytes(parseInt(block.transactionsCumulativeSize)));
+				updateText('block.blockSize', formatBytes(parseInt(block.blockSize)));
+				updateText('block.currentTxsMedian', formatBytes(parseInt(block.sizeMedian)));
+				updateText('block.effectiveTxsMedian', formatBytes(parseInt(block.effectiveSizeMedian)));
 				updateText('block.rewardPenalty', block.penalty*100 + "%");
 				updateText('block.baseReward', getReadableCoins(block.baseReward));
 				updateText('block.transactionsFee', getReadableCoins(block.totalFeeAmount));
@@ -135,7 +135,7 @@
         return '<td>' + formatPaymentLink(transaction.hash) + '</td>' +
                '<td>' + getReadableCoins(transaction.fee, 4, true) + '</td>' +
                '<td>' + getReadableCoins(transaction.amount_out, 4, true) + '</td>' +
-               '<td>' + transaction.size + '</td>';
+               '<td>' + formatBytes(parseInt(transaction.size)) + '</td>';
     }
 
     function getTransactionRowElement(transaction, jsonString){
@@ -175,11 +175,11 @@
     }
 	
 	function makeNextBlockLink(blockHash){
-		$('#block_height').append(' <a href="' + getBlockchainUrl(blockHash) + '" title="Наступний блок"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>');
+		$('#block_height').append(' <a href="' + getBlockchainUrl(blockHash) + '" title="Next block"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>');
 	}
 	
 	function makePrevBlockLink(blockHash){
-		$('#block_height').prepend('<a href="' + getBlockchainUrl(blockHash) + '" title="Попередній блок"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a> ');
+		$('#block_height').prepend('<a href="' + getBlockchainUrl(blockHash) + '" title="Previous block"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a> ');
 	}
 	
 	function formatPrevNextBlockLink(hash){

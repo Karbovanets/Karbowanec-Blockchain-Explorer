@@ -223,6 +223,7 @@ code {
   font-family: 'Inconsolata', monospace;
   font-size: 1em;
   text-align: center;
+  padding: 8px 2px;
 }
 
 td .mtx-ago,
@@ -236,6 +237,10 @@ td .timeago {
 
 #blocks_rows > tr > td:nth-child(2) {
 	text-align: left;
+}
+
+#blocks_rows > tr > td:nth-child(4) {
+	font-size: 85%;
 }
 
 #content {

@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} !/$ [NC]
+RewriteRule ^(.*)$ /$1 [L,R=301]
+</IfModule>
+
