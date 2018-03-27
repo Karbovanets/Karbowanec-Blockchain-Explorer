@@ -44,7 +44,7 @@ var networkStat = {
 		["krb.mine.nu", "http://krb.mine.nu:8117/stats"],
 		["krb.i-holder.net", "http://krb.i-holder.net:8117/stats"],
 		["karbo.proofpool.org", "http://proofpool.org:8119/stats"],
-    ["cryptoknight.cc/karbo", "https://cryptoknight.cc/karbo/rpc/karbo"],
+		["cryptoknight.cc/karbo", "https://cryptoknight.cc/karbo/rpc/karbo"],
 		["karbo.pool.multed.com", "http://karbo.pool.multed.com:8117/stats"]
     ]
 };
