@@ -360,7 +360,7 @@ function GetSearchBlockbyHeight(){
     if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
 	  
 			xhrGetSearchBlockbyHeight = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -387,7 +387,7 @@ function GetSearchBlock(){
 var block, xhrGetSearchBlock;
 	if (xhrGetSearchBlock) xhrGetSearchBlock.abort();
 		xhrGetSearchBlock = $.ajax({
-            url: api + '/json_rpc',
+            url: api,
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
@@ -406,7 +406,7 @@ var block, xhrGetSearchBlock;
 					window.location.href = getBlockchainUrl(block.hash);
 				} else if(data.error) {
 					$.ajax({
-						url: api + '/json_rpc',
+						url: api,
 						method: "POST",
 						data: JSON.stringify({
 							jsonrpc:"2.0",
@@ -424,7 +424,7 @@ var block, xhrGetSearchBlock;
 								window.location.href = transactionExplorer.replace('{id}', text);
 							  } else if(data.error) {
 								xhrGetTsx =  $.ajax({
-									url: api + '/json_rpc',
+									url: api,
 									method: "POST",
 									data: JSON.stringify({
 										jsonrpc:"2.0",
