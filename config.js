@@ -7,6 +7,7 @@ var refreshDelay = 30000;
 var networkStat = {
     "krb": [
 		["karbo.hashvault.pro", "https://karbo.hashvault.pro/api/pool/stats"],
+		["krb.semipool.com", "https://krb-api.semipool.com/pool/stats"],
 		["krb.mypool.name", "http://krb.mypool.name:32351/stats"],
 		["democats.org/pool/?name=karbowanec", "http://pool2.democats.org:7673/stats"],
 		["pool.karbowanec.com", "http://pool.karbowanec.com:8117/stats"],
@@ -44,7 +45,10 @@ var networkStat = {
 		["krb.mine.nu", "http://krb.mine.nu:8117/stats"],
 		["krb.i-holder.net", "http://krb.i-holder.net:8117/stats"],
 		["karbo.proofpool.org", "http://proofpool.org:8119/stats"],
-		["karbo.pool.multed.com", "http://karbo.pool.multed.com:8117/stats"]
-		
+		["karbo.pool.multed.com", "http://karbo.pool.multed.com:8117/stats"],
+		["cryptoknight.cc/karbo", "https://cryptoknight.cc/rpc/karbo/stats"],
+		["mineallcrypto.com/karbowanec", "https://mineallcrypto.com/karbowanec/pool/stats"],
+		["krb.irdpool.ru", "http://krb.irdpool.ru:8112/stats"],
+		["krb.simplypool.net", "http://85.10.204.245:1117/stats"]		
     ]
 };
