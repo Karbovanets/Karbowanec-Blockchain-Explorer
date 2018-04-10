@@ -202,6 +202,7 @@
 			$('#node_block').html(parseInt(lastStats['last_known_block_index']));
 			$('#node_diff').html(parseInt(lastStats['difficulty']));
 			$('#node_alt').html(parseInt(lastStats['alt_blocks_count']));
+			$('#node_rpc').html(parseInt(lastStats['rpc_connections_count']));
 			$('#node_inc').html(parseInt(lastStats['incoming_connections_count']));
 			$('#node_out').html(parseInt(lastStats['outgoing_connections_count']));
 			$('#node_white').html(parseInt(lastStats['white_peerlist_size']));
@@ -523,7 +524,7 @@ $('#txt_search').keyup(function(e){
 					<!-- This copyright should be left intact -->
 				
 					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					v. 1.1.1.<br />
+					v. 1.1.2.<br />
 					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>
@@ -540,8 +541,9 @@ $('#txt_search').keyup(function(e){
 					<li>Last block: <span id="node_block">...</span></li>
 					<li>Difficulty: <span id="node_diff">...</span></li>
 					<li>Alt. blocks: <span id="node_alt">...</span></li>
-					<li>Incoming connections: <span id="node_inc">...</span></li>
-					<li>Outgoing connects: <span id="node_out">...</span></li>
+					<li>RPC connections: <span id="node_rpc">...</span></li>
+					<li>Incoming P2P connections: <span id="node_inc">...</span></li>
+					<li>Outgoing P2P connects: <span id="node_out">...</span></li>
 					<li>White peers: <span id="node_white">...</span></li>
 					<li>Grey peers: <span id="node_grey">...</span></li>
 				</ul>

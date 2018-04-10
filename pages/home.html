@@ -14,7 +14,7 @@
 		  <div class="panel-body">
 			<div class="row">
 				<div class="col-sm-6 col-md-6">
-					<ul class="list-group">
+					<ul class="list-group" style="margin-bottom: 0px;">
 					
 						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Blockchain height, total amount of blocks starting from zero."><i class="fa fa-list-ol"></i> Height: <span id="networkHeight"></span></li>
 				
@@ -26,12 +26,14 @@
 						
 						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins"></span></li>
 						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Percent of already emitted coins related to Initial supply before Tail emission."><i class="fa fa-university" aria-hidden="true"></i> Emission: <span id="emissionPercent"></span> %</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Percent of already emitted coins related to Initial supply before Tail emission."><i class="fa fa-university" aria-hidden="true"></i> Emission: <span id="emissionPercent"></span> %</li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-center disabled" data-toggle="tooltip" data-placement="top" data-original-title="Minimum transaction fee."><i class="fa fa-percent" aria-hidden="true"></i> Min. fee: <span id="minimumFee"></span></li>
 						
 					</ul>
 				</div>
 				<div class="col-sm-6 col-md-6">
-					<ul class="list-group">
+					<ul class="list-group" style="margin-bottom: 0px;">
 					
 						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Next Difficulty: <span id="networkDifficulty"></span></li>
 				
@@ -40,9 +42,11 @@
 					
 						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Current estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"></span></li>
 						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average estimated network hash rate. Calculated by average difficulty."><i class="fa fa-clock-o"></i> Average Hash Rate: <span id="avgHashrate"></span></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average estimated network hash rate. Calculated by average difficulty."><i class="fa fa-tachometer"></i> Avg. Hash Rate: <span id="avgHashrate"></span></li>
 
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="bottom" data-original-title="Estimated block solve time at estimated network speed and current difficulty."><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Solve time: <span id="blockSolveTime"></span></li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Estimated block solve time at estimated network speed and current difficulty."><i class="fa fa-clock-o" aria-hidden="true"></i> Est. solve time: <span id="blockSolveTime"></span></li>
+						
+						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average solve time for the recent blocks listed below."><i class="fa fa-clock-o" aria-hidden="true"></i> Avg. solve time: <span id="avgSolveTime"></span></li>
 					
 					</ul>
 				</div>
@@ -63,7 +67,7 @@
 			
 		  </div>
 		  <div class="panel-body chart-wrapper">
-			<canvas id="difficultyChart" height="210"></canvas>
+			<canvas id="difficultyChart" height="250"></canvas>
 		  </div>
 		</div>
 	</div>
@@ -197,6 +201,8 @@ var block,
 	Txses = [],
 	Sizes = [],
 	Timestamps = [],
+	time_stamps = [],
+	Solvetimes = [],
 	diffChart,
 	refresh = true;
 
@@ -209,8 +215,13 @@ currentPage = {
 				renderInitialBlocks()
 			).then(function() {
 				setTimeout(function(){
-					displayDiffChart();
-					refreshChart();
+					$.when(
+						displayDiffChart()
+					).then(function() {
+						setTimeout(function(){
+							refreshChart();
+						}, 100)
+					});
 				}, 500)
 			});
         },
@@ -454,7 +465,8 @@ $('#goto-height').keyup(function(e){
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
 		Timestamps.push(dateTime);
-				
+		time_stamps.push(block.timestamp);
+
         row.innerHTML = columns;
 		
         return row;
@@ -496,6 +508,7 @@ $('#goto-height').keyup(function(e){
         }
 		$("time.timeago").timeago();
 		calcAvgHashRate();
+		calcAvgSolveTime();
     }
 
 	function calcAvgHashRate(){
@@ -510,6 +523,18 @@ $('#goto-height').keyup(function(e){
 		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
         updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
 
+	}
+
+	function calcAvgSolveTime(){ 
+		ts = time_stamps.concat([]);
+		ts.sort();
+		var avg_solve_time = 0;
+		var solveTime = 0;
+		for (var i = 1; i < ts.length; i++){
+			solveTime += ts[i] - ts[i - 1];
+		}
+		avg_solve_time = solveTime / (ts.length - 1);
+		updateText('avgSolveTime', getReadableTime(avg_solve_time));
 	}
 	
 //  Karbovanets MemPool Transactions
@@ -772,7 +797,7 @@ function displayDiffChart() {
 						
 						var multistringText = [];
   
-						var str1 = diff_swatch + 'Складність: ' + diff + '';
+						var str1 = diff_swatch + 'Difficulty: ' + diff + '';
 						var str2 = 'Size: ' + size + '';
 						var str3 = 'Transactions: ' + txcount + '';
   
@@ -803,12 +828,6 @@ function refreshChart() {
 		txsnr   = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
-			/*var label  = parseInt(row.find('td:first').text());
-			var diff   = parseInt(row.find('td.blk-diff').text());
-			var txses  = parseInt(row.find('td:last').text());
-			var size   = parseInt(row.find('td:nth-child(3)').text());
-			var time   = row.attr('data-dt');
-			*/
 			var label = row.data("json").height;
 			var diff  = row.data("json").difficulty;
 			var txses = row.data("json").tx_count;

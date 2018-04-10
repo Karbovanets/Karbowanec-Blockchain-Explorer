@@ -142,7 +142,10 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-6 col-md-6">
-				<canvas id="minersChart" style="margin: 0 auto;"></canvas>
+				<canvas id="bigMinersChart" style="margin: 0 auto;"></canvas>
+			</div>
+			<div class="col-lg-6 col-md-6">
+				<canvas id="smallMinersChart" style="margin: 0 auto;"></canvas>
 			</div>
 		</div>
 </div>
@@ -245,7 +248,8 @@ var poolsRefreshed = 0;
 							recalcBigSmallHashrate();
 							displayBigChart();
 							displaySmallChart();
-							displayChart2();
+							displayBigMinersChart();
+							displaySmallMinersChart();
 						}, 1000);
 					}
 			});
@@ -281,8 +285,10 @@ function calculateTotalFee(config) {
   
 	var bigLabels = [];
 	var bigHashrates = [];
+	var bigMiners = []; 
 	var smallLabels = [];
 	var smallHashrates = [];
+	var smallMiners = []; 
 	var bigHashrate = 300000;
 
 	function recalcBigSmallHashrate() {
@@ -291,15 +297,17 @@ function calculateTotalFee(config) {
 		smallLabels = [];
 		smallHashrates = [];
 		var objpoolHashrates = poolNames.map(function callback(currentValue, index, array) {
-			return { name: currentValue, hashrates: poolHashrates[index] }
+			return { name: currentValue, hashrates: poolHashrates[index],miners: poolMiners[index] }
 		})
 		objpoolHashrates.forEach(function callback(currentValue, index, array) {
 			if (currentValue.hashrates < bigHashrate) {
 				smallLabels.push(currentValue.name);
 				smallHashrates.push(currentValue.hashrates);
+				smallMiners.push(currentValue.miners);
 			} else {
 				bigHashrates.push(currentValue.hashrates);
 				bigLabels.push(currentValue.name);
+				bigMiners.push(currentValue.miners);
 			}
 
 		});
@@ -307,11 +315,13 @@ function calculateTotalFee(config) {
 		bigLabels.push("other");
 
 		//push other Hashrate
-		bigHashrates.push(poolHashrates.reduce(function (previousValue, currentValue, index, array) {
-			if (currentValue < bigHashrate)
+		bigHashrates.push(smallHashrates.reduce(function (previousValue, currentValue) {
 				return previousValue + currentValue;
-			else
-				return previousValue
+		}, 0));
+
+		//push other Miners
+		bigMiners.push(smallMiners.reduce(function (previousValue, currentValue) {
+				return previousValue + currentValue;
 		}, 0));
 
 	}
@@ -405,14 +415,57 @@ function calculateTotalFee(config) {
 		});
 	}
 
+function displaySmallMinersChart() {
+			var ctx2 = document.getElementById("smallMinersChart");
 
-function displayChart2() {
-    var ctx2 = document.getElementById("minersChart");
+			var chartData2 = {
+				labels: smallLabels,
+				datasets: [{
+					data: smallMiners,
+					backgroundColor: colors,
+					borderWidth: 0,
+					segmentShowStroke: false
+				}]
+			};
+			var options2 = {
+				title: {
+					display: true,
+					text: 'Miner Distribution smaller than 300k',
+					fontSize: 25
+				},
+				tooltips: {
+					enabled: true,
+					mode: 'single',
+					callbacks: {
+						title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+						label: function (tooltipItem, data) {
+							var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+							var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+							return amount + ' / ' + total + ' miners  (' + parseFloat(amount * 100 / total).toFixed(2) + '%)';
+						}
+					}
+				},
+				legend: {
+					display: false,
+					labels: {
+						fontColor: '#fff'
+					}
+				}
+			};
+
+			window.smallMinersChart = new Chart(ctx2, {
+				type: 'doughnut',
+				data: chartData2,
+				options: options2
+			});
+		}
+function displayBigMinersChart() {
+    var ctx2 = document.getElementById("bigMinersChart");
 
     var chartData2 = {
-      labels: poolNames,
+      labels: bigLabels,
       datasets: [{
-        data: poolMiners,
+        data: bigMiners,
         backgroundColor: colors,
         borderWidth: 0,
         segmentShowStroke: false
@@ -421,7 +474,7 @@ function displayChart2() {
     var options2 = {
       title: {
         display: true,
-        text: 'Miner Distribution',
+        text: 'Miner Distribution bigger than 300k',
         fontSize: 25
       },
       tooltips: {
@@ -444,7 +497,7 @@ function displayChart2() {
       }
     };
 
-    window.poolsChart2 = new Chart(ctx2, {
+    window.bigMinersChart = new Chart(ctx2, {
       type: 'doughnut',
       data: chartData2,
       options: options2
@@ -469,7 +522,7 @@ setInterval(function(){
 					result = host.substr(0, index);
 				}
 				
-				it = it + 1;
+				it = it + 1; 
 					
                 $.getJSON('/api/?mode=get&url=' + url, (data, textStatus, jqXHR) => {
 				
@@ -540,6 +593,7 @@ function refreshChart() {
 		sorttable.makeSortable(document.getElementById("network-hash"));
 		var pool_rows = $('#pools_rows').children();
 		var otherHashrate= 0;
+		var otherMiners= 0;
 		var inx;
 		for (var i = 0; i < pool_rows.length; i++) {
 			var row = $(pool_rows[i]);
@@ -552,17 +606,27 @@ function refreshChart() {
 			if((inx = poolsSmallChart.data.labels.indexOf(label))>-1){
 				poolsSmallChart.data.datasets[0].data[inx] = parseInt(hashrate);
 			}
+			
 			if(hashrate < bigHashrate)  otherHashrate += parseInt(hashrate);
-			poolsChart2.data.labels[i] = label;
-			poolsChart2.data.datasets[0].data[i] = parseInt(miners);
+
+			if ((inx = bigMinersChart.data.labels.indexOf(label)) > -1)
+				bigMinersChart.data.datasets[0].data[inx] = parseInt(miners);
+
+			if ((inx = smallMinersChart.data.labels.indexOf(label)) > -1)
+				smallMinersChart.data.datasets[0].data[inx] = parseInt(miners);
+			
+			if (hashrate < bigHashrate) otherMiners += parseInt(miners);
 		}
 
 		if ((inx = poolsChart.data.labels.indexOf("other")) > -1)
 			poolsChart.data.datasets[0].data[inx] = parseInt(otherHashrate);
 	
+		if ((inx = bigMinersChart.data.labels.indexOf("other")) > -1)
+			bigMinersChart.data.datasets[0].data[inx] = parseInt(otherMiners);
 	
 		poolsChart.update();
-		poolsChart2.update();
+		bigMinersChart.update();
+		smallMinersChart.update();
 		poolsSmallChart.update();
 }
 	
