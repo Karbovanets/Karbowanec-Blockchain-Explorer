@@ -246,17 +246,30 @@
 
     function getBlockchainUrl(id) {
         return blockchainExplorer.replace('{id}', id);
-    }
+	}
 
+	function getinfo() {
+		$.ajax({
+			url: api + '/getinfo',
+			timeout: 1500 //in milliseconds
+		})
+		.done(function (data) {
+			try {
+				lastStats = JSON.parse(data);
+			} catch (e) {
+				lastStats = data;
+			}
+			routePage(fetchLiveStats);
+		})
+		.fail(function () {
+			apiList.push(api);
+			api = apiList.shift();
+			getinfo();
+		});
+	}
+	
     $(function(){
-        $.get(api + '/getinfo', function(data){
-            try {
-                lastStats = JSON.parse(data);
-            } catch(e) {
-                lastStats = data;
-            }
-            routePage(fetchLiveStats);
-        });
+		getinfo();
     });
 	
     // Blockexplorer functions

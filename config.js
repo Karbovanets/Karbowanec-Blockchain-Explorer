@@ -1,4 +1,5 @@
 var api = 'http://108.61.198.115:32348';
+var apiList = ["http://45.32.232.11:32348", "http://35.204.35.191:32348"];
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
