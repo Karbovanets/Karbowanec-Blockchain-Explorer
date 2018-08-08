@@ -89,9 +89,9 @@
 									<span id="calcHashUnit" data-mul="1">KH/s</span> <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" role="menu" id="calcHashUnits">
-									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="0">H/s</a></li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="1">KH/s</a></li>
-									<li class="list-group-item d-flex justify-content-between align-items-center" data-mul="2">MH/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center"><a data-mul="0">H/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center"><a data-mul="1">KH/s</a></li>
+									<li class="list-group-item d-flex justify-content-between align-items-center"><a data-mul="2">MH/s</a></li>
 								</ul>
 							</div>
 							<span class="input-group-addon">=</span>
@@ -125,12 +125,13 @@
     </table>
 </div>
 
-<strong>Other pools</strong> (stats unavailable)
-
-<ul>
-	<li><a href="https://pandapool.io/r/501174421">pandapool.io</a></li>
-</ul>
-
+<div class="container">
+	<div class="row">
+		<div class="col-md-2">
+			<input type="range" min="90000" max="2100000" value="300000" step="10000" onchange="changBigHashrate(event)">
+		</div>
+	</div>
+</div>
 <div class="container">
         <div class="row">
 			<div class="col-lg-6 col-md-6">
@@ -167,6 +168,7 @@ totalHashrate = 0;
 totalMiners = 0;
 lastReward = 0;
 avgDiff = 0;
+var bigHashrate = 300000;
 var it = -1;
 var poolsRefreshed = 0;
 			NETWORK_STAT_MAP.forEach((url, host, map) => {
@@ -241,17 +243,21 @@ var poolsRefreshed = 0;
 						updateText('total_pools', poolNames.length);
 					
 					}
-				});
-				poolsRefreshed++;
-					if (poolsRefreshed === NETWORK_STAT_MAP.size){ 
-						setTimeout(function(){
+				}).complete(function(params) {
+					poolsRefreshed++;
+					
+					
+						setTimeout(function () {
 							recalcBigSmallHashrate();
 							displayBigChart();
 							displaySmallChart();
 							displayBigMinersChart();
 							displaySmallMinersChart();
-						}, 1000);
-					}
+						}, 100);
+					
+				})
+				
+					
 			});
 
     currentPage = {
@@ -285,17 +291,19 @@ function calculateTotalFee(config) {
   
 	var bigLabels = [];
 	var bigHashrates = [];
-	var bigMiners = []; 
+	var bigMiners = [];
 	var smallLabels = [];
 	var smallHashrates = [];
-	var smallMiners = []; 
-	var bigHashrate = 300000;
+	var smallMiners = [];
+	
 
 	function recalcBigSmallHashrate() {
 		bigLabels = [];
 		bigHashrates = [];
 		smallLabels = [];
 		smallHashrates = [];
+		bigMiners = [];
+		smallMiners = [];
 		var objpoolHashrates = poolNames.map(function callback(currentValue, index, array) {
 			return { name: currentValue, hashrates: poolHashrates[index],miners: poolMiners[index] }
 		})
@@ -313,6 +321,7 @@ function calculateTotalFee(config) {
 		});
 
 		bigLabels.push("other");
+	
 
 		//push other Hashrate
 		bigHashrates.push(smallHashrates.reduce(function (previousValue, currentValue) {
@@ -340,7 +349,7 @@ function calculateTotalFee(config) {
 		var options = {
 			title: {
 				display: true,
-				text: 'Hashrate Distribution bigger than 300K',
+				text: 'Hashrate Distribution bigger than '+ (bigHashrate/1000).toFixed(0)+'K',
 				fontSize: 25
 			},
 			tooltips: {
@@ -362,7 +371,7 @@ function calculateTotalFee(config) {
 				}
 			}
 		};
-
+		if(poolsChart.data) poolsChart.destroy();
 		window.poolsChart = new Chart(ctx, {
 			type: 'doughnut',
 			data: chartData,
@@ -385,7 +394,7 @@ function calculateTotalFee(config) {
 		var options = {
 			title: {
 				display: true,
-				text: 'Hashrate Distribution smaller than 300K',
+				text: 'Hashrate Distribution smaller than ' + (bigHashrate / 1000).toFixed(0) +'K',
 				fontSize: 25
 			},
 			tooltips: {
@@ -407,7 +416,7 @@ function calculateTotalFee(config) {
 				}
 			}
 		};
-
+		if (poolsSmallChart.data) poolsSmallChart.destroy();
 		window.poolsSmallChart = new Chart(ctx, {
 			type: 'doughnut',
 			data: chartData,
@@ -415,6 +424,7 @@ function calculateTotalFee(config) {
 		});
 	}
 
+	
 function displaySmallMinersChart() {
 			var ctx2 = document.getElementById("smallMinersChart");
 
@@ -430,7 +440,7 @@ function displaySmallMinersChart() {
 			var options2 = {
 				title: {
 					display: true,
-					text: 'Miner Distribution smaller than 300k',
+					text: 'Miner Distribution smaller than ' + (bigHashrate / 1000).toFixed(0) +'k',
 					fontSize: 25
 				},
 				tooltips: {
@@ -452,7 +462,7 @@ function displaySmallMinersChart() {
 					}
 				}
 			};
-
+			if (smallMinersChart.data) smallMinersChart.destroy();
 			window.smallMinersChart = new Chart(ctx2, {
 				type: 'doughnut',
 				data: chartData2,
@@ -474,7 +484,7 @@ function displayBigMinersChart() {
     var options2 = {
       title: {
         display: true,
-        text: 'Miner Distribution bigger than 300k',
+        text: 'Miner Distribution bigger than ' + (bigHashrate / 1000).toFixed(0) +'k',
         fontSize: 25
       },
       tooltips: {
@@ -496,20 +506,31 @@ function displayBigMinersChart() {
         }
       }
     };
-
-    window.bigMinersChart = new Chart(ctx2, {
-      type: 'doughnut',
-      data: chartData2,
-      options: options2
-    });
+	if (bigMinersChart.data) bigMinersChart.destroy();
+	    window.bigMinersChart = new Chart(ctx2, {
+		type: 'doughnut',
+		data: chartData2,
+		options: options2
+	});
 }
-
+function changBigHashrate(event) {
+	bigHashrate= parseInt(event.target.value);
+	
+	setTimeout(function () {
+		recalcBigSmallHashrate();
+		displayBigChart();
+		displaySmallChart();
+		displayBigMinersChart();
+		displaySmallMinersChart();
+	}, 100);
+}
 setInterval(function(){
 	poolsRefreshed = 0;
 	var totalHashrate = 0;
 	totalMiners = 0;
 	poolNames = [];
 	poolHashrates = [];
+	poolMiners =[];
 	it = -1;
 		
             NETWORK_STAT_MAP.forEach((url, host, map) => {
@@ -522,11 +543,11 @@ setInterval(function(){
 					result = host.substr(0, index);
 				}
 				
-				it = it + 1; 
+				it = it + 1;
 					
                 $.getJSON('/api/?mode=get&url=' + url, (data, textStatus, jqXHR) => {
 				
-					if (data.pool === 'undefined'){
+					if (data.pool === undefined){
 						
 						var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
 						var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
@@ -535,7 +556,9 @@ setInterval(function(){
 						
 						updateText('hashrate-'+result, data.pool_statistics.hashRate);
 						updateText('miners-'+result, data.pool_statistics.miners);
-					
+						poolNames.push(result);
+						poolHashrates.push(parseInt(data.pool_statistics.hashRate));
+						poolMiners.push(parseInt(data.pool_statistics.miners));
 						totalHashrate += parseInt(data.pool_statistics.hashRate);
 						totalMiners += parseInt(data.pool_statistics.miners);
 						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
@@ -550,7 +573,9 @@ setInterval(function(){
 						updateText('height-'+result, data.network.height);
 						updateText('hashrate-'+result, data.pool.hashrate);
 						updateText('miners-'+result, data.pool.miners);
-						
+						poolNames.push(result);
+						poolHashrates.push(parseInt(data.pool.hashrate));
+						poolMiners.push(parseInt(data.pool.miners));
 						var poolBlocks = [];
 						for (var i = 0; i < data.pool.blocks.length; i++) {
 						  if (data.pool.blocks[i].length < 10) {
@@ -595,6 +620,7 @@ function refreshChart() {
 		var otherHashrate= 0;
 		var otherMiners= 0;
 		var inx;
+		console.log("pool_rows: "+pool_rows.length);
 		for (var i = 0; i < pool_rows.length; i++) {
 			var row = $(pool_rows[i]);
 			var label = row.find('td:nth-child(2)').text();
@@ -624,6 +650,8 @@ function refreshChart() {
 		if ((inx = bigMinersChart.data.labels.indexOf("other")) > -1)
 			bigMinersChart.data.datasets[0].data[inx] = parseInt(otherMiners);
 	
+		console.log(poolsSmallChart.data.datasets[0].data.reduce((a,b)=>a+b)+"|"+ otherHashrate);
+
 		poolsChart.update();
 		bigMinersChart.update();
 		smallMinersChart.update();
