@@ -1,0 +1,138 @@
+<h2><i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i> Validate Address</h2>
+
+<div class="well bs-component">
+	<form class="form-horizontal" id="validate_address_form">
+	    <fieldset>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="public_address">Address</label>
+					<input class="form-control" placeholder="Karbo address to validate" id="public_address">
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<button class="btn btn-primary" type="button" id="validate_address">
+						<span class="fa fa-search"></span> Validate
+					</button>
+				</div>
+			</div>
+	    </fieldset>
+	</form>
+</div>
+
+
+ <div class="panel panel-default" id="validation_result">
+  <div class="panel-heading">
+	<h3 class="panel-title">Validation result</h3>
+  </div>
+  <div class="panel-body">
+
+	<p><span id="verified" class="fa"></span></p>
+	<p>View Public Key: <span id="viewPublicKey"></span></p>
+	<p>Spend Public Key: <span id="spendPublicKey"></span></p>
+
+  </div>
+ </div>
+
+<script>
+	var xhrValidateAddress;
+	var publicAddress = $("#public_address");
+	var viewPublicKey = $("#viewPublicKey");
+	var spendPublicKey = $("#spendPublicKey");
+	var result = $('#verified');
+	var result_container = $("#validation_result");
+	result_container.hide();
+	
+    currentPage = {
+        destroy: function(){
+			if (xhrValidateAddress) xhrValidateAddress.abort();
+        },
+        init: function(){
+        },
+        update: function(){
+        }
+	};
+
+	$("#validate_address").click(function() {
+		result_container.hide();
+		result.empty();
+		viewPublicKey.empty();
+		spendPublicKey.empty();
+		
+		if(!publicAddress.val()) {
+			wrongParamAlert("Fill the address field");
+			return;
+		}
+		
+		validateAddress();
+	});	
+		
+		
+function validateAddress(){
+	if (xhrValidateAddress) xhrValidateAddress.abort();
+		xhrValidateAddress = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"validateaddress",
+				params: {
+					address: publicAddress.val(),
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var res = data.result;
+				
+				console.log(res);
+				
+				result_container.removeClass("panel-default");
+				result_container.removeClass("panel-success");
+				result_container.removeClass("panel-warning");
+				result.removeClass("text-success");
+				result.removeClass("text-warning");
+				result.removeClass("fa-check");
+				result.removeClass("fa-times");
+				
+				var isvalid = JSON.parse(res.isvalid);
+				
+				if (isvalid) {
+					result.text("Address is valid");
+					result_container.addClass("panel-success");
+					result.addClass("text-success");
+					result.addClass("fa-check");
+					viewPublicKey.text(res.viewPublicKey);
+					spendPublicKey.text(res.spendPublicKey);
+				} else {
+					result.text("Address is invalid!");
+					result_container.addClass("panel-warning");
+					result.addClass("text-warning");
+					result.addClass("fa-times");
+				}
+				result_container.show();
+			  }
+			}
+		});
+	}	
+
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+	
+	function wrongParamAlert(message) {
+	$('#page').after(
+		'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
+		'<button type="button" class="close" ' + 
+		'data-dismiss="alert" aria-hidden="true">' + 
+		'&times;' + 
+		'</button>' + 
+		'<strong>' + message + '</strong><br />' +
+		'</div>');
+	}
+
+</script>
