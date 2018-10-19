@@ -57,6 +57,8 @@ var networkStat = {
 		["karbo.herominers.com", "https://karbo.herominers.com/api/stats"],
 		["krb.hashgang.io", "https://eu1.krb.hashgang.io/api/stats"],
 		["easyhash.pro/krb", "https://easyhash.pro/krb/api/stats"],
-		["krb.mychainpools.com", "https://krb.mychainpools.com:8148/stats"]
+		["krb.mychainpools.com", "https://krb.mychainpools.com:8148/stats"],
+		["krb.superpools.online", "http://krb.superpools.online:8117/stats"],
+		["newpool.pw/karbo", "https://minenice.newpool.pw:8217/stats"]
     ]
 };

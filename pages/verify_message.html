@@ -1,0 +1,160 @@
+<style>
+	h2 #transactionHash {
+		font-size: 20px;
+		color: #222;
+	}
+</style>
+
+<h2><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>Verify signed message</h2>
+
+<div class="well bs-component">
+	<form class="form-horizontal" id="check_tx_form">
+	    <fieldset>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="public_address">Address</label>
+					<input class="form-control" placeholder="Public Karbo address" id="public_address">
+				</div>
+			</div>
+		
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="signature" style="margin-bottom: 10px;">Signature</label>
+						<input class="form-control" placeholder="SigV1........." id="signature">
+				</div>		
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="message" style="margin-bottom: 10px;">Message</label>
+					<textarea class="form-control" id="message" rows="5" spellcheck="false"></textarea>
+				</div>	
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<button class="btn btn-primary" type="button" id="verify">
+						<span class="fa fa-search"> Verify</span>
+					</button>
+				</div>
+			</div>
+	    </fieldset>
+	</form>
+</div>
+
+
+ <div class="panel panel-default" id="verification_result">
+  <div class="panel-heading">
+	<h3 class="panel-title">Verification result</h3>
+  </div>
+  <div class="panel-body">
+
+	<span id="verified" class="fa"></span>
+
+  </div>
+ </div>
+
+
+<p>Hereby you can verify signature of the message signed by the public address' private keys.</p>
+
+<p>This can prove, for example, that the address belongs to the issuer of the signature.</p>
+
+
+<script>
+	var xhrVerifyMessage;
+	var signature = $("#signature");
+	var message = $("#message");
+	var address = $("#public_address");
+	var result = $("#verified");
+	var result_container = $("#verification_result");
+	result_container.hide();
+
+    currentPage = {
+        destroy: function(){
+			if (xhrVerifyMessage) xhrVerifyMessage.abort();
+        },
+        init: function(){
+        },
+        update: function(){
+        }
+    };
+	
+	
+	$("#verify").click(function() {
+		result_container.hide();
+		$('#verified').empty();
+		privateKeyType = $("[name=keyType]:checked").val();
+		if(!signature.val() || !message.val() || !address.val()) {
+			wrongParamAlert("Fill all fields!");
+			return;
+		}
+		verifyMessage();
+	});
+
+	function verifyMessage(){
+	if (xhrVerifyMessage) xhrVerifyMessage.abort();
+		xhrVerifyMessage = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"verifymessage",
+				params: {
+					message: message.val(),
+					address: address.val(),
+					signature: signature.val()
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var res = data.result;
+				
+				console.log(res);
+				
+				result_container.removeClass("panel-default");
+				result_container.removeClass("panel-success");
+				result_container.removeClass("panel-warning");
+				result.removeClass("text-success");
+				result.removeClass("text-warning");
+				result.removeClass("fa-check");
+				result.removeClass("fa-times");
+				
+				var isvalid = JSON.parse(res.sig_valid);
+				
+				if (isvalid) {
+					result.text("Signature is valid");
+					result_container.addClass("panel-success");
+					result.addClass("text-success");
+					result.addClass("fa-check");
+				} else {
+					result.text("Signature is invalid!");
+					result_container.addClass("panel-warning");
+					result.addClass("text-warning");
+					result.addClass("fa-times");
+				}
+				result_container.show();
+			  }
+			}
+		});
+	}	
+	
+	
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+	
+	function wrongParamAlert(message) {
+	$('#page').after(
+		'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
+		'<button type="button" class="close" ' + 
+		'data-dismiss="alert" aria-hidden="true">' + 
+		'&times;' + 
+		'</button>' + 
+		'<strong>' + message + '</strong><br />' +
+		'</div>');
+	}
+</script>
