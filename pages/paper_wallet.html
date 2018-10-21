@@ -1,0 +1,60 @@
+<h2><i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>Paper Wallet</h2>
+
+<div class="row">
+	<div class="col-md-12">
+		<div style="margin-bottom: 1em;">
+			<button class="btn btn-primary btn-lg" type="button" id="generate_paper_wallet">
+				<span class="fa fa-cogs"></span> Generate
+			</button>
+		</div>
+	</div>
+</div>
+ <div class="panel panel-default" id="validation_result">
+  <div class="panel-body">
+	<div id="paperwallet_result">
+	</div>
+  </div>
+ </div>
+<script src="/js/crypto_utils.js"></script>
+<script>
+	currentPage = {
+		destroy: function(){
+		},
+		init: function(){
+			generateWallet();
+		},
+		update: function(){
+		}
+	};
+
+	$("#generate_paper_wallet").click(function()
+	{
+		generateWallet();
+	});
+	
+
+	function generateWallet() {
+		$("#paperwallet_result").empty();
+
+		var seed = cnUtil.sc_reduce32(poor_mans_kdf(cnUtil.rand_32()));
+		var keys = cnUtil.create_address(seed);
+		var mnemonic = mn_encode(seed, "english");
+
+		$("#paperwallet_result").append(
+			'<div>' +
+				'<h3><i class="fa fa-envelope-o" aria-hidden="true"></i> Address</h3>' +
+				'<p class="text-primary"><strong style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.public_addr + '</strong></p>' +
+				'<h3><i class="fa fa-key" aria-hidden="true"></i> Mnemonic Seed</h3>' +
+				'<p class="text-danger" style="font-family: monospace, monospace;">' + mnemonic + '</p>' +
+				'<h3><i class="fa fa-key" aria-hidden="true"></i> Legacy GUI Keys</h3>' +
+				'<p class="text-danger" style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.privateKeys + '</p>' +
+				'<h3><i class="fa fa-key" aria-hidden="true"></i> View Keys</h3>' +
+				'<p class="text-success"><strong>Public:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.view.pub + '</span></p>' +
+				'<p class="text-danger"><strong>Secret:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.view.sec + '</span></p>' +
+				'<h3><i class="fa fa-key" aria-hidden="true"></i> Spend Keys</h3>' +
+				'<p class="text-success"><strong>Public:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.spend.pub + '</span></p>' +
+				'<p class="text-danger"><strong>Secret:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.spend.sec + '</span></p>' +
+			'</div>'
+		);
+	}
+</script>
