@@ -240,7 +240,7 @@ td .timeago {
 }
 
 #blocks_rows > tr > td:nth-child(4) {
-	font-size: 85%;
+	/*font-size: 85%;*/
 }
 
 #content {

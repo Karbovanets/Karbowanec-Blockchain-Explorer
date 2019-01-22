@@ -1,15 +1,15 @@
-var api = 'http://108.61.198.115:32348';
+var api = 'https://karbo.club/services/node_web';
 var apiList = ["http://45.32.232.11:32348", "http://35.204.35.191:32348"];
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
 // pools stats by MainCoins
-var networkStat = {
-    "krb": [
+var poolsStat = 
+	[
 		["karbo.hashvault.pro", "https://karbo.hashvault.pro/api/pool/stats"],
-		["krb.semipool.com", "https://krb-api.semipool.com/pool/stats"],
-		["krb.mypool.name", "http://krb.mypool.name:32351/stats"],
+		["krb.semipool.com", "https://webkrb.semipool.com/api/pool/stats"],
+		["krb.mypool.name", "https://api.krb.mypool.online/stats"],
 		["democats.org/pool/?name=karbowanec", "http://pool2.democats.org:7673/stats"],
 		["pool.karbowanec.com", "http://pool.karbowanec.com:8117/stats"],
 		["krb.cryptonotepool.com", "http://5.189.135.137:8618/stats"],
@@ -59,7 +59,90 @@ var networkStat = {
 		["easyhash.pro/krb", "https://easyhash.pro/krb/api/stats"],
 		["krb.mychainpools.com", "https://krb.mychainpools.com:8148/stats"],
 		["krb.superpools.online", "http://krb.superpools.online:8117/stats"],
-		["newpool.pw/karbo", "https://minenice.newpool.pw:8217/stats"],
-		["karbo.asiapool.io", "https://karbo.asiapool.io/api/stats"]
-    ]
-};
+		["newpool.pw/krb", "https://minenice.newpool.pw:8215/stats"],
+		["karbo.asiapool.io", "https://karbo.asiapool.io/api/stats"],
+		["youpool.io/KARBO", "http://149.28.85.162:8128/stats"]
+    ];
+var nodesStat = 
+	[
+        ["krbnode.cf:32348"],
+		["krb.sberex.com:32348"],
+		["n.karboon.pp.ua:32348"],
+		["karboon.pp.ua:32348"],
+		["51.15.201.166:32348"],
+		["51.15.218.183:32348"],
+		["51.15.74.207:32348"],
+		["krbnode.ocukminingpool.com:32348"],
+		["85.194.241.83:32348"],
+		["212.80.59.96:32348"],
+		["45.77.141.1:32348"],
+		["free.rublin.org:32348"],
+		["looongcat.pp.ua:32348"],
+		["karbo.world:32348"],
+		["karbo.cash:32348"],
+		["node.karbo.space:32348"],
+		["212.24.106.170:32348"],
+		["138.201.91.104:32348"],
+		["178.212.197.205:32348"],
+		["krb.i-holder.net:55555"],
+		["node.krb.mypool.online:32348"],
+		["tonykarbo.tk:32348"],
+		["176.9.107.175:32348"],
+		["80.211.164.116:32348"],
+		["37.139.4.158:32348"],
+		["45.63.41.207:32348"],
+		["45.63.105.210:32348"],
+		["217.12.221.20:32348"],
+		["128.0.174.209:32348"],
+		["krb.master-node.network:32348"],
+		["132.148.19.74:32348"],
+		["158.140.206.99:32348"],
+		["148.251.11.177:32348"],
+		["104.199.88.35:32348"],
+		["node.karbo-exchange.com.ua:32348"],
+		["krb.thatsmy.tech:32348"],
+		["karbo.pool.multed.com:32348"],
+		["91.239.235.16:32348"],
+		["karbo.dlinkddns.com:32348"],
+		["173.212.201.123:32348"],
+		["95.67.41.41:32348"],
+		["krb.pool.ualinux.com:32348"],
+		["krb.00.net.ua:32348"],
+		["95.46.98.29:32348"],
+		["krb.gordon.host:32348"],
+		["karbonode.pp.ua:32348"],
+		["node.karbo.farm:32348"],
+		["5.189.135.137:32348"],
+		["arbitmaster.com:32348"],
+		["krbnode.3t.org.ua:32348"],
+		["108.61.198.115:32348"],
+		["31.41.219.221:32348"],
+		["80.211.139.102:32348"],
+		["node.krbpool.pp.ua:32348"],
+		["88.198.25.81:32348"],
+		["101.100.139.22:32348"],
+		["35.240.206.232:32348"],
+		["107.174.15.131:32348"],
+		["178.234.37.123:32348"],
+		["51.15.119.96:32348"],
+		["51.15.232.206:32348"],
+		["51.15.71.187:32348"],
+		["95.46.98.64:32348"],
+		["45.32.232.11:32348"],
+		["51.15.252.228:32348"],
+		["krb.nodemaster.pro:32348"],
+		["krb2.nodemaster.pro:32348"],
+		["noda.pp.ua:32348"],
+		["35.237.126.109:32348"],
+		["144.76.140.59:32348"],
+		["178.63.69.60:32348"],
+		["195.26.92.156:32348"],
+		["karb.pp.ua:32348"],
+		["krbnode.pp.ua:32348"],
+		["karbonode.top:32348"],
+		["krb.hashgang.io:32348"],
+		["kabany.tk:32348"],
+		["212.227.192.145:32348"],
+		["51.15.75.207:32348"],
+		["104.207.130.36:32348"]
+    ];

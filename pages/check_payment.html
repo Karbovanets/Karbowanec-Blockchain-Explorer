@@ -13,18 +13,19 @@
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="transaction_hash" style="margin-bottom: 10px;">Transaction Hash</label>
-						<input class="form-control" placeholder="64 char transaction id" id="transaction_hash">
+					<input class="form-control" placeholder="64 characters transaction id" id="transaction_hash">
 				</div>		
 			</div>
 			<div class="col-md-12">
 				<div class="form-group">
 					<p>
-						<label for="private_key">Private Key:
+						<label for="transaction_key">Private Key or Proof:
 							<div class="radio-inline"><label><input type="radio" name="keyType" value="tx_key" checked>Transaction Key</label></div>
 							<div class="radio-inline"><label><input type="radio" name="keyType" value="view_key">Private View Key</label></div>
+							<div class="radio-inline"><label><input type="radio" name="keyType" value="tx_proof">Proof of Payment</label></div>
 						</label>
 					</p>
-					<input class="form-control" placeholder="64 char private view key or private transaction key" id="private_key">
+					<input class="form-control" placeholder="Private view key, Secret transaction key or Proof of payment" id="transaction_key">
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -47,7 +48,7 @@
 <div id="check_result">
  <div class="panel panel-default">
   <div class="panel-heading">
-	<h3 class="panel-title">Received <span id="receivedAmount"></span> in transaction: <span id="transactionHash" style="word-break: break-all;"></span></h3>
+	<h3 class="panel-title">Specified address received <strong><span id="receivedAmount"></span></strong> in transaction <strong><span id="transactionHash" style="word-break: break-all;"></span></strong></h3>
   </div>
   <div class="panel-body">
 	
@@ -65,7 +66,7 @@
 		</div>
 	</div>
 	<div id="tx_block">
-		<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h3>
+		<h4><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h4>
 		<div class="row">
 			<div class="col-md-12 stats">
 				<div><i class="fa fa-circle-o"></i> Hash: <span id="block.hash" style="word-break: break-all;"></span></div>
@@ -118,17 +119,18 @@
 <p>You can also check that payment was made to your address in given transaction with your <em>Private View Key</em>. Alternatively the <em>Tracking Key</em> from GUI wallet can be used.</p>
 
 <script>
-    var xhrGetTransaction, xhrCheckTransactionByKey, xhrCheckTransactionByViewKey, transaction;
+    var xhrGetTransaction, xhrCheckTransactionByKey, xhrCheckTransactionByViewKey, xhrCheckTxProof, transaction;
 	var transactionHash = $("#transaction_hash");
-	var privateKey = $("#private_key");
+	var transactionKey = $("#transaction_key");
 	var publicAddress = $("#public_address");
-	var privateKeyType;
+	var transactionKeyType;
 
     currentPage = {
         destroy: function(){
 			if (xhrGetTransaction) xhrGetTransaction.abort();
 			if (xhrCheckTransactionByKey) xhrCheckTransactionByKey.abort();
 			if (xhrCheckTransactionByViewKey) xhrCheckTransactionByViewKey.abort();
+			if (xhrCheckTxProof) xhrCheckTxProof.abort();
         },
         init: function(){
         },
@@ -143,8 +145,8 @@
 		$('#outputs_rows').empty();
 		$('#receivedAmount').empty();
 		$('#transactionHash').empty();
-		privateKeyType = $("[name=keyType]:checked").val();
-		if(!transactionHash.val() || !privateKey.val() || !publicAddress.val()) {
+		transactionKeyType = $("[name=keyType]:checked").val();
+		if(!transactionHash.val() || !transactionKey.val() || !publicAddress.val()) {
 			wrongParamAlert("Fill all fields!");
 			return;
 		}
@@ -173,10 +175,12 @@
 				var tx = data.result;
 				renderTransaction(tx);
 				
-				if (privateKeyType === "tx_key") {
+				if (transactionKeyType === "tx_key") {
 					checkTxKey();
-				} else if (privateKeyType === "view_key") {
+				} else if (transactionKeyType === "view_key") {
 					checkViewKey();
+				} else if (transactionKeyType === "tx_proof") {
+					checkTxProof();
 				}
 				
 			  }
@@ -195,7 +199,7 @@
 				method:"check_tx_key",
 				params: {
 					txid: transactionHash.val(),
-					txkey: privateKey.val(),
+					txkey: transactionKey.val(),
 					address: publicAddress.val()
 				}
 			}),
@@ -225,7 +229,7 @@
 	
 	function checkViewKey(){
 		// in case some one will try to use tracking key from GUI extract private view key from it
-		var privateViewKey = privateKey.val();
+		var privateViewKey = transactionKey.val();
 		if (privateViewKey.length === 256) {
 			privateViewKey = privateViewKey.substr(privateViewKey.length - 64);
 		}
@@ -263,6 +267,50 @@
 					});				
 				}
 				$("#check_result").show();
+			  }
+			}
+		});
+	}
+	
+	function checkTxProof(){
+		if (xhrCheckTxProof) xhrCheckTxProof.abort();
+		xhrCheckTxProof = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"check_tx_proof",
+				params: {
+					tx_id: transactionHash.val(),
+					signature: transactionKey.val(),
+					dest_address: publicAddress.val()
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var result = data.result;
+				
+				if(result.signature_valid) {
+				
+				  
+				  $("#receivedAmount").html(getReadableCoins(result.received_amount,12));
+				
+				  var outputResults = result.outputs;
+				  for (var i = 0; i < outputResults.length; i++){
+					$('#outputs_rows tr').each(function() {
+						$this = $(this);
+						if ($this.attr('data-k_image') === outputResults[i].target.data.key) {
+							$this.addClass("success");
+						}
+					});				
+				  }
+				  $("#check_result").show();
+				}
 			  }
 			}
 		});

@@ -1,81 +1,109 @@
-<h2><i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i> Validate Address</h2>
+<style>
+	h2 #transactionHash {
+		font-size: 20px;
+		color: #222;
+	}
+</style>
+
+<h2><i class="fa fa-money fa-fw" aria-hidden="true"></i>Check reserve proof</h2>
+
+<p>Hereby you can check a signature proving that the owner of "address" holds at least this much, optionally with a challenge string "message".</p>
 
 <div class="well bs-component">
-	<form class="form-horizontal" id="validate_address_form">
+	<form class="form-horizontal" id="check_reserve_form">
 	    <fieldset>
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="public_address">Address</label>
-					<input class="form-control" placeholder="Karbo address to validate" id="public_address">
+					<input class="form-control" placeholder="Public Karbo address" id="public_address">
 				</div>
 			</div>
+				
 			<div class="col-md-12">
 				<div class="form-group">
-					<button class="btn btn-primary" type="button" id="validate_address">
-						<span class="fa fa-search"></span> Validate
+					<label for="message" style="margin-bottom: 10px;">Message</label>
+					<textarea class="form-control" id="message" rows="2" spellcheck="false"></textarea>
+				</div>	
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="signature" style="margin-bottom: 10px;">Signature</label>
+					<textarea class="form-control" id="signature" rows="20" spellcheck="false"></textarea>
+				</div>	
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
+					<button class="btn btn-primary" type="button" id="verify">
+						<span class="fa fa-search"> Verify</span>
 					</button>
 				</div>
 			</div>
 	    </fieldset>
 	</form>
 </div>
- <div class="panel panel-default" id="validation_result">
+
+
+ <div class="panel panel-default" id="verification_result">
   <div class="panel-heading">
-	<h3 class="panel-title">Validation result</h3>
+	<h3 class="panel-title">Verification result</h3>
   </div>
   <div class="panel-body">
+
 	<p id="verified"><i class="fa fa-2x"></i> <span></span></p>
-	<p>View Public Key: <span id="viewPublicKey"></span></p>
-	<p>Spend Public Key: <span id="spendPublicKey"></span></p>
+
   </div>
  </div>
+
+
+
 <script>
-	var xhrValidateAddress;
-	var publicAddress = $("#public_address");
-	var viewPublicKey = $("#viewPublicKey");
-	var spendPublicKey = $("#spendPublicKey");
-	var result = $('#verified');
+	var xhrCheckReserve;
+	var signature = $("#signature");
+	var message = $("#message");
+	var address = $("#public_address");
+	var result = $("#verified");
 	var result_icon = $("#verified").find("i");
 	var result_text = $("#verified").find("span");
-	var result_container = $("#validation_result");
+	var result_container = $("#verification_result");
 	result_container.hide();
-	
+
     currentPage = {
         destroy: function(){
-			if (xhrValidateAddress) xhrValidateAddress.abort();
+			if (xhrVerifyMessage) xhrVerifyMessage.abort();
         },
         init: function(){
         },
         update: function(){
         }
-	};
-
-	$("#validate_address").click(function() {
+    };
+	
+	
+	$("#verify").click(function() {
 		result_container.hide();
 		result_text.empty();
-		viewPublicKey.empty();
-		spendPublicKey.empty();
-		
-		if(!publicAddress.val()) {
-			wrongParamAlert("Fill the address field");
+		privateKeyType = $("[name=keyType]:checked").val();
+		if(!signature.val() || !address.val()) {
+			wrongParamAlert("Fill address and signature fields!");
 			return;
 		}
-		
-		validateAddress();
-	});	
-		
-		
-function validateAddress(){
-	if (xhrValidateAddress) xhrValidateAddress.abort();
-		xhrValidateAddress = $.ajax({
+		checkReserve();
+	});
+
+	function checkReserve(){
+	if (xhrCheckReserve) xhrCheckReserve.abort();
+		xhrCheckReserve = $.ajax({
 			url: api + '/json_rpc',
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
 				id: "test",
-				method:"validateaddress",
+				method:"check_reserve_proof",
 				params: {
-					address: publicAddress.val(),
+					message: message.val(),
+					address: address.val(),
+					signature: signature.val()
 				}
 			}),
 			dataType: 'json',
@@ -96,17 +124,17 @@ function validateAddress(){
 				result_icon.removeClass("fa-check");
 				result_icon.removeClass("fa-times");
 				
-				var isvalid = JSON.parse(res.isvalid);
+				var isvalid = JSON.parse(res.good);
 				
 				if (isvalid) {
-					result_text.text("Address is valid");
+					result_text.html("Signature is valid and proves that specified address holds at least <strong>" 
+					+ getReadableCoins(res.total) + "</strong>, from which spent: " 
+					+ getReadableCoins(res.spent));
 					result_container.addClass("panel-success");
 					result.addClass("text-success");
 					result_icon.addClass("fa-check");
-					viewPublicKey.text(res.viewPublicKey);
-					spendPublicKey.text(res.spendPublicKey);
 				} else {
-					result_text.text("Address is invalid!");
+					result_text.text("Signature is invalid!");
 					result_container.addClass("panel-warning");
 					result.addClass("text-warning");
 					result_icon.addClass("fa-times");
@@ -116,7 +144,8 @@ function validateAddress(){
 			}
 		});
 	}	
-
+	
+	
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
@@ -131,5 +160,4 @@ function validateAddress(){
 		'<strong>' + message + '</strong><br />' +
 		'</div>');
 	}
-
 </script>

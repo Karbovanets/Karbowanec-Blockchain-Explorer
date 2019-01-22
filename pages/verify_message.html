@@ -8,7 +8,7 @@
 <h2><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>Verify signed message</h2>
 
 <div class="well bs-component">
-	<form class="form-horizontal" id="check_tx_form">
+	<form class="form-horizontal" id="check_message_form">
 	    <fieldset>
 			<div class="col-md-12">
 				<div class="form-group">
@@ -48,7 +48,7 @@
   </div>
   <div class="panel-body">
 
-	<span id="verified" class="fa"></span>
+	<p id="verified"><i class="fa fa-2x"></i> <span></span></p>
 
   </div>
  </div>
@@ -65,6 +65,8 @@
 	var message = $("#message");
 	var address = $("#public_address");
 	var result = $("#verified");
+	var result_icon = $("#verified").find("i");
+	var result_text = $("#verified").find("span");
 	var result_container = $("#verification_result");
 	result_container.hide();
 
@@ -81,7 +83,7 @@
 	
 	$("#verify").click(function() {
 		result_container.hide();
-		$('#verified').empty();
+		result_text.empty();
 		privateKeyType = $("[name=keyType]:checked").val();
 		if(!signature.val() || !message.val() || !address.val()) {
 			wrongParamAlert("Fill all fields!");
@@ -120,21 +122,21 @@
 				result_container.removeClass("panel-warning");
 				result.removeClass("text-success");
 				result.removeClass("text-warning");
-				result.removeClass("fa-check");
-				result.removeClass("fa-times");
+				result_icon.removeClass("fa-check");
+				result_icon.removeClass("fa-times");
 				
 				var isvalid = JSON.parse(res.sig_valid);
 				
 				if (isvalid) {
-					result.text("Signature is valid");
+					result_text.text("Signature is valid");
 					result_container.addClass("panel-success");
 					result.addClass("text-success");
-					result.addClass("fa-check");
+					result_icon.addClass("fa-check");
 				} else {
-					result.text("Signature is invalid!");
+					result_text.text("Signature is invalid!");
 					result_container.addClass("panel-warning");
 					result.addClass("text-warning");
-					result.addClass("fa-times");
+					result_icon.addClass("fa-times");
 				}
 				result_container.show();
 			  }
