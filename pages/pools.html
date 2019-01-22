@@ -169,10 +169,9 @@ totalMiners = 0;
 lastReward = 0;
 avgDiff = 0;
 var bigHashrate = 300000;
-var it = -1;
 var poolsRefreshed = 0;
 			NETWORK_STAT_MAP.forEach((url, host, map) => {
-			
+				//window.colors.push(getRandomColor());
 				var index = host.indexOf("/");
 					var result;
 					if (index < 0) {
@@ -182,27 +181,30 @@ var poolsRefreshed = 0;
 					}
 				
 				$.getJSON(url, (data, textStatus, jqXHR) => {
-					it = it + 1;
-					window.colors.push(getRandomColor());
+					
+					
 					
 					if (data.pool == null){
-					
+						
 						var d = new Date(data.pool_statistics.lastBlockFoundTime*1000);
 					
 						var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 						
 						var agostring = $.timeago(d);
+
+						var color= getRandomColor();
 						
-						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + window.colors[it] + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+'</td><td id=hashrate-'+result+'>'+data.pool_statistics.hashRate+'</td><td id=miners-'+result+'>'+data.pool_statistics.miners+'</td><td id=totalFee-'+result+'>'+'</td><td id=minPayout-'+result+'>'+'</td><td>'+data.pool_statistics.lastBlockFound+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
+						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + color + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+'</td><td id=hashrate-'+result+'>'+data.pool_statistics.hashRate+'</td><td id=miners-'+result+'>'+data.pool_statistics.miners+'</td><td id=totalFee-'+result+'>'+'</td><td id=minPayout-'+result+'>'+'</td><td>'+data.pool_statistics.lastBlockFound+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
 						
 						totalHashrate += parseInt(data.pool_statistics.hashRate);
 						totalMiners += parseInt(data.pool_statistics.miners);
 						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
 						updateText('total_miners', totalMiners);
 						poolNames.push(result);
+						colors["color-"+ result]=color;
 						poolHashrates.push(parseInt(data.pool_statistics.hashRate));
 						poolMiners.push(parseInt(data.pool_statistics.miners));
-						window.colors.push(getRandomColor());
+						
 						
 						$.getJSON(url.split('/pool/stats')[0] + '/network/stats', (data, textStatus, jqXHR) => {
 						updateText('height-'+result, data.height);
@@ -214,7 +216,7 @@ var poolsRefreshed = 0;
 						});
 						
 					} else {
-					
+						var color = getRandomColor();
 						var d = new Date(parseInt(data.pool.lastBlockFound));
 						if(!isNaN(d)) {
 							var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
@@ -230,13 +232,14 @@ var poolsRefreshed = 0;
 						  }
 						}
 						
-						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + window.colors[it] + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+data.network.height+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFee-'+result+'>'+calculateTotalFee(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFoundBlock-' + result + '>' + (!isNaN(d) ? poolBlocks.sort(cmp).reverse()[0] : 'none' ) + '</span></td><td><span id=lastFound-'+result+'>'+ (!isNaN(d) ? datestring : '-' ) +'</span> (<span class="timeago" id="ago-'+result+'">'+ (!isNaN(d) ? agostring : 'never' ) + '</span>)</td><</tr>');
+						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + color + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+data.network.height+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFee-'+result+'>'+calculateTotalFee(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFoundBlock-' + result + '>' + (!isNaN(d) ? poolBlocks.sort(cmp).reverse()[0] : 'none' ) + '</span></td><td><span id=lastFound-'+result+'>'+ (!isNaN(d) ? datestring : '-' ) +'</span> (<span class="timeago" id="ago-'+result+'">'+ (!isNaN(d) ? agostring : 'never' ) + '</span>)</td><</tr>');
 						
 						totalHashrate += parseInt(data.pool.hashrate);
 						totalMiners += parseInt(data.pool.miners);
 						updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
 						updateText('total_miners', totalMiners);
 						poolNames.push(result);
+						colors["color-" + result] = color;
 						poolHashrates.push(parseInt(data.pool.hashrate));
 						poolMiners.push(parseInt(data.pool.miners));
 						
@@ -292,10 +295,11 @@ function calculateTotalFee(config) {
 	var bigLabels = [];
 	var bigHashrates = [];
 	var bigMiners = [];
+	var bigColors =[];
 	var smallLabels = [];
 	var smallHashrates = [];
 	var smallMiners = [];
-	
+	var smallColors = [];
 
 	function recalcBigSmallHashrate() {
 		bigLabels = [];
@@ -304,18 +308,22 @@ function calculateTotalFee(config) {
 		smallHashrates = [];
 		bigMiners = [];
 		smallMiners = [];
+		smallColors =[];
+		bigColors =[];
 		var objpoolHashrates = poolNames.map(function callback(currentValue, index, array) {
-			return { name: currentValue, hashrates: poolHashrates[index],miners: poolMiners[index] }
+			return { name: currentValue, hashrates: poolHashrates[index],miners: poolMiners[index],color: colors["color-" + currentValue] }
 		})
 		objpoolHashrates.forEach(function callback(currentValue, index, array) {
 			if (currentValue.hashrates < bigHashrate) {
 				smallLabels.push(currentValue.name);
 				smallHashrates.push(currentValue.hashrates);
 				smallMiners.push(currentValue.miners);
+				smallColors.push(currentValue.color);
 			} else {
 				bigHashrates.push(currentValue.hashrates);
 				bigLabels.push(currentValue.name);
 				bigMiners.push(currentValue.miners);
+				bigColors.push(currentValue.color);
 			}
 
 		});
@@ -341,7 +349,7 @@ function calculateTotalFee(config) {
 			labels: bigLabels,
 			datasets: [{
 				data: bigHashrates,
-				backgroundColor: window.colors,
+				backgroundColor: bigColors,
 				borderWidth: 0,
 				segmentShowStroke: false
 			}]
@@ -386,7 +394,7 @@ function calculateTotalFee(config) {
 			labels: smallLabels,
 			datasets: [{
 				data: smallHashrates,
-				backgroundColor: window.colors,
+				backgroundColor: smallColors,
 				borderWidth: 0,
 				segmentShowStroke: false
 			}]
@@ -432,7 +440,7 @@ function displaySmallMinersChart() {
 				labels: smallLabels,
 				datasets: [{
 					data: smallMiners,
-					backgroundColor: colors,
+					backgroundColor: smallColors,
 					borderWidth: 0,
 					segmentShowStroke: false
 				}]
@@ -476,7 +484,7 @@ function displayBigMinersChart() {
       labels: bigLabels,
       datasets: [{
         data: bigMiners,
-        backgroundColor: colors,
+        backgroundColor: bigColors,
         borderWidth: 0,
         segmentShowStroke: false
       }]
