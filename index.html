@@ -409,7 +409,7 @@ function GetSearchBlockbyHeight(){
 	var block, xhrGetSearchBlockbyHeight;
     if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
 	  
-			xhrGetSearchBlockbyHeight = $.ajax({
+		xhrGetSearchBlockbyHeight = $.ajax({
             url: api + '/json_rpc',
             method: "POST",
             data: JSON.stringify({

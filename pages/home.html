@@ -695,6 +695,7 @@ function displayDiffChart() {
 			legend: {
 				display: false
 			},
+			onClick: graphClickEvent,
 			scales: {
 			  yAxes: [{
 				id: 'Height',
@@ -801,11 +802,13 @@ function displayDiffChart() {
 			  
 			  ],
 			  xAxes: [{
+				stacked: true,
+				//offset: true,
 				type: "time",
 				categoryPercentage: 0,
 				barPercentage: 1,
 				categorySpacing: 0,
-				barThickness: 10,
+				barThickness: 20,
 				time: {
                     parser: false,
 					unit: 'minute',
@@ -830,7 +833,7 @@ function displayDiffChart() {
 					fontSize: 9,
 					fontColor: "#CCC",
 					autoSkip: true,
-					//maxRotation: 90,
+					maxRotation: 0,
 					//minRotation: 90
 					//display:false
 				}
@@ -929,6 +932,35 @@ function loadMoreChart() {
 	diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
 	
 	diffChart.update();
+}
+
+function graphClickEvent(event, array){
+	var index = array[0]._index;
+	var dataValue = diffChart.data.datasets[0].data[index];	
+	var block, xhrGetSearchBlockbyHeight;
+    if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();	
+	xhrGetSearchBlockbyHeight = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "blockbyheight",
+                method:"getblockheaderbyheight",
+                params: {
+                   height: dataValue
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				if(data.result){
+					block = data.result.block_header;
+					window.location.href = getBlockchainUrl(block.hash);
+				} else if(data.error) {
+					wrongSearchAlert();
+				}
+            }
+    });
 }
 
 $(function() {
