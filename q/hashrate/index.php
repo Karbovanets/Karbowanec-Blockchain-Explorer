@@ -1,13 +1,11 @@
-<?php 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL, 'http://95.46.98.64:32348/getinfo');
-$result = curl_exec($ch);
-$obj = json_decode($result, TRUE);
-curl_close($ch);
-//print_r($obj);
-$difficulty = $obj['difficulty'];
-$hashrate = round($difficulty / 240);
-print_r($hashrate);
-?>
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require '../util.php';
+$config = (require '../../config.php');
+$info = fetch_getinfo($config['api']);
+$difficulty = $info['difficulty'];
+$hashrate = round($difficulty / $config['blockTargetInterval']);
