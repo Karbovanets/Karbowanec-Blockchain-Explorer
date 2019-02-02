@@ -183,9 +183,15 @@ var poolsRefreshed = 0;
 					} else {
 						result = host.substr(0, index);
 					}
-				
+				if (window.location.protocol == 'https:') {	
+					var pattern = /^((https):\/\/)/;
+					if(!pattern.test(url)) {
+						url = '/api/?mode=get&url=' + url;
+					}
+				}
+	
 				$.getJSON(url, (data, textStatus, jqXHR) => {
-					
+
 					
 					if (data.pool == null){
 						
@@ -557,7 +563,14 @@ setInterval(function(){
 				}
 				
 				it = it + 1;
-					
+				
+				if (window.location.protocol == 'https:') {	
+					var pattern = /^((https):\/\/)/;
+					if(!pattern.test(url)) {
+						url = '/api/?mode=get&url=' + url;
+					}
+				}
+				
                 $.getJSON(url, (data, textStatus, jqXHR) => {
 				
 					if (data.pool === undefined){
