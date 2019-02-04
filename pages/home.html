@@ -230,15 +230,13 @@ currentPage = {
 			$.when(
 				renderInitialBlocks()
 			).then(function() {
-				setTimeout(function(){
-					$.when(
-						displayDiffChart()
-					).then(function() {
-						setTimeout(function(){
-							refreshChart();
-						}, 100)
-					});
-				}, 500)
+				$.when(
+					displayDiffChart()
+				).then(function() {
+					setTimeout(function(){
+						refreshChart();
+					}, 100)
+				})
 			});
         },
         update: function(){
@@ -255,9 +253,7 @@ currentPage = {
 				$.when(
 					renderInitialBlocks()
 				).then(function() {
-					setTimeout(function(){
-						refreshChart();
-					}, 100)
+					refreshChart();
 				});
 			}
 			if((currHeight + 31) < lastStats.last_known_block_index){
@@ -427,7 +423,6 @@ $('#goto-height').keyup(function(e){
 });
 
     function renderInitialBlocks(){
-        if (xhrGetBlocks) xhrGetBlocks.abort();
 		
 		var loadHeight;
 		
@@ -440,8 +435,8 @@ $('#goto-height').keyup(function(e){
 			$('#prev-page').addClass('disabled');
 			$('#next-page').removeClass('disabled');
 		}
-		
-			xhrGetBlocks = $.ajax({
+
+			return $.ajax({
 				url: api + '/json_rpc',
 				method: "POST",
 				data: JSON.stringify({
@@ -458,7 +453,8 @@ $('#goto-height').keyup(function(e){
 					renderBlocks(data.result.blocks);
 				}
 			});
-    };
+
+		};
 
     function getBlockRowElement(block, jsonString){
 
@@ -910,15 +906,18 @@ function refreshChart() {
 				times.push(time);				
 				mfees.push(mfee);				
 		}
-		diffChart.data.labels = times.reverse();
-		diffChart.data.datasets[0].data = labels.reverse();
-		diffChart.data.datasets[1].data = diffs.reverse();
-		diffChart.data.datasets[2].data = mfees.reverse();
-		diffChart.data.datasets[3].data = txsnr.reverse();
-		diffChart.data.datasets[4].data = sizes.reverse();
+
+		if (diffChart != undefined){
+			diffChart.data.labels = times.reverse();
+			diffChart.data.datasets[0].data = labels.reverse();
+			diffChart.data.datasets[1].data = diffs.reverse();
+			diffChart.data.datasets[2].data = mfees.reverse();
+			diffChart.data.datasets[3].data = txsnr.reverse();
+			diffChart.data.datasets[4].data = sizes.reverse();
 		
-		
-		diffChart.update();
+			diffChart.update();
+		}
+
 }	
 
 function loadMoreChart() {
