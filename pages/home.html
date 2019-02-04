@@ -417,7 +417,7 @@ $('#next-page').click(function(e){
 
 $('#goto-height-go').click(function() {
 	var height = document.getElementById('goto-height').value;
-	var newUrl = "/?height="+height;
+	var newUrl = "./?height="+height;
 	window.location = newUrl;
 });
 
@@ -910,7 +910,6 @@ function refreshChart() {
 				times.push(time);				
 				mfees.push(mfee);				
 		}
-		
 		diffChart.data.labels = times.reverse();
 		diffChart.data.datasets[0].data = labels.reverse();
 		diffChart.data.datasets[1].data = diffs.reverse();
@@ -988,4 +987,4 @@ function getReadableTime(seconds){
 
 </script>
 
-<script src="../js/Chart.bundle.min.js"></script>
+<script src="js/Chart.bundle.min.js"></script>

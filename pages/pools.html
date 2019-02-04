@@ -154,8 +154,8 @@
 
 <br />
 
-<script src="/js/Chart.bundle.min.js"></script>
-<script src="/js/sorttable.js"></script>
+<script src="js/Chart.bundle.min.js"></script>
+<script src="js/sorttable.js"></script>
 
 <script>
 
@@ -242,7 +242,7 @@ var poolsRefreshed = 0;
 						var lastHeight =  data.lastblock ? data.lastblock.height : data.network.height;
 						var lastHash =  data.lastblock ? data.lastblock.hash : data.network.hash;
 						
-						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + color + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+lastHeight+'</td><td class="lastHash" id=lastHash-'+result+'>'+lastHash+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFee-'+result+'>'+calculateTotalFee(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFoundBlock-' + result + '>' + (!isNaN(d) ? poolBlocks.sort(cmp).reverse()[0] : 'none' ) + '</span></td><td><span id=lastFound-'+result+'>'+ (!isNaN(d) ? datestring : '-' ) +'</span> (<span class="timeago" id="ago-'+result+'">'+ (!isNaN(d) ? agostring : 'never' ) + '</span>)</td><</tr>');
+						$('#pools_rows').append('<tr><td id="color-'+ result + '" style="background-color:' + color + '">&nbsp;</td><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+lastHeight+'</td><td class="lastHash" id=lastHash-'+result+'>'+lastHash+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFee-'+result+'>'+calculateTotalFee(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFoundBlock-' + result + '>' + (!isNaN(d) ? poolBlocks.sort(cmp).reverse()[0] : 'none' ) + '</span></td><td><span id=lastFound-'+result+'>'+ (!isNaN(d) ? datestring : '-' ) +'</span> (<span class="timeago" id="ago-'+result+'">'+ (!isNaN(d) ? agostring : 'never' ) + '</span>)</td></tr>');
 						
 						totalHashrate += parseInt(data.pool.hashrate);
 						totalMiners += parseInt(data.pool.miners);
