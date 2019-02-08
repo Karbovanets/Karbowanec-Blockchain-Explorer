@@ -364,6 +364,10 @@ b {
     font-weight: bold;
 }
 
+.warning,
+.text-warning {
+	color: #FFC000;
+}
 
 @media (max-width: 768px) {
 .explorer_menu, .explorer-search {

@@ -302,6 +302,12 @@
 			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
 		return str;
 	}
+	
+	function toHexString(byteArray) {
+		return byteArray.reduce((output, elem) => 
+		(output + ('0' + elem.toString(16)).slice(-2)),'');
+	}
+
 </script>
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -373,7 +379,7 @@
                 <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
                 </a></li>
 
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction2.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
                 </a></li>
 				
 				<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html" href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
