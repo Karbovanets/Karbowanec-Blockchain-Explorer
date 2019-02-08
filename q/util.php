@@ -4,7 +4,7 @@ function build_post_context($postdata) {
 		'http' =>
 			array(
 				'method' => 'POST',
-				'header' => 'application/json',
+				'header' => 'content-type: application/json',
 				'content' => $postdata
 			)
 		)
