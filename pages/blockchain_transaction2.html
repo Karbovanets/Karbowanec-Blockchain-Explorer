@@ -89,6 +89,24 @@
 		</div>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="signatures">Signatures <span class="badge" id="signatures_count"></span></h3>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>№</th>
+					<th><i class="fa fa-key"></i>&nbsp;Signature</th>
+				</tr>
+				</thead>
+				<tbody id="signature_rows">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 
 <script>
     var xhrGetTransaction, transaction;
@@ -157,7 +175,7 @@
 				} else {
 					$('#div_transaction_mixin').show();
 				}
-                if (transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
+                if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
 					updateText('transaction.paymentId', transaction.paymentId);
 					updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
 				} else {
@@ -182,12 +200,15 @@
 					$('#tx_block').show();
 					$('#tx_unconfirmed').hide();
 				}
-				
+
                 updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
                 updateText('block.height', transaction.blockIndex);
-				
+                
+				updateText('signatures_count', transaction.signaturesSize);
+
                 renderInputs(transaction.inputs);
                 renderOutputs(transaction.outputs);
+                renderSignatures(transaction.signatures);	
 	}
 
 	function getTransactionUrlOutputIndex(id, ind) {
@@ -336,7 +357,45 @@
 		}
     }
 
+
+	function getSigCells(sig){
+        return '<td>' + sig.first + '</td>' +
+            '<td>' + sig.second + '</td>';
+    }
+
+	function getSigRowElement(sig, jsonString){
+
+        var row = document.createElement('tr');
+        row.setAttribute('data-json', jsonString);
+        row.setAttribute('id', 'sigRow' + sig.second.substring(0, 10));
+
+        row.innerHTML = getSigCells(sig);
+
+        return row;
+    }
+
+	function renderSignatures(signatures){
 	
+		console.log(signatures);
+	
+		var $signatureRows = $('#signature_rows');
+		
+		for (var i = 0; i < signatures.length; i++){
+			var sig = signatures[i];
+			
+			var sigJson = JSON.stringify(sig);
+			
+            var existingRow = document.getElementById('sigRow' + sig.second.substring(0, 10));
+
+            if (existingRow && existingRow.getAttribute('data-json') !== sigJson){
+                $(existingRow).replaceWith(getSigRowElement(sig, sigJson));
+            }
+            else if (!existingRow){
+                var sigElement = getSigRowElement(sig, sigJson);
+                $signatureRows.append(sigElement);
+            }
+		}
+	}
 
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
