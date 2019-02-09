@@ -20,7 +20,7 @@
 
 		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId" style="word-break: break-all;"></span>
 		<br />
-		<small>Decoded: <em id="transaction.paymentIdDecifer" style="word-break: break-all;"></em></small></div>
+		<small>Decoded: <code id="transaction.paymentIdDecifer" style="word-break: break-all;"></code></small></div>
 
 		<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
 
@@ -109,21 +109,27 @@
 </div>
 
 <script>
-    var xhrGetTransaction, transaction;
-
+    var xhrGetTransaction, transaction, ago;
+	var refresh = false;
+	
     currentPage = {
         destroy: function(){
             if (xhrGetTransaction) xhrGetTransaction.abort();
         },
         init: function(){
-            getTransaction();
+            //getTransaction();
         },
         update: function(){
-			getTransaction();
+			if(!refresh) {
+				getTransaction();
+			} else {		
+				$(".transaction-timeago").timeago('update', ago);
+				updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
+			}
         }
     };
 
-    function getTransaction(){
+    function getTransaction(){	
         if (xhrGetTransaction) xhrGetTransaction.abort();
 		var searchTx = $.parseJSON(sessionStorage.getItem('searchTransaction'));
 		if (searchTx) {
@@ -143,9 +149,9 @@
 				dataType: 'json',
 				cache: 'false',
 				success: function(data){
-					var tx = data.result.transaction;
-					if (typeof tx !== 'undefined') {
-						renderTransaction(tx);
+					transaction = data.result.transaction;
+					if (typeof transaction !== 'undefined') {
+						renderTransaction(transaction);
 					}
 				}
 			});
@@ -153,14 +159,15 @@
 		sessionStorage.removeItem('searchTransaction');
 	}
 
-	function renderTransaction(transaction){		
+	function renderTransaction(transaction){
 				
                 updateText('transaction.hash', transaction.hash);
                 if (transaction.inBlockchain){
 					$('#confirmations').show();
 					updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
-					updateText('transaction.timestamp', formatDate(transaction.timestamp));
-					$(".transaction-timeago").timeago('update', new Date(transaction.timestamp * 1000).toISOString());
+					updateText('transaction.timestamp', formatDate(transaction.timestamp));			
+					ago = new Date(transaction.timestamp * 1000).toISOString();
+					$(".transaction-timeago").timeago('update', ago);
 				}
                 updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
                 if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
@@ -192,13 +199,14 @@
 				} else {
 					$("#transaction_extra_nonce").hide();
 				}
-	
+
 				if (!transaction.inBlockchain){
 					$('#tx_block').hide();
 					$('#tx_unconfirmed').show();
 				} else {
 					$('#tx_block').show();
 					$('#tx_unconfirmed').hide();
+					refresh = true;
 				}
 
                 updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
@@ -231,7 +239,7 @@
 	}
 
     function getInputCells(input){
-	
+
 		if (input.type != "ff") {
           return '<td>' + getReadableCoins(input.data.input.amount) + '</td>' +
             '<td>' + input.data.input.k_image + '</td>' +
@@ -270,7 +278,7 @@
 		if (inputResults.length == 1) {
 
 			var input = inputResults[0];
-			
+
 			var inputJson = JSON.stringify(input);
 			var existingRow = document.getElementById('inputRow_' + input.data.height);
 			 if (existingRow && existingRow.getAttribute('data-json') !== inputJson){
@@ -281,15 +289,15 @@
                 var inputElement = getInputRowElement(input, inputJson);
                 $inputsRows.append(inputElement);
             }
-		
+
 		} else {
 
           for (var i = 0; i < inputResults.length; i++){
-		
+
             var input = inputResults[i];
-		
+
             var inputJson = JSON.stringify(input);
-			
+
             var existingRow = document.getElementById('inputRow' + input.data.input.k_image);
 
             if (existingRow && existingRow.getAttribute('data-json') !== inputJson){
@@ -299,9 +307,9 @@
                 var inputElement = getInputRowElement(input, inputJson);
                 $inputsRows.append(inputElement);
             }
-			
+
           }
-		  
+
 		}
 		updateText('inputs_count', inputResults.length);
     }
@@ -336,7 +344,7 @@
             var output = outputResults[i];
 
             var outputJson = JSON.stringify(output);
-			
+
             var existingRow = document.getElementById('outputRow' + output.output.target.data.key);
 
             if (existingRow && existingRow.getAttribute('data-json') !== outputJson){
@@ -346,7 +354,7 @@
                 var outputElement = getOutputRowElement(output, outputJson);
                 $outputsRows.append(outputElement);
             }
-			
+
         }
 		
 		updateText('outputs_count', outputResults.length);
@@ -375,16 +383,16 @@
     }
 
 	function renderSignatures(signatures){
-	
+
 		console.log(signatures);
-	
+
 		var $signatureRows = $('#signature_rows');
-		
+
 		for (var i = 0; i < signatures.length; i++){
 			var sig = signatures[i];
-			
+
 			var sigJson = JSON.stringify(sig);
-			
+
             var existingRow = document.getElementById('sigRow' + sig.second.substring(0, 10));
 
             if (existingRow && existingRow.getAttribute('data-json') !== sigJson){
