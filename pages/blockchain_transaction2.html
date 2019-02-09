@@ -36,12 +36,12 @@
 		
 		<div><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction Public Key, R, is in the extra part of the transaction data structure."><i class="fa fa-question-circle"></i></span> Public Key: <span id="transaction.public_key" style="word-break: break-all;"></span></div>
 
-		<div id="transaction_extra_nonce"><span data-toggle="tooltip" data-placement="right" data-original-title="Extra nonce."><i class="fa fa-question-circle"></i></span> Extra nonce: <span id="transaction.extra_nonce"></span></div>
+		<div id="transaction_extra_nonce" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Extra nonce."><i class="fa fa-question-circle"></i></span> Extra nonce: <span id="transaction.extra_nonce"></span></div>
 
       </div>
     </div>
 	<div class="col-md-5">
-		<div id="tx_block">
+		<div id="tx_block" class="stats" style="display: none;">
 			<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h3>
 			<div><i class="fa fa-circle-o"></i>&nbsp;Hash: <span id="block.hash" style="word-break: break-all;"></span></div>
 			<div><i class="fa fa-circle-o"></i>&nbsp;Height: <span id="block.height"></span></div>
@@ -82,7 +82,7 @@
 					<th><i class="fa fa-file-o"></i>&nbsp;Type</th>
 				</tr>
 				</thead>
-				<tbody id="outputs_rows" class="outputs_rows">
+				<tbody id="outputs_rows">
 
 				</tbody>
 			</table>
@@ -101,6 +101,7 @@
             getTransaction();
         },
         update: function(){
+			getTransaction();
         }
     };
 
@@ -125,7 +126,9 @@
 				cache: 'false',
 				success: function(data){
 					var tx = data.result.transaction;
-					renderTransaction(tx);
+					if (typeof tx !== 'undefined') {
+						renderTransaction(tx);
+					}
 				}
 			});
 		}
@@ -142,15 +145,18 @@
 					$(".transaction-timeago").timeago('update', new Date(transaction.timestamp * 1000).toISOString());
 				}
                 updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
-                if (transaction.inputs[0].type != "ff") {
+                if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
 					updateText('transaction.fee', getReadableCoins(transaction.totalInputsAmount - transaction.totalOutputsAmount));
                 } else {
 					$('#transaction_fee').hide();
 				}
 				
 				updateText('transaction.mixin', transaction.mixin);
-                if (!transaction.mixin)
+                if (!transaction.mixin) {
                     $('#div_transaction_mixin').hide();
+				} else {
+					$('#div_transaction_mixin').show();
+				}
                 if (transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
 					updateText('transaction.paymentId', transaction.paymentId);
 					updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
@@ -172,6 +178,9 @@
 				if (!transaction.inBlockchain){
 					$('#tx_block').hide();
 					$('#tx_unconfirmed').show();
+				} else {
+					$('#tx_block').show();
+					$('#tx_unconfirmed').hide();
 				}
 				
                 updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
@@ -266,7 +275,6 @@
                 $(existingRow).replaceWith(getInputRowElement(input, inputJson));
             }
             else if (!existingRow){
-
                 var inputElement = getInputRowElement(input, inputJson);
                 $inputsRows.append(inputElement);
             }
@@ -314,7 +322,6 @@
                 $(existingRow).replaceWith(getOutputRowElement(output, outputJson));
             }
             else if (!existingRow){
-
                 var outputElement = getOutputRowElement(output, outputJson);
                 $outputsRows.append(outputElement);
             }

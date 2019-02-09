@@ -46,6 +46,7 @@
 
 <script>
     var block, xhrGetBlock;
+	var refresh, next = false;
 
     currentPage = {
         destroy: function(){
@@ -55,6 +56,7 @@
             getBlock();
         },
         update: function(){
+			getBlock();
         }
     };
 
@@ -113,7 +115,9 @@
 				updateText('block.totalTransactions', block.alreadyGeneratedTransactions);
 				renderTransactions(block.transactions);
 			
-				makePrevBlockLink(block.prev_hash);
+				if(!refresh) {
+					makePrevBlockLink(block.prev_hash);
+				}
 				
 				$.ajax({
 					url: api + '/json_rpc',
@@ -132,14 +136,15 @@
 					  if(data.result){
 						var nextBlockHash = data.result.block_header.hash;
 					  }
-						 if(nextBlockHash) {
+						 if(nextBlockHash && !next) {
 							makeNextBlockLink(nextBlockHash);
+							next = true;
 						 }
 					},
 					error: function (ajaxContext) {
 					}
 				});
-	
+		refresh = true;
 	}
 	
     function getTransactionCells(transaction){
