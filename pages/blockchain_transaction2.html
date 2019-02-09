@@ -111,6 +111,7 @@
 <script>
     var xhrGetTransaction, transaction, ago;
 	var refresh = false;
+	var loaded = false;
 	
     currentPage = {
         destroy: function(){
@@ -121,8 +122,10 @@
         },
         update: function(){
 			if(!refresh) {
+				console.log("requesting data...");
 				getTransaction();
-			} else {		
+			} else {
+				console.log("refreshing...");
 				$(".transaction-timeago").timeago('update', ago);
 				updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
 			}
@@ -161,62 +164,70 @@
 
 	function renderTransaction(transaction){
 				
-                updateText('transaction.hash', transaction.hash);
-                if (transaction.inBlockchain){
-					$('#confirmations').show();
-					updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
-					updateText('transaction.timestamp', formatDate(transaction.timestamp));			
-					ago = new Date(transaction.timestamp * 1000).toISOString();
-					$(".transaction-timeago").timeago('update', ago);
-				}
-                updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
-                if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
-					updateText('transaction.fee', getReadableCoins(transaction.totalInputsAmount - transaction.totalOutputsAmount));
-                } else {
-					$('#transaction_fee').hide();
-				}
-				
-				updateText('transaction.mixin', transaction.mixin);
-                if (!transaction.mixin) {
-                    $('#div_transaction_mixin').hide();
-				} else {
-					$('#div_transaction_mixin').show();
-				}
-                if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
-					updateText('transaction.paymentId', transaction.paymentId);
-					updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
-				} else {
-                    $('#div_transaction_paymentId').hide();
-				}
-                updateText('transaction.size', formatBytes(parseInt(transaction.size)));
-                //updateText('transaction.version', transaction.tx.version);
-                updateText('transaction.unlock_time', transaction.unlockTime);
-                updateText('transaction.public_key', transaction.extra.publicKey);
-                updateText('transaction.extra_raw', transaction.extra.raw);
-				
-                if (typeof transaction.extra.nonce !== 'undefined' && transaction.extra.nonce.length > 0) {
-					updateText('transaction.extra_nonce',  toHexString(transaction.extra.nonce));
-				} else {
-					$("#transaction_extra_nonce").hide();
-				}
+		updateText('transaction.hash', transaction.hash);
+		if (transaction.inBlockchain){
+			$('#confirmations').show();
+			updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
+			updateText('transaction.timestamp', formatDate(transaction.timestamp));			
+			ago = new Date(transaction.timestamp * 1000).toISOString();
+			$(".transaction-timeago").timeago('update', ago);
+		}
+		updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
+		if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
+			updateText('transaction.fee', getReadableCoins(transaction.totalInputsAmount - transaction.totalOutputsAmount));
+		} else {
+			$('#transaction_fee').hide();
+		}
+		
+		updateText('transaction.mixin', transaction.mixin);
+		if (!transaction.mixin) {
+			$('#div_transaction_mixin').hide();
+		} else {
+			$('#div_transaction_mixin').show();
+		}
+		if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
+			updateText('transaction.paymentId', transaction.paymentId);
+			updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
+		} else {
+			$('#div_transaction_paymentId').hide();
+		}
+		updateText('transaction.size', formatBytes(parseInt(transaction.size)));
+		//updateText('transaction.version', transaction.tx.version);
+		updateText('transaction.unlock_time', transaction.unlockTime);
+		updateText('transaction.public_key', transaction.extra.publicKey);
+		updateText('transaction.extra_raw', transaction.extra.raw);
+		
+		if (typeof transaction.extra.nonce !== 'undefined' && transaction.extra.nonce.length > 0) {
+			updateText('transaction.extra_nonce',  toHexString(transaction.extra.nonce));
+		} else {
+			$("#transaction_extra_nonce").hide();
+		}
 
-				if (!transaction.inBlockchain){
-					$('#tx_block').hide();
-					$('#tx_unconfirmed').show();
-				} else {
-					$('#tx_block').show();
-					$('#tx_unconfirmed').hide();
-					refresh = true;
-				}
+		if (!transaction.inBlockchain){
+			$('#tx_block').hide();
+			$('#tx_unconfirmed').show();
+		} else {
+			$('#tx_block').show();
+			$('#tx_unconfirmed').hide();
+			refresh = true;
+		}
 
-                updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
-                updateText('block.height', transaction.blockIndex);
-                
-				updateText('signatures_count', transaction.signaturesSize);
+		updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
+		updateText('block.height', transaction.blockIndex);
+		
+		updateText('signatures_count', transaction.signaturesSize);
 
-                renderInputs(transaction.inputs);
-                renderOutputs(transaction.outputs);
-                renderSignatures(transaction.signatures);	
+		if(!loaded) {
+		
+			console.log("rendering inputs...");
+			renderInputs(transaction.inputs);
+			console.log("rendering outputs...");
+			renderOutputs(transaction.outputs);
+			console.log("rendering signatures...");
+			renderSignatures(transaction.signatures);
+		}
+		
+		loaded = true;
 	}
 
 	function getTransactionUrlOutputIndex(id, ind) {
@@ -383,8 +394,6 @@
     }
 
 	function renderSignatures(signatures){
-
-		console.log(signatures);
 
 		var $signatureRows = $('#signature_rows');
 
