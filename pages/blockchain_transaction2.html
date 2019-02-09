@@ -20,7 +20,7 @@
 
 		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId" style="word-break: break-all;"></span>
 		<br />
-		<small>Decoded: <em id="transaction.paymentIdDecifer" style="word-break: break-all;"></em></small></div>
+		<small>Decoded: <code id="transaction.paymentIdDecifer" style="word-break: break-all;"></code></small></div>
 
 		<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
 
@@ -91,21 +91,27 @@
 </div>
 
 <script>
-    var xhrGetTransaction, transaction;
-
+    var xhrGetTransaction, transaction, ago;
+	var refresh = false;
+	
     currentPage = {
         destroy: function(){
             if (xhrGetTransaction) xhrGetTransaction.abort();
         },
         init: function(){
-            getTransaction();
+            //getTransaction();
         },
         update: function(){
-			getTransaction();
+			if(!refresh) {
+				getTransaction();
+			} else {		
+				$(".transaction-timeago").timeago('update', ago);
+				updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
+			}
         }
     };
 
-    function getTransaction(){
+    function getTransaction(){	
         if (xhrGetTransaction) xhrGetTransaction.abort();
 		var searchTx = $.parseJSON(sessionStorage.getItem('searchTransaction'));
 		if (searchTx) {
@@ -125,9 +131,9 @@
 				dataType: 'json',
 				cache: 'false',
 				success: function(data){
-					var tx = data.result.transaction;
-					if (typeof tx !== 'undefined') {
-						renderTransaction(tx);
+					transaction = data.result.transaction;
+					if (typeof transaction !== 'undefined') {
+						renderTransaction(transaction);
 					}
 				}
 			});
@@ -135,14 +141,15 @@
 		sessionStorage.removeItem('searchTransaction');
 	}
 
-	function renderTransaction(transaction){		
+	function renderTransaction(transaction){
 				
                 updateText('transaction.hash', transaction.hash);
                 if (transaction.inBlockchain){
 					$('#confirmations').show();
 					updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
-					updateText('transaction.timestamp', formatDate(transaction.timestamp));
-					$(".transaction-timeago").timeago('update', new Date(transaction.timestamp * 1000).toISOString());
+					updateText('transaction.timestamp', formatDate(transaction.timestamp));			
+					ago = new Date(transaction.timestamp * 1000).toISOString();
+					$(".transaction-timeago").timeago('update', ago);
 				}
                 updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
                 if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
@@ -174,13 +181,14 @@
 				} else {
 					$("#transaction_extra_nonce").hide();
 				}
-	
+
 				if (!transaction.inBlockchain){
 					$('#tx_block').hide();
 					$('#tx_unconfirmed').show();
 				} else {
 					$('#tx_block').show();
 					$('#tx_unconfirmed').hide();
+					refresh = true;
 				}
 				
                 updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
@@ -268,7 +276,7 @@
             var input = inputResults[i];
 		
             var inputJson = JSON.stringify(input);
-			
+
             var existingRow = document.getElementById('inputRow' + input.data.input.k_image);
 
             if (existingRow && existingRow.getAttribute('data-json') !== inputJson){
@@ -336,7 +344,6 @@
 		}
     }
 
-	
 
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
