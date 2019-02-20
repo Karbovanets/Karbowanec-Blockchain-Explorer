@@ -7,14 +7,14 @@
 		white-space: nowrap;
 	}
 </style>
-<h2><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction <small data-toggle="tooltip" data-placement="right" data-original-title="Unique fingerprint of the transaction." id="transaction.hash" style="word-break: break-all;"></small></h2>
+<h2><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction <small data-toggle="tooltip" data-placement="right" data-original-title="Unique fingerprint of the transaction." id="transaction.hash" style="word-break: break-all; word-wrap: break-word;"></small></h2>
 <div class="row">
     <div class="col-md-6 stats"> 
 	  <div id="tx_info">
 
-		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId" style="word-break: break-all;"></span>
+		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId" style="word-break: break-all; word-wrap: break-word;"></span>
 		<br />
-		<small>Decoded: <em id="transaction.paymentIdDecifer" style="word-break: break-all;"></em></small></div>
+		<small>Decoded: <em id="transaction.paymentIdDecifer" style="word-break: break-all; word-wrap: break-word;"></em></small></div>
 		
 		<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
 		
@@ -26,9 +26,9 @@
 		<div><span data-toggle="tooltip" data-placement="right" data-original-title="Version of the transaction."><i class="fa fa-question-circle"></i></span> Version: <span id="transaction.version"></span></div>
         
         <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."><i class="fa fa-question-circle"></i></span> Mixin count: <span id="transaction.mixin"></span></div>
-		<div><span data-toggle="tooltip" data-placement="right" data-original-title="Raw unformatted extra transaction data structure."><i class="fa fa-question-circle"></i></span> Extra (raw): <span id="transaction.extra_raw" style="word-break: break-all;"></span></div>
+		<div><span data-toggle="tooltip" data-placement="right" data-original-title="Raw unformatted extra transaction data structure."><i class="fa fa-question-circle"></i></span> Extra (raw): <span id="transaction.extra_raw" style="word-break: break-all; word-wrap: break-word;"></span></div>
 		
-		<div><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction Public Key, R, is in the extra part of the transaction data structure."><i class="fa fa-question-circle"></i></span> Public Key: <span id="transaction.public_key" style="word-break: break-all;"></span></div>
+		<div><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction Public Key, R, is in the extra part of the transaction data structure."><i class="fa fa-question-circle"></i></span> Public Key: <span id="transaction.public_key" style="word-break: break-all; word-wrap: break-word;"></span></div>
 
 		<div id="transaction_extra_nonce"><span data-toggle="tooltip" data-placement="right" data-original-title="Extra nonce."><i class="fa fa-question-circle"></i></span> Extra nonce: <span id="transaction.extra_nonce"></span></div>
 		
@@ -40,7 +40,7 @@
 	<div class="col-md-6 stats">
 		<div id="tx_block">
 			<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h3>
-			<div><i class="fa fa-circle-o"></i>&nbsp;Hash: <span id="block.hash" style="word-break: break-all;"></span></div>
+			<div><i class="fa fa-circle-o"></i>&nbsp;Hash: <span id="block.hash" style="word-break: break-all; word-wrap: break-word;"></span></div>
 			<div><i class="fa fa-circle-o"></i>&nbsp;Height: <span id="block.height"></span></div>
 			<div><i class="fa fa-circle-o"></i>&nbsp;Timestamp: <span id="block.timestamp"></span></div>
 		</div>

@@ -474,3 +474,11 @@ input:checked + .switch-slider:before {
 .input-group-btn button {
 	border-radius: 0;
 }
+
+.break-word {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	white-space: pre-line;
+	-ms-word-break: break-all;
+	word-break: break-word;
+}
