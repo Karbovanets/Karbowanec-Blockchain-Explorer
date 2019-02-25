@@ -171,7 +171,8 @@
 					}
 				}),
 				dataType: 'json',
-				cache: 'false',
+				cache: false,
+				async: false,
 				success: function(data){
 					if (typeof data.result !== 'undefined') {
 						transaction = data.result.transaction;
