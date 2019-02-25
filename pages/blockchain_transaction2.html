@@ -19,7 +19,8 @@
 		margin-top: 30px;
 	}
 </style>
-<div id="tx_details">
+<p id="tx_loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
+<div id="tx_details" style="display: none;">
 <h2><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction <small data-toggle="tooltip" data-placement="right" data-original-title="Unique fingerprint of the transaction." id="transaction.hash" style="word-break: break-all; word-wrap: break-word;"></small></h2>
 <div class="row">
     <div class="col-md-7 stats"> 
@@ -129,6 +130,7 @@
 		</div>
 	</div>
 </div>
+
 <script>
     var xhrGetTransaction, transaction, ago;
 	var refresh = false;
@@ -144,7 +146,7 @@
         update: function(){
 			if(!refresh) {
 				console.log("requesting data...");
-				getTransaction();
+				getTransaction(handleData);
 			} else {
 				console.log("refreshing...");
 				$(".transaction-timeago").timeago('update', ago);
@@ -153,44 +155,42 @@
         }
     };
 
-    function getTransaction(){	
+    function getTransaction(successCallback){	
         if (xhrGetTransaction) xhrGetTransaction.abort();
-		var searchTx = $.parseJSON(sessionStorage.getItem('searchTransaction'));
-		if (searchTx) {
-			renderTransaction(searchTx);
-		} else {
-			xhrGetTransaction = $.ajax({
-				url: api + '/json_rpc',
-				method: "POST",
-				data: JSON.stringify({
-					jsonrpc:"2.0",
-					id: "test",
-					method:"k_transaction_details_by_hash",
-					params: {
-						hash: urlParam('hash')
-					}
-				}),
-				dataType: 'json',
-				cache: false,
-				async: false,
-				success: function(data){
-					if (typeof data.result !== 'undefined') {
-						transaction = data.result.transaction;
-						renderTransaction(transaction);
-						$('#tx_not_found').hide();
-					} else {
-						$('#tx_not_found').show();
-						$('#tx_details').hide();
-						$('#tx_not_found_json').html(JSON.stringify(data.error, undefined, 2));
-					}
+		xhrGetTransaction = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"k_transaction_details_by_hash",
+				params: {
+					hash: urlParam('hash')
 				}
-			});
+			}),
+			dataType: 'json',
+			cache: false,
+			async: false,
+			success: successCallback
+		});
+	}
+
+	function handleData(data){
+		console.log("handling data...");
+		if (typeof data.result !== 'undefined') {
+			transaction = data.result.transaction;
+			renderTransaction(transaction);
+			$('#tx_not_found').hide();
+			$('#tx_loading').hide();
+			$('#tx_details').show();
+		} else {
+			$('#tx_not_found').show();
+			$('#tx_details').hide();
+			$('#tx_not_found_json').html(JSON.stringify(data.error, undefined, 2));
 		}
-		sessionStorage.removeItem('searchTransaction');
 	}
 
 	function renderTransaction(transaction){
-				
 		updateText('transaction.hash', transaction.hash);
 		if (transaction.inBlockchain){
 			$('#confirmations').show();
