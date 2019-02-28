@@ -437,6 +437,7 @@ var block, xhrGetSearchBlock;
 					$.ajax({
 						url: api + '/json_rpc',
 						method: "POST",
+						async: false,
 						data: JSON.stringify({
 							jsonrpc:"2.0",
 							id: "test",
@@ -446,7 +447,7 @@ var block, xhrGetSearchBlock;
 							}
 						}),
 						dataType: 'json',
-						cache: 'false',
+						cache: false,
 						success: function(data){
 							  if(data.result){
 								sessionStorage.setItem('searchTransaction', JSON.stringify(data.result));

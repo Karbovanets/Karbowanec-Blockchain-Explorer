@@ -63,7 +63,8 @@ var poolsStat =
 		["krb.superpools.online", "http://krb.superpools.online:8117/stats"],
 		["newpool.pw/krb", "https://minenice.newpool.pw:8215/stats"],
 		["karbo.asiapool.io", "https://karbo.asiapool.io/api/stats"],
-		["youpool.io/KARBO", "http://149.28.85.162:8128/stats"]
+		["youpool.io/KARBO", "http://149.28.85.162:8128/stats"],
+		["krb.cryptonote.club", "https://krb.cryptonote.club:8199/stats"]
     ];
 var nodesStat = 
 	[
@@ -128,7 +129,6 @@ var nodesStat =
 		["http://107.174.15.131:32348"],
 		["http://178.234.37.123:32348"],
 		["http://51.15.119.96:32348"],
-		["http://51.15.232.206:32348"],
 		["http://51.15.71.187:32348"],
 		["http://95.46.98.64:32348"],
 		["http://45.32.232.11:32348"],
