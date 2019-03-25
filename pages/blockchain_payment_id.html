@@ -1,6 +1,6 @@
 <h2><i class="fa fa-tag fa-fw" aria-hidden="true"></i> Payment ID <small id="paymend_id" style="word-break: break-all; word-wrap: break-word;"></small></h2>
 
-<h3><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transactions with this Payment ID</h3>
+<h3><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction(s) with this Payment ID <span class="badge" id="transactions_count"></span></h3>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -82,6 +82,8 @@
     }
 
     function renderTransactions(transactionResults){
+	
+		updateText('transactions_count', transactionResults.length);
 
         var $transactionsRows = $('#transactions_rows');
 
@@ -97,7 +99,6 @@
                 $(existingRow).replaceWith(getTransactionRowElement(transaction, transactionJson));
             }
             else if (!existingRow){
-
                 var transactionElement = getTransactionRowElement(transaction, transactionJson);
                 $transactionsRows.append(transactionElement);
             }
