@@ -1,0 +1,684 @@
+<style>
+	h2 #transactionHash {
+		font-size: 20px;
+		color: #222;
+	}
+	
+	tx_block h3 {
+		margin-top: 0px;
+	}
+	table td:first-child,
+	table th {
+		white-space: nowrap;
+	}
+	table td:nth-child(2) {
+		word-break: break-all;
+	}
+	.table > tbody > tr > td:nth-child(2) {
+		font-size: 95%;
+	}
+	.nav-item .nav-link h3 {
+		margin: 0 20px;
+	}
+	#tab_menu {
+		margin-top: 30px;
+	}
+</style>
+
+<h2><i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>Check Payment</h2>
+
+<div class="well bs-component">
+	<form class="form-horizontal" id="check_tx_form">
+	    <fieldset>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="transaction_hash" style="margin-bottom: 10px;">Transaction Hash</label>
+					<input class="form-control" placeholder="64 characters transaction id" id="transaction_hash">
+				</div>		
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<p>
+						<label for="transaction_key">Private Key or Proof:
+							<div class="radio-inline"><label><input type="radio" name="keyType" value="tx_key" checked>Transaction Key</label></div>
+							<div class="radio-inline"><label><input type="radio" name="keyType" value="view_key">Private View Key</label></div>
+							<div class="radio-inline"><label><input type="radio" name="keyType" value="tx_proof">Proof of Payment</label></div>
+						</label>
+					</p>
+					<input class="form-control" placeholder="Private view key, Secret transaction key or Proof of payment" id="transaction_key">
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="public_address">Recipient Public Address</label>
+					<input class="form-control" placeholder="Public Karbo receiver's address" id="public_address">
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<button class="btn btn-primary" type="button" id="check_transaction">
+						<span class="fa fa-search"> Check Payment</span>
+					</button>
+				</div>
+			</div>
+	    </fieldset>
+	</form>
+</div>
+
+<div id="check_result">
+
+ <p id="tx_loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
+
+ <div class="panel panel-default">
+  <div class="panel-heading">
+	<h3 class="panel-title">Specified address received <strong><span id="receivedAmount"></span></strong> in transaction <strong><span id="transactionHash" style="word-break: break-all; word-wrap: break-word;"></span></strong></h3>
+  </div>
+  <div class="panel-body">
+
+	<div class="row">
+		<div class="col-md-7 stats"> 
+		  <div id="tx_info">
+
+			<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transactionPaymentId" style="word-break: break-all; word-wrap: break-word;"></span>
+			<br />
+			<small>Decoded: <code id="transaction.paymentIdDecifer" style="word-break: break-all; word-wrap: break-word;"></code></small></div>
+
+			<div id="confirmations" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="The number of network confirmations."><i class="fa fa-question-circle"></i></span> Confirmations: <span id="transaction.confirmations"></span>, First confirmation time: <span id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)</div>
+
+			<div><span data-toggle="tooltip" data-placement="right" data-original-title="Unlock time allows you to send a transaction to someone, such that they can not spend it until after a certain number of blocks, or until a certain time."><i class="fa fa-question-circle"></i></span> Unlock time: <span id="transaction.unlock_time"></span></div>
+
+			<div id="transaction_fee"><span data-toggle="tooltip" data-placement="right" data-original-title="Money that goes to the miner, who included this transaction into block."><i class="fa fa-question-circle"></i></span> Fee: <span id="transaction.fee"></span></div>
+			<div><span data-toggle="tooltip" data-placement="right" data-original-title="It does not mean that this is the amount that is actually transferred."><i class="fa fa-question-circle"></i></span> Sum of outputs: <span id="transaction.amount_out"></span></div>
+			<div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the transaction in bytes."><i class="fa fa-question-circle"></i></span> Size: <span id="transaction.size"></span></div>
+			<!--div><span data-toggle="tooltip" data-placement="right" data-original-title="Version of the transaction."><i class="fa fa-question-circle"></i></span> Version: <span id="transaction.version"></span></div-->
+
+			<div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."><i class="fa fa-question-circle"></i></span> Mixin count: <span id="transaction.mixin"></span></div>
+			<div><span data-toggle="tooltip" data-placement="right" data-original-title="Raw unformatted extra transaction data structure."><i class="fa fa-question-circle"></i></span> Extra (raw): <span id="transaction.extra_raw" style="word-break: break-all; word-wrap: break-word;"></span></div>
+			
+			<div><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction Public Key, R, is in the extra part of the transaction data structure."><i class="fa fa-question-circle"></i></span> Public Key: <span id="transaction.public_key" style="word-break: break-all; word-wrap: break-word;"></span></div>
+
+			<div id="transaction_extra_nonce" style="display: none;"><span data-toggle="tooltip" data-placement="right" data-original-title="Extra nonce."><i class="fa fa-question-circle"></i></span> Extra nonce: <span id="transaction.extra_nonce"></span></div>
+
+		  </div>
+		</div>
+		<div class="col-md-5">
+			<div id="tx_block" class="stats" style="display: none;">
+				<h3><i class="fa fa-cube fa-fw" aria-hidden="true"></i> In block</h3>
+				<div><i class="fa fa-circle-o"></i>&nbsp;Hash: <span id="block.hash" style="word-break: break-all; word-wrap: break-word;"></span></div>
+				<div><i class="fa fa-circle-o"></i>&nbsp;Height: <span id="block.height"></span></div>
+			</div>
+			
+			<div id="tx_unconfirmed" style="display: none;"><h3 class="text-warning"><span data-toggle="tooltip" data-placement="right" data-original-title="The transaction is not included into block yet and therefore is not wtitten into blockchain."><i class="fa fa-exclamation-triangle fa-lg text-warning"></i></span> Unconfirmed transaction</h3></div>
+		</div>
+	</div>
+
+	<ul class="nav nav-tabs" id="tab_menu">
+	  <li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tab_inputs"><h3 class="inputs">Inputs <span class="badge" id="inputs_count"></span></h3></a>
+	  </li>
+	  <li class="nav-item active">
+		<a class="nav-link active" data-toggle="tab" href="#tab_outputs"><h3 class="outputs">Outputs <span class="badge" id="outputs_count"></span></h3></a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tab_signatures"><h3 class="signatures">Signatures <span class="badge" id="signatures_count"></span></h3></a>
+	  </li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane fade" id="tab_inputs">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th><i class="fa fa-money"></i>&nbsp;Amount</th>
+						<th><i class="fa fa-paw"></i>&nbsp;Image</th>
+						<th><i class="fa fa-arrows-alt"></i>&nbsp;Output&nbsp;Indexes</th>
+						<th><i class="fa fa-file-o"></i>&nbsp;Type</th>
+					</tr>
+					</thead>
+					<tbody id="inputs_rows">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="tab-pane fade active in" id="tab_outputs">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th><i class="fa fa-money"></i>&nbsp;Amount</th>
+						<th><i class="fa fa-key"></i>&nbsp;Key</th>
+						<th><i class="fa fa-arrows-alt"></i>&nbsp;Output&nbsp;Index</th>
+						<th><i class="fa fa-file-o"></i>&nbsp;Type</th>
+					</tr>
+					</thead>
+					<tbody id="outputs_rows">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="tab_signatures">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th>№</th>
+						<th><i class="fa fa-key"></i>&nbsp;Signature</th>
+					</tr>
+					</thead>
+					<tbody id="signature_rows">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+   </div>
+  </div>
+</div>
+<div id="tx_not_found" style="display: none;">
+	<div class="row">
+		<div class="col-md-12"> 
+			<h3 class="text-danger"><i class="fa fa-exclamation-triangle fa-lg text-danger"></i> Transaction not found</h3>
+			<pre id="tx_not_found_json"></pre>
+		</div>
+	</div>
+</div>
+
+<br />
+
+<p>Hereby you can prove that you paid the receiver with the <em>Private Transaction Key</em> (which you can obtain from the wallet), the transaction ID and the receiver's address.</p>
+<p>Outputs that belong to receiver's address will be highlighted.</p>
+<p><em>Private transaction key</em> is a one time key that is automatically generated for every transaction.</p>
+<p>To get it in <em>simplewallet</em> from CLI Suite use command <code>get_tx_key</code>, in GUI you can find it in the transaction details dialog.</p>
+
+<p>You can also check that payment was made to your address in given transaction with your <em>Private View Key</em>. Alternatively the <em>Tracking Key</em> from GUI wallet can be used.</p>
+
+<script>
+    var xhrGetTransaction, xhrCheckTransactionByKey, xhrCheckTransactionByViewKey, xhrCheckTxProof, transaction, ago;
+	var transactionHash = $("#transaction_hash");
+	var transactionKey = $("#transaction_key");
+	var publicAddress = $("#public_address");
+	var transactionKeyType;
+	var refresh = false;
+	var loaded = false;
+	
+    currentPage = {
+        destroy: function(){
+			if (xhrGetTransaction) xhrGetTransaction.abort();
+			if (xhrCheckTransactionByKey) xhrCheckTransactionByKey.abort();
+			if (xhrCheckTransactionByViewKey) xhrCheckTransactionByViewKey.abort();
+			if (xhrCheckTxProof) xhrCheckTxProof.abort();
+        },
+        init: function(){
+        },
+        update: function(){
+			
+        }
+    };
+	$("#check_result").hide();
+	
+	$("#check_transaction").click(function() {
+		$("#check_result").hide();
+		$('#receivedAmount').empty();
+		$('#transactionHash').empty();
+		transactionKeyType = $("[name=keyType]:checked").val();
+		if(!transactionHash.val() || !transactionKey.val() || !publicAddress.val()) {
+			wrongParamAlert("Fill all fields!");
+			return;
+		}
+		console.log("requesting data...");
+		getTransaction(handleData);
+	});
+
+	function getTransaction(successCallback){	
+        if (xhrGetTransaction) xhrGetTransaction.abort();
+		xhrGetTransaction = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"k_transaction_details_by_hash",
+				params: {
+					hash: transactionHash.val()
+				}
+			}),
+			dataType: 'json',
+			cache: false,
+			async: false,
+			success: successCallback
+		});
+	}
+	
+	function handleData(data){
+		console.log("handling data...");
+
+		if (data.error) {
+			//wrongParamAlert(data.error.message);
+			refresh = false;
+			loaded = false;
+			
+
+			$('#tx_not_found').show();
+			$('#tx_details').hide();
+			$('#tx_not_found_json').html(JSON.stringify(data.error, undefined, 2));
+		} else {
+	
+			var tx = data.result.transaction;
+			renderTransaction(tx);
+			
+			$('#tx_not_found').hide();
+			$('#tx_loading').hide();
+			$('#tx_details').show();
+			
+			if (transactionKeyType === "tx_key") {
+				checkTxKey();
+			} else if (transactionKeyType === "view_key") {
+				checkViewKey();
+			} else if (transactionKeyType === "tx_proof") {
+				checkTxProof();
+			}
+		
+		}
+	}
+	
+	function checkTxKey(){
+		if (xhrCheckTransactionByKey) xhrCheckTransactionByKey.abort();
+		xhrCheckTransactionByKey = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"check_tx_key",
+				params: {
+					txid: transactionHash.val(),
+					txkey: transactionKey.val(),
+					address: publicAddress.val()
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var result = data.result;
+				$("#receivedAmount").html(getReadableCoins(result.amount,12));
+				
+				var output_results = result.outputs;
+				for (var i = 0; i < output_results.length; i++){
+					$('#outputs_rows tr').each(function() {
+						$this = $(this);
+						if ($this.attr('data-k_image') === output_results[i].target.data.key) {
+							$this.addClass("success");
+						}
+					});				
+				}
+				$("#check_result").show();
+			  }
+			}
+		});
+	}
+	
+	function checkViewKey(){
+		// in case some one will try to use tracking key from GUI extract private view key from it
+		var privateViewKey = transactionKey.val();
+		if (privateViewKey.length === 256) {
+			privateViewKey = privateViewKey.substr(privateViewKey.length - 64);
+		}
+	
+		if (xhrCheckTransactionByViewKey) xhrCheckTransactionByViewKey.abort();
+		xhrCheckTransactionByViewKey = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"check_tx_with_view_key",
+				params: {
+					txid: transactionHash.val(),
+					view_key: privateViewKey,
+					address: publicAddress.val()
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var result = data.result;
+				$("#receivedAmount").html(getReadableCoins(result.amount,12));
+				
+				var output_results = result.outputs;
+				for (var i = 0; i < output_results.length; i++){
+					$('#outputs_rows tr').each(function() {
+						$this = $(this);
+						if ($this.attr('data-k_image') === output_results[i].target.data.key) {
+							$this.addClass("success");
+						}
+					});				
+				}
+				$("#check_result").show();
+			  }
+			}
+		});
+	}
+	
+	function checkTxProof(){
+		if (xhrCheckTxProof) xhrCheckTxProof.abort();
+		xhrCheckTxProof = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"check_tx_proof",
+				params: {
+					tx_id: transactionHash.val(),
+					signature: transactionKey.val(),
+					dest_address: publicAddress.val()
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+			  if (data.error) {
+				wrongParamAlert(data.error.message);
+			  } else {
+				var result = data.result;
+				
+				if(result.signature_valid) {
+				
+				  
+				  $("#receivedAmount").html(getReadableCoins(result.received_amount,12));
+				
+				  var output_results = result.outputs;
+				  for (var i = 0; i < output_results.length; i++){
+					$('#outputs_rows tr').each(function() {
+						$this = $(this);
+						if ($this.attr('data-k_image') === output_results[i].target.data.key) {
+							$this.addClass("success");
+						}
+					});				
+				  }
+				  $("#check_result").show();
+				}
+			  }
+			}
+		});
+	}
+
+	function getTransactionUrlOutputIndex(id, ind) {
+        return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id + '&highlight=' + ind);
+    }
+
+	function renderInputIndexes(offsets, outputs){
+	
+		var html = "";
+	
+		for (var i = 0; i < offsets.length; i++){
+			var offset = offsets[i];
+			var index = outputs[i];
+			var bull = "";
+			if (i < offsets.length - 1) { bull = ' &bull; '; }
+		
+			html += '<a href="' + getTransactionUrlOutputIndex(index.transactionHash, index.number) + '">' + offset + '</a>' + bull;
+		}
+		return html;
+	}
+
+    function getInputCells(input){
+
+		if (input.type != "ff") {
+          return '<td>' + getReadableCoins(input.data.input.amount) + '</td>' +
+            '<td>' + input.data.input.k_image + '</td>' +
+            '<td>' + renderInputIndexes(input.data.input.key_offsets, input.data.outputs) + '</td>' +
+            '<td>' + input.type + '</td>';
+		} else {
+		  return '<td>' + getReadableCoins(input.data.amount) + '</td>' +
+			'<td colspan="2">' + "coinbase" + '</td>' +
+            '<td>' + input.type + '</td>';
+		}
+    }
+
+    function getInputRowElement(input, jsonString){
+        var row = document.createElement('tr');
+        if(input.type != 'ff') {
+          row.setAttribute('data-json', jsonString);
+          row.setAttribute('data-k_image', input.data.input.k_image);
+		  row.setAttribute('data-key_offsets', input.data.input.key_offsets);
+          row.setAttribute('id', 'inputRow' + input.data.input.k_image);
+          row.setAttribute('type', input.type);
+        } else {
+		  row.setAttribute('data-json', jsonString);
+          row.setAttribute('id', 'inputRow' + input.data.height);
+          row.setAttribute('type', input.type);
+		}
+	
+        row.innerHTML = getInputCells(input);
+
+        return row;
+    }
+
+    function renderInputs(inputResults){
+
+        var $inputsRows = $('#inputs_rows');
+		
+		if (inputResults.length == 1) {
+
+			var input = inputResults[0];
+
+			var inputJson = JSON.stringify(input);
+			var existingRow = document.getElementById('inputRow_' + input.data.height);
+			 if (existingRow && existingRow.getAttribute('data-json') !== inputJson){
+                $(existingRow).replaceWith(getInputRowElement(input, inputJson));
+            }
+            else if (!existingRow){
+
+                var inputElement = getInputRowElement(input, inputJson);
+                $inputsRows.append(inputElement);
+            }
+
+		} else {
+
+          for (var i = 0; i < inputResults.length; i++){
+
+            var input = inputResults[i];
+
+            var inputJson = JSON.stringify(input);
+
+            var existingRow = document.getElementById('inputRow' + input.data.input.k_image);
+
+            if (existingRow && existingRow.getAttribute('data-json') !== inputJson){
+                $(existingRow).replaceWith(getInputRowElement(input, inputJson));
+            }
+            else if (!existingRow){
+                var inputElement = getInputRowElement(input, inputJson);
+                $inputsRows.append(inputElement);
+            }
+
+          }
+
+		}
+		updateText('inputs_count', inputResults.length);
+    }
+
+
+    function getOutputCells(output){
+        return '<td>' + getReadableCoins(output.output.amount) + '</td>' +
+            '<td>' + output.output.target.data.key + '</td>' +
+            '<td>' + output.globalIndex + '</td>' +
+            '<td>' + output.output.target.type + '</td>';
+    }
+
+
+    function getOutputRowElement(output, jsonString){
+
+        var row = document.createElement('tr');
+        row.setAttribute('data-json', jsonString);
+        row.setAttribute('data-k_image', output.output.target.data.key);
+        row.setAttribute('id', 'outputRow' + output.output.target.data.key);
+
+        row.innerHTML = getOutputCells(output);
+
+        return row;
+    }
+
+    function renderOutputs(outputResults){
+
+        var $outputsRows = $('#outputs_rows');
+
+        for (var i = 0; i < outputResults.length; i++){
+
+            var output = outputResults[i];
+
+            var outputJson = JSON.stringify(output);
+
+            var existingRow = document.getElementById('outputRow' + output.output.target.data.key);
+
+            if (existingRow && existingRow.getAttribute('data-json') !== outputJson){
+                $(existingRow).replaceWith(getOutputRowElement(output, outputJson));
+            }
+            else if (!existingRow){
+                var outputElement = getOutputRowElement(output, outputJson);
+                $outputsRows.append(outputElement);
+            }
+
+        }
+		
+		updateText('outputs_count', outputResults.length);
+		
+		if (urlParam('highlight')) {
+			var $highlight = $('#outputs_rows tr').eq(urlParam('highlight'));
+			$highlight.addClass("info");
+			$highlight.children().eq(2).addClass("text-danger");
+			$highlight.get(0).scrollIntoView(true);
+		}
+    }
+
+
+	function getSigCells(sig){
+        return '<td>' + sig.first + '</td>' +
+            '<td>' + sig.second + '</td>';
+    }
+
+	function getSigRowElement(sig, jsonString){
+
+        var row = document.createElement('tr');
+        row.setAttribute('data-json', jsonString);
+        row.setAttribute('id', 'sigRow' + sig.second.substring(0, 10));
+
+        row.innerHTML = getSigCells(sig);
+
+        return row;
+    }
+
+	function renderSignatures(signatures){
+
+		var $signatureRows = $('#signature_rows');
+
+		for (var i = 0; i < signatures.length; i++){
+			var sig = signatures[i];
+
+			var sigJson = JSON.stringify(sig);
+
+            var existingRow = document.getElementById('sigRow' + sig.second.substring(0, 10));
+
+            if (existingRow && existingRow.getAttribute('data-json') !== sigJson){
+                $(existingRow).replaceWith(getSigRowElement(sig, sigJson));
+            }
+            else if (!existingRow){
+                var sigElement = getSigRowElement(sig, sigJson);
+                $signatureRows.append(sigElement);
+            }
+		}
+	}
+	
+	function renderTransaction(transaction){
+	
+		updateText('transactionHash', transaction.hash);
+		if (transaction.inBlockchain){
+			$('#confirmations').show();
+			updateText('transaction.confirmations', lastStats.height - transaction.blockIndex);
+			updateText('transaction.timestamp', formatDate(transaction.timestamp));			
+			ago = new Date(transaction.timestamp * 1000).toISOString();
+			$(".transaction-timeago").timeago('update', ago);
+		}
+		updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
+		if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
+			updateText('transaction.fee', getReadableCoins(transaction.totalInputsAmount - transaction.totalOutputsAmount));
+		} else {
+			$('#transaction_fee').hide();
+		}
+		
+		updateText('transaction.mixin', transaction.mixin);
+		if (!transaction.mixin) {
+			$('#div_transaction_mixin').hide();
+		} else {
+			$('#div_transaction_mixin').show();
+		}
+		if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
+			$('#transactionPaymentId').html('<a href="/?hash=' + transaction.paymentId + '#blockchain_payment_id">' + transaction.paymentId + '</a>');
+			updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
+		} else {
+			$('#div_transaction_paymentId').hide();
+		}
+		updateText('transaction.size', formatBytes(parseInt(transaction.size)));
+		//updateText('transaction.version', transaction.tx.version);
+		updateText('transaction.unlock_time', transaction.unlockTime);
+		updateText('transaction.public_key', transaction.extra.publicKey);
+		updateText('transaction.extra_raw', transaction.extra.raw);
+		
+		if (typeof transaction.extra.nonce !== 'undefined' && transaction.extra.nonce.length > 0) {
+			updateText('transaction.extra_nonce',  toHexString(transaction.extra.nonce));
+		} else {
+			$("#transaction_extra_nonce").hide();
+		}
+
+		if (!transaction.inBlockchain){
+			$('#tx_block').hide();
+			$('#tx_unconfirmed').show();
+		} else {
+			$('#tx_block').show();
+			$('#tx_unconfirmed').hide();
+			refresh = true;
+		}
+
+		updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
+		updateText('block.height', transaction.blockIndex);
+		
+		updateText('signatures_count', transaction.signaturesSize);
+
+		if(!loaded) {
+		
+			console.log("rendering inputs...");
+			renderInputs(transaction.inputs);
+			console.log("rendering outputs...");
+			renderOutputs(transaction.outputs);
+			console.log("rendering signatures...");
+			renderSignatures(transaction.signatures);
+		}
+		
+		loaded = true;
+	}
+	
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+	
+	function wrongParamAlert(message) {
+	$('#page').after(
+		'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
+		'<button type="button" class="close" ' + 
+		'data-dismiss="alert" aria-hidden="true">' + 
+		'&times;' + 
+		'</button>' + 
+		'<strong>' + message + '</strong><br />' +
+		'</div>');
+	}
+</script>
