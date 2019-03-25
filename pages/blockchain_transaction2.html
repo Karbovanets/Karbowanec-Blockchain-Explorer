@@ -26,7 +26,7 @@
     <div class="col-md-7 stats"> 
 	  <div id="tx_info">
 
-		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transaction.paymentId" style="word-break: break-all; word-wrap: break-word;"></span>
+		<div id="div_transaction_paymentId"><span data-toggle="tooltip" data-placement="right" data-original-title="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."><i class="fa fa-question-circle"></i></span> Payment ID: <span id="transactionPaymentId" style="word-break: break-all; word-wrap: break-word;"></span>
 		<br />
 		<small>Decoded: <code id="transaction.paymentIdDecifer" style="word-break: break-all; word-wrap: break-word;"></code></small></div>
 
@@ -213,7 +213,7 @@
 			$('#div_transaction_mixin').show();
 		}
 		if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId != 0000000000000000000000000000000000000000000000000000000000000000) {
-			updateText('transaction.paymentId', transaction.paymentId);
+			$('#transactionPaymentId').html('<a href="/?hash=' + transaction.paymentId + '#blockchain_payment_id">' + transaction.paymentId + '</a>');
 			updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
 		} else {
 			$('#div_transaction_paymentId').hide();
