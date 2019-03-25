@@ -8,6 +8,12 @@
 		display: block;
 		float: right;
 	}
+	
+	#mempool_wrapper {
+	  overflow-y: scroll;
+	  max-height: 400px;
+	  width: 100% !important;
+	}
 </style>
 
 <div class="row">
@@ -90,78 +96,83 @@
 </div>
 
 <div class="panel panel-default">
-  <div class="panel-heading">
+	<div class="panel-heading">
   
-	<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction pool 
-	<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i class="fa fa-question-circle"></i></span>
-    </h3>
+		<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction pool 
+		<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i class="fa fa-question-circle"></i></span>
+		</h3>
 	
-  </div>
-  <div class="panel-body">
-		
-		<div class="row">
-		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-			<div class="panel panel-default tab-panel">
-			  <div class="panel-body">
-				
-				  <ul class="nav nav-pills nav-stacked">
-					<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Count: <span id="mempool_count" class="value"></span></li>
-				  </ul>
-				
-			  </div>
-			</div>
-		  </div>
-		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-			<div class="panel panel-default tab-panel">
-			  <div class="panel-body">
-				
-				  <ul class="nav nav-pills nav-stacked">
-					<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Amount: <span id="mempool_amount" class="value"></span></li>
-				  </ul>
-				
-			  </div>
-			</div>
-		  </div>
-		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-			<div class="panel panel-default tab-panel">
-			  <div class="panel-body">
-				
-				  <ul class="nav nav-pills nav-stacked">
-					<li href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Fees: <span id="mempool_fees" class="value"></span></a></li>
-				  </ul>
-				
-			  </div>
-			</div>
-		  </div>
-		  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-		    <div class="panel panel-default tab-panel">
-		      <div class="panel-body">
-			    
-			      <ul class="nav nav-pills nav-stacked">
-				    <li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Size: <span id="mempool_sizes" class="value"></span></li>
-			      </ul>
-			   
-		      </div>
-			</div>
-		  </div>
+	</div>
+	<div class="panel-body">
+		<div id="empty_mem_pool">
+			<p>No pending transactions.</p>
 		</div>
-
-
-		<div class="table-responsive">
-			<table class="table table-hover" id="mem_pool_table">
-				<thead>
-				<tr>
-					<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
-					<th width="10%"><i class="fa fa-money"></i> Amount</th>
-					<th width="10%"><i class="fa fa-tag"></i> Fee</th>
-					<th width="10%"><i class="fa fa-archive"></i> Size</th>
-					<th width="40%"><i class="fa fa-paw"></i> Hash</th>
-				</tr>
-				</thead>
-				<tbody id="mem_pool_rows">
+		<div id="mem_pool" style="display: none;">
+			<div class="row">
+			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+				<div class="panel panel-default tab-panel">
+				  <div class="panel-body">
 					
-				</tbody>
-			</table>
+					  <ul class="nav nav-pills nav-stacked">
+						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Count: <span id="mempool_count" class="value"></span></li>
+					  </ul>
+					
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+				<div class="panel panel-default tab-panel">
+				  <div class="panel-body">
+					
+					  <ul class="nav nav-pills nav-stacked">
+						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Amount: <span id="mempool_amount" class="value"></span></li>
+					  </ul>
+					
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+				<div class="panel panel-default tab-panel">
+				  <div class="panel-body">
+					
+					  <ul class="nav nav-pills nav-stacked">
+						<li href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Fees: <span id="mempool_fees" class="value"></span></a></li>
+					  </ul>
+					
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+				<div class="panel panel-default tab-panel">
+				  <div class="panel-body">
+					
+					  <ul class="nav nav-pills nav-stacked">
+						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Size: <span id="mempool_sizes" class="value"></span></li>
+					  </ul>
+				   
+				  </div>
+				</div>
+			  </div>
+			</div>
+
+			<div id="mempool_wrapper">
+				<div class="table-responsive">
+					<table class="table table-hover" id="mem_pool_table">
+						<thead>
+						<tr>
+							<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
+							<th width="10%"><i class="fa fa-money"></i> Amount</th>
+							<th width="10%"><i class="fa fa-tag"></i> Fee</th>
+							<th width="10%"><i class="fa fa-archive"></i> Size</th>
+							<th width="40%"><i class="fa fa-paw"></i> Hash</th>
+						</tr>
+						</thead>
+						<tbody id="mem_pool_rows">
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -183,7 +194,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>
@@ -602,6 +612,14 @@ function getPoolTransactions(){
 			updateText('mempool_amount', getReadableCoins(totalAmount,4));
 			updateText('mempool_fees', getReadableCoins(totalFee, 8));
 			updateText('mempool_sizes', formatBytes(parseInt(totalSize)));
+			
+			if (data.length == 0) {
+				$('#mem_pool').hide();
+				$('#empty_mem_pool').show();
+			} else {
+				$('#mem_pool').show();
+				$('#empty_mem_pool').hide();
+			}
 		}
 	}
   });
