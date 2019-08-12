@@ -37,7 +37,7 @@
         <div id="transaction_fee"><span data-toggle="tooltip" data-placement="right" data-original-title="Money that goes to the miner, who included this transaction into block."><i class="fa fa-question-circle"></i></span> Fee: <span id="transaction.fee"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="It does not mean that this is the amount that is actually transferred."><i class="fa fa-question-circle"></i></span> Sum of outputs: <span id="transaction.amount_out"></span></div>
         <div><span data-toggle="tooltip" data-placement="right" data-original-title="Size of the transaction in bytes."><i class="fa fa-question-circle"></i></span> Size: <span id="transaction.size"></span></div>
-		<!--div><span data-toggle="tooltip" data-placement="right" data-original-title="Version of the transaction."><i class="fa fa-question-circle"></i></span> Version: <span id="transaction.version"></span></div-->
+		<div><span data-toggle="tooltip" data-placement="right" data-original-title="Version of the transaction."><i class="fa fa-question-circle"></i></span> Version: <span id="transaction.version"></span></div>
 
         <div id="div_transaction_mixin"><span data-toggle="tooltip" data-placement="right" data-original-title="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."><i class="fa fa-question-circle"></i></span> Mixin count: <span id="transaction.mixin"></span></div>
 		<div><span data-toggle="tooltip" data-placement="right" data-original-title="Raw unformatted extra transaction data structure."><i class="fa fa-question-circle"></i></span> Extra (raw): <span id="transaction.extra_raw" style="word-break: break-all; word-wrap: break-word;"></span></div>
@@ -219,7 +219,7 @@
 			$('#div_transaction_paymentId').hide();
 		}
 		updateText('transaction.size', formatBytes(parseInt(transaction.size)));
-		//updateText('transaction.version', transaction.tx.version);
+		updateText('transaction.version', transaction.version);
 		updateText('transaction.unlock_time', transaction.unlockTime);
 		updateText('transaction.public_key', transaction.extra.publicKey);
 		updateText('transaction.extra_raw', transaction.extra.raw);
