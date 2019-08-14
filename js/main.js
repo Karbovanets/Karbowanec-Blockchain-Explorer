@@ -406,3 +406,28 @@ jQuery(function ($) {
         });
     });
 });
+
+function colorHash(hash) {
+    var chunks = [];
+    var chunkSize = 6;
+    var html = hash.substr(0, 4);
+    hash = hash.substr(4, 60);
+
+    while (hash) {
+        if (hash.length < chunkSize) {
+            chunks.push(hash);
+            break;
+        }
+        else {
+            chunks.push(hash.substr(0, chunkSize));
+            hash = hash.substr(chunkSize);
+        }
+    }
+    
+    for (var i = 0; i < 10; i++){
+        html += '<span class="color-hash" style="background-color: #'+ chunks[i] +';"></span>';
+    }
+    
+    return html;
+    
+}

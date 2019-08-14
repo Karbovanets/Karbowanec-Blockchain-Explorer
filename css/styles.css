@@ -305,6 +305,17 @@ foooter a,
     margin-right: 10px;
 }
 
+.color-hash-wrapper {
+    position: relative;
+    margin: 0 5px 0 0;
+}
+
+.color-hash {
+    height: 12px;
+    width: 5px;
+    display: inline-block;
+}
+
 @media only screen and (max-width: 992px) {
     
     .container {
@@ -338,6 +349,7 @@ foooter a,
         position: relative;
     }
 }
+
 @media only screen and (max-width: 1500px) {
     .table-responsive {
         display: grid;

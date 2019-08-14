@@ -736,7 +736,7 @@
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
 			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
-			'<td>' + formatBlockLink(block.hash) + '</td>' +
+			'<td><a href="' + getBlockchainUrl(block.hash) + '"><span class="color-hash-wrapper">' + colorHash(block.hash) + '</span></a>' + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.base_difficulty + ' / ' + block.actual_difficulty + '</td>' +
 			'<td>' + block.transactions_count + '</td>';
