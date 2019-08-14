@@ -266,7 +266,7 @@ currentPage = {
 					refreshChart();
 				});
 			}
-			if((currHeight + blockPerPage + 1) < lastStats.last_known_block_index){
+			if(currHeight + blocksPerPage < lastStats.last_known_block_index){
 				$('#next-page').removeClass('disabled');
 			}
 		}
@@ -323,7 +323,7 @@ $('#loadMoreBlocks').click(function(){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    count: blockPerPage,
+                    count: blocksPerPage,
 					height: $('#blocks_rows').children().last().data('height')
                 }
             }),
@@ -342,10 +342,11 @@ $('#loadMoreBlocks').click(function(){
 });
 
 $('#prev-page').click(function(e){
+	$('#prev-page').removeClass('disabled');
 	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = ((currHeight - blockPerPage - 1) < 0) ? 0 : currHeight - blockPerPage + 1;
+	var openHeight = (currHeight - blocksPerPage <= 0) ? blocksPerPage : currHeight - blocksPerPage;
 	
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -355,7 +356,7 @@ $('#prev-page').click(function(e){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    count: blockPerPage,
+                    count: blocksPerPage,
 					height: openHeight
                 }
             }),
@@ -374,10 +375,10 @@ $('#prev-page').click(function(e){
     });
 	e.preventDefault();
 	
-	if((currHeight + blockPerPage + 1) > lastStats.last_known_block_index){
+	if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
 		$('#next-page').removeClass('disabled');
 	}
-	if((currHeight - blockPerPage * 2 + 1) < 0){
+	if(currHeight - blocksPerPage <= 0){
 		$('#prev-page').addClass('disabled');
 	}
 });
@@ -386,7 +387,7 @@ $('#next-page').click(function(e){
 	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight + blockPerPage + 1 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + blockPerPage + 1;
+	var openHeight = (currHeight + blocksPerPage > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + blocksPerPage;
 	
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -396,7 +397,7 @@ $('#next-page').click(function(e){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    count: blockPerPage,
+                    count: blocksPerPage,
 					height: openHeight
                 }
             }),
@@ -415,12 +416,12 @@ $('#next-page').click(function(e){
     });
 	e.preventDefault();
 	
-	if((currHeight + 61) > lastStats.last_known_block_index){
+	if((currHeight + blocksPerPage) >= lastStats.last_known_block_index){
 		$('#next-page').addClass('disabled');
 		refresh = true;
 	}
 	
-		$('#prev-page').removeClass('disabled');
+	$('#prev-page').removeClass('disabled');
 	
 });
 
@@ -444,7 +445,7 @@ $('#goto-height').keyup(function(e){
             else
 				loadHeight = lastStats.height - 1;
 		
-		if((loadHeight - blockPerPage - 1) < 0){
+		if((loadHeight - blocksPerPage) < 0){
 			$('#prev-page').addClass('disabled');
 			$('#next-page').removeClass('disabled');
 		}
@@ -457,7 +458,7 @@ $('#goto-height').keyup(function(e){
 					id: "test",
 					method:"f_blocks_list_json",
 					params: {
-						count: blockPerPage,
+						count: blocksPerPage,
 						height: loadHeight
 					}
 				}),

@@ -4,7 +4,7 @@ var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
-var blockPerPage = 10;
+var blocksPerPage = 10;
 var whiteTheme = "css/themes/white-theme.css";
 var nightTheme = "css/themes/dark-theme.css";
 // pools stats by MainCoins
