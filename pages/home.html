@@ -582,8 +582,7 @@ function getPoolTransactions(){
 	cache: 'false',
 	success: function(newdata) {
 		if(typeof newdata.result !== "undefined") {
-			var data = newdata.result.transactions; 		// Karbo 2
-            //var data = newdata.result.mempool; 			// Karbo 1
+            var data = newdata.result.mempool === "undefined" ? newdata.result.transactions : newdata.result.mempool; // Karbo 1 or Karbo 2
 			var totalAmount = 0;
 			var totalFee = 0;
 			var totalSize = 0;
