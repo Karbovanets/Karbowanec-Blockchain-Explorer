@@ -69,8 +69,7 @@
 					
 					</ul>
 				</div>
-				
-			
+
 			</div>
 		  </div>
 		</div>
@@ -232,6 +231,7 @@ var block,
 	diffChart,
 	refresh = true;
 
+
 currentPage = {
         destroy: function(){
             if (xhrGetBlocks) xhrGetBlocks.abort();
@@ -266,7 +266,7 @@ currentPage = {
 					refreshChart();
 				});
 			}
-			if((currHeight + 31) < lastStats.last_known_block_index){
+			if((currHeight + blockPerPage + 1) < lastStats.last_known_block_index){
 				$('#next-page').removeClass('disabled');
 			}
 		}
@@ -323,7 +323,8 @@ $('#loadMoreBlocks').click(function(){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    height: $('#blocks_rows').children().last().data('height')
+                    count: blockPerPage,
+					height: $('#blocks_rows').children().last().data('height')
                 }
             }),
             dataType: 'json',
@@ -344,7 +345,7 @@ $('#prev-page').click(function(e){
 	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight - 31 < 0) ? 0 : currHeight - 31;
+	var openHeight = ((currHeight - blockPerPage - 1) < 0) ? 0 : currHeight - blockPerPage + 1;
 	
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -354,7 +355,8 @@ $('#prev-page').click(function(e){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    height: openHeight
+                    count: blockPerPage,
+					height: openHeight
                 }
             }),
             dataType: 'json',
@@ -372,10 +374,10 @@ $('#prev-page').click(function(e){
     });
 	e.preventDefault();
 	
-	if((currHeight + 31) > lastStats.last_known_block_index){
+	if((currHeight + blockPerPage + 1) > lastStats.last_known_block_index){
 		$('#next-page').removeClass('disabled');
 	}
-	if((currHeight - 61) < 0){
+	if((currHeight - blockPerPage * 2 + 1) < 0){
 		$('#prev-page').addClass('disabled');
 	}
 });
@@ -384,7 +386,7 @@ $('#next-page').click(function(e){
 	refresh = false;
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight + 31 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + 31;
+	var openHeight = (currHeight + blockPerPage + 1 > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + blockPerPage + 1;
 	
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
@@ -394,7 +396,8 @@ $('#next-page').click(function(e){
                 id: "test",
                 method:"f_blocks_list_json",
                 params: {
-                    height: openHeight
+                    count: blockPerPage,
+					height: openHeight
                 }
             }),
             dataType: 'json',
@@ -441,7 +444,7 @@ $('#goto-height').keyup(function(e){
             else
 				loadHeight = lastStats.height - 1;
 		
-		if((loadHeight - 31) < 0){
+		if((loadHeight - blockPerPage - 1) < 0){
 			$('#prev-page').addClass('disabled');
 			$('#next-page').removeClass('disabled');
 		}
@@ -454,6 +457,7 @@ $('#goto-height').keyup(function(e){
 					id: "test",
 					method:"f_blocks_list_json",
 					params: {
+						count: blockPerPage,
 						height: loadHeight
 					}
 				}),
