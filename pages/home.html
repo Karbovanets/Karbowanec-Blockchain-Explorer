@@ -478,7 +478,7 @@ $('#goto-height').keyup(function(e){
         row.setAttribute('data-height', block.height);
         row.setAttribute('id', 'blockRow' + block.height);
         row.setAttribute('title', block.hash);
-		var dateTime = new Date(block.timestamp * 1000).toISOString();
+		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000).toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
 		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee,6,false)));
         var columns =
