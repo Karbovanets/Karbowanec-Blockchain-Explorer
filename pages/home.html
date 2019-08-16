@@ -183,15 +183,35 @@
   </div>
   <div class="panel-body">
 	<div class="row">
-		<div class="col-sm-8 col-md-6 col-lg-5">
+		<div class="col-sm-8 col-md-8 col-lg-6">
 			<div class="input-group">
-				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-arrow-left" aria-hidden="true"></i> Older</a>
-				<span class="input-group-addon">№</span>
+				<a id="first-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-step-backward" aria-hidden="true"></i> First</a>
+				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-backward" aria-hidden="true"></i> Older</a>
+				<span class="input-group-addon">Height:</span>
 				<input id="goto-height" type="text" class="form-control" placeholder="Height">
 				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Go</a>
-				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i class="fa fa-forward" aria-hidden="true"></i></a>
+				<a id="last-page" href="#" class="btn btn-default input-group-addon disabled">Last <i class="fa fa-step-forward" aria-hidden="true"></i></a>
 			</div>
 		</div>
+		
+		<div class="col-sm-4 col-md-4 col-lg-6">
+			<div class="input-group">
+				<div class="input-group-btn">
+					<a href="#" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="true">
+						Blocks per page: <span id="count_val">10</span>
+						<span class="caret"></span>
+					</a>
+					<ul id="select_blocks_count" class="dropdown-menu dropdown-menu-right">
+						<li><a href="#">10</a></li>
+						<li><a href="#">20</a></li>
+						<li><a href="#">50</a></li>
+						<li><a href="#">100</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	<div class="table-responsive">
 		<table class="table table-hover">
@@ -231,12 +251,18 @@ var block,
 	diffChart,
 	refresh = true;
 
+var coinsInCirculation;
+var lastBaseReward;
+var stakeStats;
 
 currentPage = {
         destroy: function(){
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
+			renderLastBlock();
+			fetchStakeStats();
+			$("#count_val").text(blocksPerPage);
 			$.when(
 				renderInitialBlocks()
 			).then(function() {
@@ -245,12 +271,28 @@ currentPage = {
 				).then(function() {
 					setTimeout(function(){
 						refreshChart();
+						var currHeight = $('#blocks_rows').children().first().data('height');
+						if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
+							$('#next-page').addClass('disabled');
+							$('#last-page').addClass('disabled');
+							$('#loadMoreBlocks').removeClass('disabled');
+						} else {
+							$('#next-page').removeClass('disabled');
+							$('#last-page').removeClass('disabled');
+						}
+						if(currHeight - blocksPerPage <= 0){
+							$('#prev-page').addClass('disabled');
+							$('#first-page').addClass('disabled');
+							$('#loadMoreBlocks').addClass('disabled');
+						}
 					}, 100)
 				})
 			});
         },
         update: function(){
 			renderLastBlock();
+			//renderLastStats();
+			fetchStakeStats();
             updateText('networkHeight', lastStats.height.toString());
             updateText('networkTransactions', lastStats.tx_count.toString());
             updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
@@ -271,6 +313,27 @@ currentPage = {
 			}
 		}
 };
+
+function fetchStakeStats() {
+	$.ajax({
+		url: api + '/stakeinfo',
+		dataType: 'json',
+		type: 'GET',
+		cache: 'false'
+	}).done(function(data, success){
+		stakeStats = data;
+		updateText('nextStake', getReadableCoins(stakeStats.next_stake,2));
+		updateText('lockedStakes', getReadableCoins(stakeStats.total_coins_locked,2));
+		updateText('emissionPercentLocked', (stakeStats.total_coins_locked / coinsInCirculation * 100).toFixed(2) + "%");
+		updateText('stakeInterest', (lastBaseReward * 100 / stakeStats.next_stake).toFixed(2) + "%");
+	});
+}
+
+function renderLastStats(){
+	updateText('totalCoins', getReadableCoins(lastStats.already_generated_coins,2));
+	updateText('emissionPercent', (lastStats.already_generated_coins / 10000000000000000000 * 100).toFixed(4) + "%");
+	updateText('currentReward', getReadableCoins(lastStats.last_block_reward,4));
+}
 
 function renderLastBlock(){
 $.ajax({
@@ -303,6 +366,8 @@ $.ajax({
 			cache: 'false',
 			success: function(data){
 			block = data.result.block;
+				coinsInCirculation = block.alreadyGeneratedCoins;
+				lastBaseReward = block.baseReward;
 				updateText('totalCoins', getReadableCoins(block.alreadyGeneratedCoins,2));
 				updateText('emissionPercent', (block.alreadyGeneratedCoins / 10000000000000000000 * 100).toFixed(4) + "%");
 				updateText('currentReward', getReadableCoins(block.baseReward,4));
@@ -333,6 +398,10 @@ $('#loadMoreBlocks').click(function(){
 				$.when(
 					 renderBlocks(data.result.blocks)
 				).then(function() {
+					var currHeight = $('#blocks_rows').children().last().data('height');
+					if (currHeight === 0){
+						$('#loadMoreBlocks').toggleClass('disabled');
+					}
 					setTimeout(function(){
 						loadMoreChart();
 					}, 100)
@@ -342,12 +411,12 @@ $('#loadMoreBlocks').click(function(){
 });
 
 $('#prev-page').click(function(e){
-	$('#prev-page').removeClass('disabled');
 	refresh = false;
+	clearArrays();
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
 	var openHeight = (currHeight - blocksPerPage <= 0) ? blocksPerPage : currHeight - blocksPerPage;
-	
+
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
             method: "POST",
@@ -377,18 +446,23 @@ $('#prev-page').click(function(e){
 	
 	if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
 		$('#next-page').removeClass('disabled');
+		$('#last-page').removeClass('disabled');
+		$('#loadMoreBlocks').removeClass('disabled');
 	}
-	if(currHeight - blocksPerPage <= 0){
+	if(currHeight - blocksPerPage * 2 <= 0){
 		$('#prev-page').addClass('disabled');
+		$('#first-page').addClass('disabled');
+		$('#loadMoreBlocks').addClass('disabled');
 	}
 });
 
 $('#next-page').click(function(e){
 	refresh = false;
+	clearArrays();
     if (xhrGetBlocks) xhrGetBlocks.abort();
 	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight + blocksPerPage > lastStats.last_known_block_index) ? (lastStats.last_known_block_index) : currHeight + blocksPerPage;
-	
+	var openHeight = (currHeight + blocksPerPage > lastStats.last_known_block_index) ? lastStats.last_known_block_index : currHeight + blocksPerPage;
+
 	xhrGetBlocks = $.ajax({
             url: api + '/json_rpc',
             method: "POST",
@@ -418,11 +492,93 @@ $('#next-page').click(function(e){
 	
 	if((currHeight + blocksPerPage) >= lastStats.last_known_block_index){
 		$('#next-page').addClass('disabled');
+		$('#last-page').addClass('disabled');
 		refresh = true;
 	}
 	
-	$('#prev-page').removeClass('disabled');
+	if(!(currHeight + $('#blocks_rows').size() - blocksPerPage <= 0)){
+		$('#loadMoreBlocks').removeClass('disabled');
+	}
 	
+	$('#prev-page').removeClass('disabled');
+	$('#first-page').removeClass('disabled');
+	
+});
+
+$('#first-page').click(function(e){
+	refresh = false;
+	clearArrays();
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    count: blocksPerPage,
+					height: blocksPerPage
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function() {
+					setTimeout(function(){
+						refreshChart();
+					}, 100)
+				});
+            }
+    });
+	e.preventDefault();
+	
+	$('#next-page').removeClass('disabled');
+	$('#last-page').removeClass('disabled');
+	$('#prev-page').addClass('disabled');
+	$('#first-page').addClass('disabled');	
+	$('#loadMoreBlocks').addClass('disabled');
+});
+
+$('#last-page').click(function(e){
+	refresh = true;
+	clearArrays();
+    if (xhrGetBlocks) xhrGetBlocks.abort();
+	xhrGetBlocks = $.ajax({
+            url: api + '/json_rpc',
+            method: "POST",
+            data: JSON.stringify({
+                jsonrpc:"2.0",
+                id: "test",
+                method:"f_blocks_list_json",
+                params: {
+                    count: blocksPerPage,
+					height: lastStats.last_known_block_index
+                }
+            }),
+            dataType: 'json',
+            cache: 'false',
+            success: function(data){
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function() {
+					setTimeout(function(){
+						refreshChart();
+					}, 100)
+				});
+            }
+    });
+	e.preventDefault();
+	
+	$('#next-page').addClass('disabled');
+	$('#last-page').addClass('disabled');
+	$('#prev-page').removeClass('disabled');
+	$('#first-page').removeClass('disabled');	
+	$('#loadMoreBlocks').removeClass('disabled');
 });
 
 $('#goto-height-go').click(function() {
@@ -436,7 +592,73 @@ $('#goto-height').keyup(function(e){
             $('#goto-height-go').click();
 });
 
-    function renderInitialBlocks(){
+
+$("#select_blocks_count").on('click', 'li a', function(e){
+	$("#count_val").text($(this).text());
+	blocksPerPage = parseInt($(this).text());
+	var currHeight = $('#blocks_rows').children().first().data('height');
+if (xhrGetBlocks) xhrGetBlocks.abort();
+	xhrGetBlocks = $.ajax({
+		url: api + '/json_rpc',
+		method: "POST",
+		data: JSON.stringify({
+			jsonrpc:"2.0",
+			id: "test",
+			method:"f_blocks_list_json",
+			params: {
+				count: blocksPerPage,
+				height: currHeight
+			}
+		}),
+		dataType: 'json',
+		cache: 'false',
+		success: function(data){
+			$('#blocks_rows').children().remove();
+			$.when(
+				renderBlocks(data.result.blocks)
+			).then(function() {
+				setTimeout(function(){
+					refreshChart();
+				}, 100)
+			});
+		}
+    });
+	
+	if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
+		$('#next-page').addClass('disabled');
+		$('#last-page').addClass('disabled');
+	}
+	else {
+		$('#next-page').removeClass('disabled');
+		$('#last-page').removeClass('disabled');
+		refresh = false;
+	}
+	$('#prev-page').removeClass('disabled');
+	$('#first-page').removeClass('disabled');
+	$('#loadMoreBlocks').removeClass('disabled');
+	if(currHeight - blocksPerPage <= 0){
+		$('#prev-page').addClass('disabled');
+		$('#first-page').addClass('disabled');
+		$('#loadMoreBlocks').addClass('disabled');
+	}
+
+	e.preventDefault();
+});
+
+
+function clearArrays(){
+	Difficulties = [];
+	MinFees = [];
+	Blocks = [];
+	Rewards = [];
+	Txses = [];
+	Sizes = [];
+	Timestamps = [];
+	time_stamps = [];
+	Solvetimes = [];
+}
+
+function renderInitialBlocks(){
 		
 		var loadHeight;
 		
@@ -796,16 +1018,16 @@ function displayDiffChart() {
 					fontSize: 9,
 					display:true,
 					suggestedMin: 0.001,
-					suggestedMax: 0.01
+					suggestedMax: 0.1
 				},
 				display: true
 			  },{
-				id: 'DepoRate',
+				id: 'Stakes',
 				type: 'linear',
 				position: 'right',
 				scaleLabel: {
 					display: true,
-					labelString: 'Deposit Rate'
+					labelString: 'Stake'
 				},
 				gridLines: {
 					display:false
@@ -813,8 +1035,8 @@ function displayDiffChart() {
 				ticks: {
 					fontSize: 9,
 					display:true,
-					suggestedMin: 0.001,
-					suggestedMax: 0.01
+					suggestedMin: 100,
+					suggestedMax: 6000
 				},
 				display: true
 			  }
