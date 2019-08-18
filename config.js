@@ -61,10 +61,13 @@ var poolsStat =
 		["easyhash.pro/krb", "https://easyhash.pro/krb/api/stats"],
 		["krb.mychainpools.com", "https://krb.mychainpools.com:8148/stats"],
 		["krb.superpools.online", "http://krb.superpools.online:8117/stats"],
-		["newpool.pw/krb", "https://minenice.newpool.pw:8215/stats"],
+		["newpool.pw/krb_croat", "https://minenice.newpool.pw:8229/stats"],
 		["karbo.asiapool.io", "https://karbo.asiapool.io/api/stats"],
 		["youpool.io/KARBO", "http://149.28.85.162:8128/stats"],
-		["krb.cryptonote.club", "https://krb.cryptonote.club:8199/stats"]
+		["krb.cryptonote.club", "https://krb.cryptonote.club:8199/stats"],
+		["coinpoolit.webhop.me/krb", "https://ns3128504.ip-51-68-204.eu:10119/stats"],
+		["cn.llama.horse", "https://pool.llama.horse:40104/stats"],
+		["cnpool.cc/krb", "https://cnpool.cc/api/krb/stats"]
     ];
 var nodesStat = 
 	[
@@ -147,5 +150,6 @@ var nodesStat =
 		["http://kabany.tk:32348"],
 		["http://212.227.192.145:32348"],
 		["http://51.15.75.207:32348"],
-		["http://104.207.130.36:32348"]
+		["http://104.207.130.36:32348"],
+		["http://178.128.164.245:32348"]
     ];
