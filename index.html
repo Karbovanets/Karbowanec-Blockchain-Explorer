@@ -349,7 +349,7 @@
 				
 	<!-- //-->
 
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
+                <li style="display:none;"><a class="hot_link" data-page="blockchain_block2.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
                 </a></li>
 
                 <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction2.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
@@ -421,7 +421,7 @@ var block, xhrGetSearchBlock;
             data: JSON.stringify({
                 jsonrpc:"2.0",
                 id: "GetSearchBlock",
-                method:"f_block_json",
+                method:"getblockbyhash",
                 params: {
                    hash: text
                 }
@@ -441,7 +441,7 @@ var block, xhrGetSearchBlock;
 						data: JSON.stringify({
 							jsonrpc:"2.0",
 							id: "test",
-							method:"f_transaction_json",
+							method:"gettransaction",
 							params: {
 								hash: text
 							}
@@ -459,7 +459,7 @@ var block, xhrGetSearchBlock;
 									data: JSON.stringify({
 										jsonrpc:"2.0",
 										id: "test",
-										method:"k_transactions_by_payment_id",
+										method:"gettransactionsbypaymentid",
 										params: {
 											payment_id: text
 										}
@@ -537,7 +537,7 @@ $('#txt_search').keyup(function(e){
 			<div class="col-lg-4 col-md-4 col-sm-6">
 				<p>
 					<small>
-						&copy; 2017-2018 <strong>Karbo</strong>
+						&copy; 2017-2019 <strong>Karbo</strong>
 					</small>
 				</p>
 				
@@ -553,7 +553,7 @@ $('#txt_search').keyup(function(e){
 					<!-- This copyright should be left intact -->
 				
 					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					v. 1.1.7.<br />
+					v. 1.1.8.<br />
 					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>

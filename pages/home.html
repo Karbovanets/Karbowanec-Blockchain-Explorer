@@ -260,8 +260,7 @@ currentPage = {
             if (xhrGetBlocks) xhrGetBlocks.abort();
         },
         init: function(){
-			renderLastBlock();
-			fetchStakeStats();
+			renderLastStats();
 			$("#count_val").text(blocksPerPage);
 			$.when(
 				renderInitialBlocks()
@@ -290,9 +289,7 @@ currentPage = {
 			});
         },
         update: function(){
-			renderLastBlock();
-			//renderLastStats();
-			fetchStakeStats();
+			renderLastStats();
             updateText('networkHeight', lastStats.height.toString());
             updateText('networkTransactions', lastStats.tx_count.toString());
             updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
@@ -314,67 +311,10 @@ currentPage = {
 		}
 };
 
-function fetchStakeStats() {
-	$.ajax({
-		url: api + '/stakeinfo',
-		dataType: 'json',
-		type: 'GET',
-		cache: 'false'
-	}).done(function(data, success){
-		stakeStats = data;
-		updateText('nextStake', getReadableCoins(stakeStats.next_stake,2));
-		updateText('lockedStakes', getReadableCoins(stakeStats.total_coins_locked,2));
-		updateText('emissionPercentLocked', (stakeStats.total_coins_locked / coinsInCirculation * 100).toFixed(2) + "%");
-		updateText('stakeInterest', (lastBaseReward * 100 / stakeStats.next_stake).toFixed(2) + "%");
-	});
-}
-
 function renderLastStats(){
-	updateText('totalCoins', getReadableCoins(lastStats.already_generated_coins,2));
-	updateText('emissionPercent', (lastStats.already_generated_coins / 10000000000000000000 * 100).toFixed(4) + "%");
+	updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.','')),2));
+	updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.','')) / 10000000000000000000 * 100).toFixed(4) + "%");
 	updateText('currentReward', getReadableCoins(lastStats.last_block_reward,4));
-}
-
-function renderLastBlock(){
-$.ajax({
-    url: api + '/json_rpc',
-    method: "POST",
-    data: JSON.stringify({
-          jsonrpc:"2.0",
-          id: "test",
-          method:"getlastblockheader",
-          params: {
-  
-                }
-    }),
-    dataType: 'json',
-    cache: 'false',
-    success: function(data){
-		last_block_hash = data.result.block_header.hash;
-		$.ajax({
-			url: api + '/json_rpc',
-			method: "POST",
-			data: JSON.stringify({
-				jsonrpc:"2.0",
-				id: "test",
-				method:"f_block_json",
-				params: {
-				    hash: last_block_hash
-				}
-			}),
-			dataType: 'json',
-			cache: 'false',
-			success: function(data){
-			block = data.result.block;
-				coinsInCirculation = block.alreadyGeneratedCoins;
-				lastBaseReward = block.baseReward;
-				updateText('totalCoins', getReadableCoins(block.alreadyGeneratedCoins,2));
-				updateText('emissionPercent', (block.alreadyGeneratedCoins / 10000000000000000000 * 100).toFixed(4) + "%");
-				updateText('currentReward', getReadableCoins(block.baseReward,4));
-			}
-		});
-    }
-});
 }
 
 var xhrGetBlocks;
@@ -422,8 +362,8 @@ $('#prev-page').click(function(e){
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
+                id: "explorer_prev_nav",
+                method:"getblockslist",
                 params: {
                     count: blocksPerPage,
 					height: openHeight
@@ -468,8 +408,8 @@ $('#next-page').click(function(e){
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
+                id: "explorer_next_nav",
+                method:"getblockslist",
                 params: {
                     count: blocksPerPage,
 					height: openHeight
@@ -514,8 +454,8 @@ $('#first-page').click(function(e){
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
+                id: "explorer_first_nav",
+                method:"getblockslist",
                 params: {
                     count: blocksPerPage,
 					height: blocksPerPage
@@ -552,8 +492,8 @@ $('#last-page').click(function(e){
             method: "POST",
             data: JSON.stringify({
                 jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
+                id: "explorer_last_nav",
+                method:"getblockslist",
                 params: {
                     count: blocksPerPage,
 					height: lastStats.last_known_block_index
@@ -603,8 +543,8 @@ if (xhrGetBlocks) xhrGetBlocks.abort();
 		method: "POST",
 		data: JSON.stringify({
 			jsonrpc:"2.0",
-			id: "test",
-			method:"f_blocks_list_json",
+			id: "explorer_block_count",
+			method:"getblockslist",
 			params: {
 				count: blocksPerPage,
 				height: currHeight
@@ -677,8 +617,8 @@ function renderInitialBlocks(){
 				method: "POST",
 				data: JSON.stringify({
 					jsonrpc:"2.0",
-					id: "test",
-					method:"f_blocks_list_json",
+					id: "explorer_init_blocks",
+					method:"getblockslist",
 					params: {
 						count: blocksPerPage,
 						height: loadHeight
@@ -789,22 +729,22 @@ function renderInitialBlocks(){
 		updateText('avgSolveTime', getReadableTime(avg_solve_time));
 	}
 	
-//  Karbovanets MemPool Transactions
+//  MemPool Transactions
 function getPoolTransactions(){
   var xhrGetPool = $.ajax({
 	url: api + '/json_rpc',
 	method: "POST",
 	data: JSON.stringify({
 		jsonrpc: "2.0",
-		id: "test",
-		method: "f_mempool_json",
+		id: "explorer_mempool",
+		method: "gettransactionspool",
 		params: {}
 	}),
 	dataType: 'json',
 	cache: 'false',
 	success: function(newdata) {
 		if(typeof newdata.result !== "undefined") {
-            var data = newdata.result.mempool === "undefined" ? newdata.result.transactions : newdata.result.mempool; // Karbo 1 or Karbo 2
+            var data = newdata.result.transactions;
 			var totalAmount = 0;
 			var totalFee = 0;
 			var totalSize = 0;

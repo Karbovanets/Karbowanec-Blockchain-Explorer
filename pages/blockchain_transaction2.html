@@ -162,8 +162,8 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
-				id: "test",
-				method:"k_transaction_details_by_hash",
+				id: "explorer_transaction_page",
+				method:"gettransaction",
 				params: {
 					hash: urlParam('hash')
 				}
