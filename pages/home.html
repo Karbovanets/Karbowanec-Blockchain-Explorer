@@ -253,7 +253,6 @@ var block,
 
 var coinsInCirculation;
 var lastBaseReward;
-var stakeStats;
 
 currentPage = {
         destroy: function(){
@@ -959,24 +958,6 @@ function displayDiffChart() {
 					display:true,
 					suggestedMin: 0.001,
 					suggestedMax: 0.1
-				},
-				display: true
-			  },{
-				id: 'Stakes',
-				type: 'linear',
-				position: 'right',
-				scaleLabel: {
-					display: true,
-					labelString: 'Stake'
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					display:true,
-					suggestedMin: 100,
-					suggestedMax: 6000
 				},
 				display: true
 			  }
