@@ -440,7 +440,7 @@ var block, xhrGetSearchBlock;
 						async: false,
 						data: JSON.stringify({
 							jsonrpc:"2.0",
-							id: "test",
+							id: "GetSearchTransaction",
 							method:"gettransaction",
 							params: {
 								hash: text
@@ -458,7 +458,7 @@ var block, xhrGetSearchBlock;
 									method: "POST",
 									data: JSON.stringify({
 										jsonrpc:"2.0",
-										id: "test",
+										id: "GetSearchTransactionByPaymentId",
 										method:"gettransactionsbypaymentid",
 										params: {
 											payment_id: text

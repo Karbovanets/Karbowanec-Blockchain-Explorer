@@ -240,8 +240,8 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
-				id: "test",
-				method:"k_transaction_details_by_hash",
+				id: "explorer_tx_check",
+				method:"gettransaction",
 				params: {
 					hash: transactionHash.val()
 				}
@@ -292,8 +292,8 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
-				id: "test",
-				method:"check_tx_key",
+				id: "explorer_check_tx_key",
+				method:"checktransactionkey",
 				params: {
 					txid: transactionHash.val(),
 					txkey: transactionKey.val(),
@@ -337,8 +337,8 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
-				id: "test",
-				method:"check_tx_with_view_key",
+				id: "explorer_check_tx_with_view_key",
+				method:"checktransactionbyviewkey",
 				params: {
 					txid: transactionHash.val(),
 					view_key: privateViewKey,
@@ -376,8 +376,8 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc:"2.0",
-				id: "test",
-				method:"check_tx_proof",
+				id: "explorer_check_tx_proof",
+				method:"checktransactionproof",
 				params: {
 					tx_id: transactionHash.val(),
 					signature: transactionKey.val(),
@@ -629,7 +629,7 @@
 			$('#div_transaction_paymentId').hide();
 		}
 		updateText('transaction.size', formatBytes(parseInt(transaction.size)));
-		//updateText('transaction.version', transaction.tx.version);
+		updateText('transaction.version', transaction.version);
 		updateText('transaction.unlock_time', transaction.unlockTime);
 		updateText('transaction.public_key', transaction.extra.publicKey);
 		updateText('transaction.extra_raw', transaction.extra.raw);

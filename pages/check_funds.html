@@ -7,7 +7,7 @@
 
 <h2><i class="fa fa-money fa-fw" aria-hidden="true"></i>Check reserve proof</h2>
 
-<p>Hereby you can check a signature proving that the owner of "address" holds at least this much, optionally with a challenge string "message".</p>
+<p>Hereby you can check a signature proving that the owner of "address" holds at least this much, optionally with a challenge string "message" and as of specified height.</p>
 
 <div class="well bs-component">
 	<form class="form-horizontal" id="check_reserve_form">
@@ -29,8 +29,15 @@
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="signature" style="margin-bottom: 10px;">Signature</label>
-					<textarea class="form-control" id="signature" rows="20" spellcheck="false"></textarea>
+					<textarea class="form-control" id="signature" rows="10" spellcheck="false"></textarea>
 				</div>	
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="due_height">Check as of Height</label>
+					<input class="form-control" placeholder="Karbo blockchain height" id="due_height">
+				</div>
 			</div>
 			
 			<div class="col-md-12">
@@ -63,6 +70,7 @@
 	var signature = $("#signature");
 	var message = $("#message");
 	var address = $("#public_address");
+	var as_of_height = $("#due_height");
 	var result = $("#verified");
 	var result_icon = $("#verified").find("i");
 	var result_text = $("#verified").find("span");
@@ -71,7 +79,7 @@
 
     currentPage = {
         destroy: function(){
-			if (xhrVerifyMessage) xhrVerifyMessage.abort();
+			if (xhrCheckReserve) xhrCheckReserve.abort();
         },
         init: function(){
         },
@@ -103,7 +111,8 @@
 				params: {
 					message: message.val(),
 					address: address.val(),
-					signature: signature.val()
+					signature: signature.val(),
+					height: parseInt(as_of_height.val())
 				}
 			}),
 			dataType: 'json',
@@ -127,8 +136,11 @@
 				var isvalid = JSON.parse(res.good);
 				
 				if (isvalid) {
-					result_text.html("Signature is valid and proves that specified address holds at least <strong>" 
-					+ getReadableCoins(res.total) + "</strong>, from which spent: " 
+					result_text.html("Signature is <strong>valid</strong> and proves that "
+					+ "specified address holds at least <strong>" 
+					+ getReadableCoins(res.total) + "</strong>, from which "
+					+ "as of height " + as_of_height.val()
+					+ " spent: " 
 					+ getReadableCoins(res.spent));
 					result_container.addClass("panel-success");
 					result.addClass("text-success");
