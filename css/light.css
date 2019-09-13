@@ -1,5 +1,4 @@
 body {
-  margin-top: 60px;
 }
 
 .table > thead > tr > td.success,
@@ -48,10 +47,10 @@ td .timeago {
 }
 
 #blocks_rows > tr > td:nth-child(2) {
-	text-align: left;
+	/*text-align: left;*/
 }
 
-#blocks_rows > tr > td:nth-child(4) {
+#blocks_rows > tr > td:nth-child(3) {
 	/*font-size: 85%;*/
 }
 

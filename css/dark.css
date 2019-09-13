@@ -1,5 +1,4 @@
 body {
-  margin-top: 60px;
   color: #a4a4a4;
   background-color: #131313;
 }
@@ -113,10 +112,10 @@ td .timeago {
 }
 
 #blocks_rows > tr > td:nth-child(2) {
-	text-align: left;
+	/*text-align: left;*/
 }
 
-#blocks_rows > tr > td:nth-child(4) {
+#blocks_rows > tr > td:nth-child(3) {
 	/*font-size: 85%;*/
 }
 

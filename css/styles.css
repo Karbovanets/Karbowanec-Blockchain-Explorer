@@ -1,0 +1,116 @@
+* {
+    outline: none
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh
+}
+
+.longpage {
+    height: 4px;
+    position: fixed;
+    top: 0;
+    background-color: #02b3e6;
+    z-index: 998
+}
+
+nav .brand-logo img {
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%)
+}
+
+nav .brand-logo span {
+    margin-left: 40px
+}
+
+nav #stats_updated {
+    margin-left: 10px
+}
+
+main {
+    flex: 1 0 auto;
+    position: relative
+}
+
+#loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.blockHash {
+    word-wrap: break-word;
+    font-size: 0.9rem
+}
+
+:root{
+    --primary:#03A9F4;
+    --secondary:#29B6F6;
+    --terciary:#B2EBF2;
+}
+
+nav{
+    padding: 0 10px 0 10px;
+    background-color: var(--primary);
+}
+
+nav .right{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.nav-wrapper form{
+    margin: auto;
+    width: 50%;
+}
+
+.nav-wrapper .input-field{
+    
+}
+
+.nav-wrapper form #search{
+    height: 50px;
+}
+
+nav .right img{
+    margin: 17px;
+    height: 30px;
+    width: 30px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+nav .right .imgProfil a{
+    height: 64px;
+}
+
+.hidden{
+    display: none;
+}
+
+.dropdown-trigger {
+	position: relative;
+}
+
+.dropdown-content {
+  background-color: #FFFFFF;
+  margin: 0;
+  display: none;
+  min-width: 300px; /* Changed this to accomodate content width */
+  max-height: auto;
+  margin-left: -1px; /* Add this to keep dropdown in line with edge of navbar */
+  overflow: hidden; /* Changed this from overflow-y:auto; to overflow:hidden; */
+  opacity: 0;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 1;
+  will-change: width, height;
+  top: 64px;
+}
