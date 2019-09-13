@@ -1,611 +1,653 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<link rel="shortcut icon" href="favicon.ico">
 	<link rel="icon" type="image/icon" href="favicon.ico">
-    <title>Karbowanec (&#1180;) [KRB] Block Explorer</title>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-    <link href="css/themes/bootstrap.min.css" rel="stylesheet">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
-    <script src="config.js"></script>
-    <script src="js/cookie.js"></script>
+	<title>Karbowanec (&#1180;) [KRB] Block Explorer</title>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+	<link href="css/themes/bootstrap.min.css" rel="stylesheet">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+	<script src="config.js"></script>
+	<script src="js/cookie.js"></script>
 	<link type="text/css" rel="stylesheet" href="css/themes/default-theme.css">
 </head>
 <body>
-<script>
+	<script>
+		var blockchainExplorer = "./?hash={id}#block";
+		var transactionExplorer = "./?hash={id}#transaction";
+		var paymentIdExplorer = "./?hash={id}#payment_id";
 
-	var blockchainExplorer 	= "./?hash={id}#blockchain_block";
-	var transactionExplorer = "./?hash={id}#blockchain_transaction";
-	var paymentIdExplorer 	= "./?hash={id}#blockchain_payment_id";
-	
-	$(function(){
+		$(function () {
+			$("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
 
-		$("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
+			var loadCSS = function () {
+				var value = $.cookie('night_mode');
+				$('.switch-checkbox').prop('checked', (value === 'true'));
 
-		var loadCSS = function() {
-			var value = $.cookie('night_mode');
-			$('.switch-checkbox').prop('checked', (value === 'true'));
+				if (value === 'true') {
+					$('#theme').attr('href', nightTheme);
 
-			if (value === 'true') {
-				$('#theme').attr('href', nightTheme);
-
-			} else {
-				$('#theme').attr('href', whiteTheme);			
-			}
-		};
-		loadCSS();
-
-		var toggleCSS = function(value) {
-			$.cookie('night_mode', value, { expires: 365, path: '/' });
+				} else {
+					$('#theme').attr('href', whiteTheme);
+				}
+			};
 			loadCSS();
+
+			var toggleCSS = function (value) {
+				$.cookie('night_mode', value, {
+					expires: 365,
+					path: '/'
+				});
+				loadCSS();
+			};
+
+			$('.switch-checkbox').on('change', function () {
+				toggleCSS(this.checked);
+			});
+		});
+
+		function getTransactionUrl(id) {
+			return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
+		}
+
+		$.fn.update = function (txt) {
+			var el = this[0];
+			if (el.textContent !== txt)
+				el.textContent = txt;
+			return this;
 		};
 
-		$('.switch-checkbox').on('change', function() {
-			toggleCSS(this.checked);
-		});
-	});
-	
-    function getTransactionUrl(id) {
-        return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
-    }
-    
-    $.fn.update = function(txt){
-        var el = this[0];
-        if (el.textContent !== txt)
-            el.textContent = txt;
-        return this;
-    };
-
-    function updateTextClasses(className, text){
-        var els = document.getElementsByClassName(className);
-        for (var i = 0; i < els.length; i++){
-            var el = els[i];
-            if (el.textContent !== text)
-                el.textContent = text;
-        }
-    }
-
-    function updateText(elementId, text){
-        var el = document.getElementById(elementId);
-        if (el.textContent !== text){
-            el.textContent = text;
-        }
-        return el;
-    }
-
-    function updateTextLinkable(elementId, text){
-        var el = document.getElementById(elementId);
-        if (el.innerHTML !== text){
-            el.innerHTML = text;
-        }
-        return el;
-    }
-
-    var currentPage;
-    var lastStats;
-    var nodeStatus;
-
-    function getReadableHashRateString(hashrate){
-        var i = 0;
-        var byteUnits = [' H', ' kH', ' MH', ' GH', ' TH', ' PH', ' EH', ' ZH', ' YH' ];
-        while (hashrate > 1000){
-            hashrate = hashrate / 1000;
-            i++;
-        }
-        return hashrate.toFixed(2) + byteUnits[i];
-    }
-	
-	function getReadableDifficultyString(difficulty, precision){
-		if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
-		if (typeof precision === 'undefined') precision = 2;
-		var units = ['', 'k', 'M', 'G', 'T', 'P'],
-            number = Math.floor(Math.log(difficulty) / Math.log(1000));
-		if (units[number] === undefined || units[number] === null) {
-            return 0
-        }
-        return (difficulty / Math.pow(1000, Math.floor(number))).toFixed(precision) + ' ' +  units[number];
-    }
-	
-    function formatBlockLink(hash){
-        return '<a href="' + getBlockchainUrl(hash) + '">' + hash + '</a>';
-    }
-
-    function getReadableCoins(coins, digits, withoutSymbol){
-        var amount = (parseInt(coins || 0) / coinUnits).toFixed(digits || coinUnits.toString().length - 1);
-        return amount + (withoutSymbol ? '' : (' ' + symbol));
-    }
-
-    function formatDate(time){
-        if (!time) return '';
-        return new Date(parseInt(time) * 1000).toLocaleString();
-    }
-	
-	function formatBytes(a,b) {
-		if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
-	}
-	
-	function formatPaymentLink(hash){
-        return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
-    }
-	
-    function pulseLiveUpdate(){
-        var stats_update = document.getElementById('stats_updated');
-        stats_update.style.transition = 'opacity 100ms ease-out';
-        stats_update.style.opacity = 1;
-        setTimeout(function(){
-            stats_update.style.transition = 'opacity 7000ms linear';
-            stats_update.style.opacity = 0;
-        }, 500);
-    }
-
-    window.onhashchange = function(){
-        routePage();
-    };
-
-
-    function fetchLiveStats() {
-        $.ajax({
-            url: api + '/getinfo',
-            dataType: 'json',
-			type: 'GET',
-            cache: 'false'
-        }).done(function(data, success){
-            pulseLiveUpdate();
-            lastStats = data;
-			nodeStatus = success;
-            currentPage.update();
-			nodeInfo();
-        }).always(function () {
-			setTimeout(function() {
-				fetchLiveStats();
-			}, refreshDelay);
-        });
-    }
-
-    function floatToString(float) {
-        return float.toFixed(6).replace(/[0\.]+$/, '');
-    }
-
-	function nodeInfo() {
-        if(nodeStatus) {
-			$('#node_connection').html('Online').addClass('text-success').removeClass('text-danger');
-			$('#node_height').html(parseInt(lastStats['height']));
-			$('#node_block').html(parseInt(lastStats['last_known_block_index']));
-			$('#node_diff').html(parseInt(lastStats['difficulty']));
-			$('#node_alt').html(parseInt(lastStats['alt_blocks_count']));
-			$('#node_rpc').html(parseInt(lastStats['rpc_connections_count']));
-			$('#node_inc').html(parseInt(lastStats['incoming_connections_count']));
-			$('#node_out').html(parseInt(lastStats['outgoing_connections_count']));
-			$('#node_white').html(parseInt(lastStats['white_peerlist_size']));
-			$('#node_grey').html(parseInt(lastStats['grey_peerlist_size']));
-			if (lastStats['version'] !== 'undefined'){
-				$('#node_ver').html(lastStats['version']);
+		function updateTextClasses(className, text) {
+			var els = document.getElementsByClassName(className);
+			for (var i = 0; i < els.length; i++) {
+				var el = els[i];
+				if (el.textContent !== text)
+					el.textContent = text;
 			}
-		} else {
-			$('#node_connection').html('Offline').addClass('text-danger').removeClass('text-success');
 		}
-    }
-	
-    var xhrPageLoading;
-    function routePage(loadedCallback) {
 
-        if (currentPage) currentPage.destroy();
-        $('#page').html('');
-        $('#loading').show();
-
-        if (xhrPageLoading)
-            xhrPageLoading.abort();
-
-        $('.hot_link').parent().removeClass('active');
-        var $link = $('a.hot_link[href="' + (window.location.hash || '#') + '"]');
-
-        $link.parent().addClass('active');
-        var page = $link.data('page');
-
-        xhrPageLoading = $.ajax({
-            url: 'pages/' + page,
-            cache: false,
-            success: function (data) {
-                $('#loading').hide();
-                $('#page').show().html(data);
-                currentPage.init();
-                //currentPage.update();
-                if (loadedCallback) loadedCallback();
-            }
-        });
-    }
-
-    function getBlockchainUrl(id) {
-        return blockchainExplorer.replace('{id}', id);
-	}
-
-	function getinfo() {
-		$.ajax({
-			url: api + '/getinfo',
-			timeout: 1500 //in milliseconds
-		})
-		.done(function (data) {
-			try {
-				lastStats = JSON.parse(data);
-			} catch (e) {
-				lastStats = data;
+		function updateText(elementId, text) {
+			var el = document.getElementById(elementId);
+			if (el.textContent !== text) {
+				el.textContent = text;
 			}
-			routePage(fetchLiveStats);
-		})
-		.fail(function () {
-			apiList.push(api);
-			api = apiList.shift();
+			return el;
+		}
+
+		function updateTextLinkable(elementId, text) {
+			var el = document.getElementById(elementId);
+			if (el.innerHTML !== text) {
+				el.innerHTML = text;
+			}
+			return el;
+		}
+
+		var currentPage;
+		var lastStats;
+		var nodeStatus;
+
+		function getReadableHashRateString(hashrate) {
+			var i = 0;
+			var byteUnits = [' H', ' kH', ' MH', ' GH', ' TH', ' PH', ' EH', ' ZH', ' YH'];
+			while (hashrate > 1000) {
+				hashrate = hashrate / 1000;
+				i++;
+			}
+			return hashrate.toFixed(2) + byteUnits[i];
+		}
+
+		function getReadableDifficultyString(difficulty, precision) {
+			if (isNaN(parseFloat(difficulty)) || !isFinite(difficulty)) return 0;
+			if (typeof precision === 'undefined') precision = 2;
+			var units = ['', 'k', 'M', 'G', 'T', 'P'],
+				number = Math.floor(Math.log(difficulty) / Math.log(1000));
+			if (units[number] === undefined || units[number] === null) {
+				return 0
+			}
+			return (difficulty / Math.pow(1000, Math.floor(number))).toFixed(precision) + ' ' + units[number];
+		}
+
+		function formatBlockLink(hash) {
+			return '<a href="' + getBlockchainUrl(hash) + '">' + hash + '</a>';
+		}
+
+		function getReadableCoins(coins, digits, withoutSymbol) {
+			var amount = (parseInt(coins || 0) / coinUnits).toFixed(digits || coinUnits.toString().length - 1);
+			return amount + (withoutSymbol ? '' : (' ' + symbol));
+		}
+
+		function formatDate(time) {
+			if (!time) return '';
+			return new Date(parseInt(time) * 1000).toLocaleString();
+		}
+
+		function formatBytes(a, b) {
+			if (0 == a) return "0 Bytes";
+			var c = 1024,
+				d = b || 2,
+				e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+				f = Math.floor(Math.log(a) / Math.log(c));
+			return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f]
+		}
+
+		function formatPaymentLink(hash) {
+			return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
+		}
+
+		function pulseLiveUpdate() {
+			var stats_update = document.getElementById('stats_updated');
+			stats_update.style.transition = 'opacity 100ms ease-out';
+			stats_update.style.opacity = 1;
+			setTimeout(function () {
+				stats_update.style.transition = 'opacity 7000ms linear';
+				stats_update.style.opacity = 0;
+			}, 500);
+		}
+
+		window.onhashchange = function () {
+			routePage();
+		};
+
+
+		function fetchLiveStats() {
+			$.ajax({
+				url: api + '/getinfo',
+				dataType: 'json',
+				type: 'GET',
+				cache: 'false'
+			}).done(function (data, success) {
+				pulseLiveUpdate();
+				lastStats = data;
+				nodeStatus = success;
+				currentPage.update();
+				nodeInfo();
+			}).always(function () {
+				setTimeout(function () {
+					fetchLiveStats();
+				}, refreshDelay);
+			});
+		}
+
+		function floatToString(float) {
+			return float.toFixed(6).replace(/[0\.]+$/, '');
+		}
+
+		function nodeInfo() {
+			if (nodeStatus) {
+				$('#node_connection').html('Online').addClass('text-success').removeClass('text-danger');
+				$('#node_height').html(parseInt(lastStats['height']));
+				$('#node_block').html(parseInt(lastStats['last_known_block_index']));
+				$('#node_diff').html(parseInt(lastStats['difficulty']));
+				$('#node_alt').html(parseInt(lastStats['alt_blocks_count']));
+				$('#node_rpc').html(parseInt(lastStats['rpc_connections_count']));
+				$('#node_inc').html(parseInt(lastStats['incoming_connections_count']));
+				$('#node_out').html(parseInt(lastStats['outgoing_connections_count']));
+				$('#node_white').html(parseInt(lastStats['white_peerlist_size']));
+				$('#node_grey').html(parseInt(lastStats['grey_peerlist_size']));
+				if (lastStats['version'] !== 'undefined') {
+					$('#node_ver').html(lastStats['version']);
+				}
+			} else {
+				$('#node_connection').html('Offline').addClass('text-danger').removeClass('text-success');
+			}
+		}
+
+		var xhrPageLoading;
+
+		function routePage(loadedCallback) {
+
+			if (currentPage) currentPage.destroy();
+			$('#page').html('');
+			$('#loading').show();
+
+			if (xhrPageLoading)
+				xhrPageLoading.abort();
+
+			$('.hot_link').parent().removeClass('active');
+			var $link = $('a.hot_link[href="' + (window.location.hash || '#') + '"]');
+
+			$link.parent().addClass('active');
+			var page = $link.data('page');
+
+			xhrPageLoading = $.ajax({
+				url: 'pages/' + page,
+				cache: false,
+				success: function (data) {
+					$('#loading').hide();
+					$('#page').show().html(data);
+					currentPage.init();
+					//currentPage.update();
+					if (loadedCallback) loadedCallback();
+				}
+			});
+		}
+
+		function getBlockchainUrl(id) {
+			return blockchainExplorer.replace('{id}', id);
+		}
+
+		function getinfo() {
+			$.ajax({
+					url: api + '/getinfo',
+					timeout: 1500 //in milliseconds
+				})
+				.done(function (data) {
+					try {
+						lastStats = JSON.parse(data);
+					} catch (e) {
+						lastStats = data;
+					}
+					routePage(fetchLiveStats);
+				})
+				.fail(function () {
+					apiList.push(api);
+					api = apiList.shift();
+					getinfo();
+				});
+		}
+
+		$(function () {
 			getinfo();
 		});
-	}
-	
-    $(function(){
-		getinfo();
-    });
-	
-    // Blockexplorer functions
-    urlParam = function(name){
-        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        if (results==null){
-           return null;
-        }
-        else{
-           return results[1] || 0;
-        }
-    }
 
-	$(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-	
-	function hex2a(hexx) {
-		var hex = hexx.toString();//force conversion
-		var str = '';
-		for (var i = 0; i < hex.length; i += 2)
-			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-		return str;
-	}
-	
-	function toHexString(byteArray) {
-		return byteArray.reduce((output, elem) => 
-		(output + ('0' + elem.toString(16)).slice(-2)),'');
-	}
+		// Blockexplorer functions
+		urlParam = function (name) {
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			if (results == null) {
+				return null;
+			} else {
+				return results[1] || 0;
+			}
+		}
 
-</script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
 
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Menu</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand " href="./"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong></a>
-			<div id="stats_updated"><i class="fa fa-bolt"></i></div>
-        </div>
-		
-        <div class="collapse navbar-collapse">
-		 
-            <ul class="nav navbar-nav navbar-left explorer_menu">
+		function hex2a(hexx) {
+			var hex = hexx.toString(); //force conversion
+			var str = '';
+			for (var i = 0; i < hex.length; i += 2)
+				str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+			return str;
+		}
 
-			    <li><a class="hot_link menu" data-page="home.html" href="#">
-                    <i class="fa fa-cubes" aria-hidden="true"></i> Explorer
-                </a></li>
-				
-				<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="fa fa-eye" aria-hidden="true"></i> Monitor <span class="caret"></span></a>
-					<ul id="monitor-menu" class="dropdown-menu">
-					
-						<li><a class="hot_link menu" data-page="pools.html" href="#pools">
-							<i class="fa fa-gavel" aria-hidden="true"></i> Pools
+		function toHexString(byteArray) {
+			return byteArray.reduce((output, elem) =>
+				(output + ('0' + elem.toString(16)).slice(-2)), '');
+		}
+	</script>
+
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Menu</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand " href="./"><span id="coinIcon">&#1180;</span> <strong>Karbo</strong></a>
+				<div id="stats_updated"><i class="fa fa-bolt"></i></div>
+			</div>
+
+			<div class="collapse navbar-collapse">
+
+				<ul class="nav navbar-nav navbar-left explorer_menu">
+
+					<li><a class="hot_link menu" data-page="home.html" href="#">
+							<i class="fa fa-cubes" aria-hidden="true"></i> Explorer
 						</a></li>
-						
-						<li><a class="hot_link menu" data-page="network.html" href="#network">
-							<i class="fa fa-thermometer-quarter" aria-hidden="true"></i> Network
+
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class="fa fa-eye" aria-hidden="true"></i> Monitor <span class="caret"></span></a>
+						<ul id="monitor-menu" class="dropdown-menu">
+
+							<li><a class="hot_link menu" data-page="pools.html" href="#pools">
+									<i class="fa fa-gavel" aria-hidden="true"></i> Pools
+								</a></li>
+
+							<li><a class="hot_link menu" data-page="network.html" href="#network">
+									<i class="fa fa-thermometer-quarter" aria-hidden="true"></i> Network
+								</a></li>
+
+						</ul>
+					</li>
+
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class="fa fa-wrench" aria-hidden="true"></i> Tools <span class="caret"></span></a>
+						<ul id="tools-menu" class="dropdown-menu">
+							<li><a class="hot_link menu" data-page="check_funds.html" href="#check_funds">
+									Check balance proof
+								</a></li>
+							<li><a class="hot_link menu" data-page="check_payment.html" href="#check_payment">
+									Check payment
+								</a></li>
+							<li><a class="hot_link menu" data-page="verify_message.html" href="#verify_message">
+									Verify message
+								</a></li>
+							<li><a class="hot_link menu" data-page="validate_address.html" href="#validate_address">
+									Validate address
+								</a></li>
+							<li><a class="hot_link menu" data-page="paper_wallet.html" href="#paperwallet">
+									Paper Wallet
+								</a></li>
+							<li><a class="hot_link menu" data-page="api.html" href="#api">
+									API
+								</a></li>
+						</ul>
+					</li>
+
+					<li>
+						<!-- Rounded switch -->
+						<label class="switch">
+							<input class="switch-checkbox" type="checkbox" />
+							<span class="switch-slider round"></span>
+						</label>
+					</li>
+
+					<!-- //-->
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_block.html"
+							href="#blockchain_block"><i class="fa fa-cubes"></i> Block
 						</a></li>
-				
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html"
+							href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
+						</a></li>
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html"
+							href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
+						</a></li>
+
+					<!-- // Alt. links -->
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_block.html" href="#block"><i
+								class="fa fa-cubes"></i> Block
+						</a></li>
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_transaction.html"
+							href="#transaction"><i class="fa fa-cubes"></i> Transaction
+						</a></li>
+
+					<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html"
+							href="#payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
+						</a></li>
+
+					<!-- //-->
+				</ul>
+
+
+				<div class="nav col-md-6 navbar-right explorer-search">
+					<div class="input-group">
+						<input class="form-control"
+							placeholder="Search by block height / hash, transaction hash, payment id" id="txt_search">
+						<span class="input-group-btn"><button class="btn btn-default" type="button" id="btn_search">
+								<span><i class="fa fa-search"></i> Search</span>
+							</button></span>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		$('#btn_search').click(function (e) {
+
+			var text = document.getElementById('txt_search').value;
+
+			function GetSearchBlockbyHeight() {
+
+				var block, xhrGetSearchBlockbyHeight;
+				if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
+
+				xhrGetSearchBlockbyHeight = $.ajax({
+					url: api + '/json_rpc',
+					method: "POST",
+					data: JSON.stringify({
+						jsonrpc: "2.0",
+						id: "blockbyheight",
+						method: "getblockheaderbyheight",
+						params: {
+							height: parseInt(text)
+						}
+					}),
+					dataType: 'json',
+					cache: 'false',
+					success: function (data) {
+						if (data.result) {
+							block = data.result.block_header;
+							window.location.href = getBlockchainUrl(block.hash);
+						} else if (data.error) {
+							wrongSearchAlert();
+						}
+					}
+				});
+			}
+
+			function GetSearchBlock() {
+				var block, xhrGetSearchBlock;
+				if (xhrGetSearchBlock) xhrGetSearchBlock.abort();
+				xhrGetSearchBlock = $.ajax({
+					url: api + '/json_rpc',
+					method: "POST",
+					data: JSON.stringify({
+						jsonrpc: "2.0",
+						id: "GetSearchBlock",
+						method: "getblockbyhash",
+						params: {
+							hash: text
+						}
+					}),
+					dataType: 'json',
+					cache: 'false',
+					success: function (data) {
+						if (data.result) {
+							block = data.result.block;
+							sessionStorage.setItem('searchBlock', JSON.stringify(block));
+							window.location.href = getBlockchainUrl(block.hash);
+						} else if (data.error) {
+							$.ajax({
+								url: api + '/json_rpc',
+								method: "POST",
+								async: false,
+								data: JSON.stringify({
+									jsonrpc: "2.0",
+									id: "GetSearchTransaction",
+									method: "gettransaction",
+									params: {
+										hash: text
+									}
+								}),
+								dataType: 'json',
+								cache: false,
+								success: function (data) {
+									if (data.result) {
+										sessionStorage.setItem('searchTransaction', JSON
+											.stringify(data.result));
+										window.location.href = transactionExplorer.replace(
+											'{id}', text);
+									} else if (data.error) {
+										xhrGetTsx = $.ajax({
+											url: api + '/json_rpc',
+											method: "POST",
+											data: JSON.stringify({
+												jsonrpc: "2.0",
+												id: "GetSearchTransactionByPaymentId",
+												method: "gettransactionsbypaymentid",
+												params: {
+													payment_id: text
+												}
+											}),
+											dataType: 'json',
+											cache: 'false',
+											success: function (data) {
+												if (data.result) {
+													txsByPaymentId = data.result
+														.transactions;
+													sessionStorage.setItem(
+														'txsByPaymentId', JSON
+														.stringify(
+															txsByPaymentId));
+													window.location.href =
+														paymentIdExplorer.replace(
+															'{id}', text);
+												} else if (data.error) {
+													$('#page').after(
+														'<div class="alert alert-warning alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">' +
+														'<button type="button" class="close" ' +
+														'data-dismiss="alert" aria-hidden="true">' +
+														'&times;' +
+														'</button>' +
+														'We could not find anything.' +
+														'</div>');
+												}
+											}
+										});
+
+									}
+								}
+							});
+						}
+					}
+				});
+			}
+
+			if (text.length < 64) {
+				GetSearchBlockbyHeight();
+			} else if (text.length == 64) {
+				GetSearchBlock();
+			} else {
+				wrongSearchAlert();
+			}
+
+			e.preventDefault();
+
+		});
+
+		function wrongSearchAlert() {
+			$('#page').after(
+				'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">' +
+				'<button type="button" class="close" ' +
+				'data-dismiss="alert" aria-hidden="true">' +
+				'&times;' +
+				'</button>' +
+				'<strong>Wrong search query!</strong><br /> Please enter block height or hash, transaction hash, or payment id.' +
+				'</div>');
+		}
+
+		$('#txt_search').keyup(function (e) {
+			if (e.keyCode === 13)
+				$('#btn_search').click();
+		});
+	</script>
+
+	<div id="content">
+		<div class="container">
+
+			<div id="page"></div>
+
+			<p id="loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
+
+		</div>
+	</div>
+
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-6">
+					<p>
+						<small>
+							&copy; 2017-2019 <strong>Karbo</strong>
+						</small>
+					</p>
+
+					<ul>
+						<li><a href="http://karbo.io/">karbo.io</li>
+						<li><a href="http://karbo.org/">karbo.org</li>
 					</ul>
-				</li>
-				
-				<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="fa fa-wrench" aria-hidden="true"></i> Tools <span class="caret"></span></a>
-					<ul id="tools-menu" class="dropdown-menu">
-						<li><a class="hot_link menu" data-page="check_funds.html" href="#check_funds">
-							Check balance proof
-						</a></li>
-						<li><a class="hot_link menu" data-page="check_payment2.html" href="#check_payment">
-							Check payment
-						</a></li>
-						<li><a class="hot_link menu" data-page="verify_message.html" href="#verify_message">
-							Verify message
-						</a></li>
-						<li><a class="hot_link menu" data-page="validate_address.html" href="#validate_address">
-							Validate address
-						</a></li>
-						<li><a class="hot_link menu" data-page="paper_wallet.html" href="#paperwallet">
-							Paper Wallet
-						</a></li>
-						<li><a class="hot_link menu" data-page="api.html" href="#api">
-							API
-						</a></li>
+
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-6">
+					<p>
+						<small>
+							<!-- This copyright should be left intact -->
+
+							Powered by <a target="_blank"
+								href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i
+									class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
+							v. 1.1.8.<br />
+							<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
+								open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
+						</small>
+					</p>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-6">
+
+					<strong class="text-info">Node info</strong>
+
+					<ul class="text-info">
+						<li>Status: <span id="node_connection" class="text-danger">Offline</span></li>
+						<li>Version: <span id="node_ver">...</span></li>
+						<li>Height: <span id="node_height">...</span></li>
+						<li>Last block: <span id="node_block">...</span></li>
+						<li>Difficulty: <span id="node_diff">...</span></li>
+						<li>Alt. blocks: <span id="node_alt">...</span></li>
+						<li>RPC connections: <span id="node_rpc">...</span></li>
+						<li>Incoming P2P connections: <span id="node_inc">...</span></li>
+						<li>Outgoing P2P connects: <span id="node_out">...</span></li>
+						<li>White peers: <span id="node_white">...</span></li>
+						<li>Grey peers: <span id="node_grey">...</span></li>
 					</ul>
-				</li>
-				
-				<li>
-					<!-- Rounded switch -->		
-                    <label class="switch">
-                        <input class="switch-checkbox" type="checkbox" />
-                        <span class="switch-slider round"></span>
-                    </label>
-                </li>
-				
-	<!-- //-->
 
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_block2.html" href="#blockchain_block"><i class="fa fa-cubes"></i> Block
-                </a></li>
-
-                <li style="display:none;"><a class="hot_link" data-page="blockchain_transaction2.html" href="#blockchain_transaction"><i class="fa fa-cubes"></i> Transaction
-                </a></li>
-				
-				<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html" href="#blockchain_payment_id"><i class="fa fa-cubes"></i> Transactions by Payment ID
-                </a></li>
-
-<!-- //-->
-            </ul>
-            
-					
-			<div class="nav col-md-6 navbar-right explorer-search">
-				<div class="input-group">
-					<input class="form-control" placeholder="Search by block height / hash, transaction hash, payment id" id="txt_search">
-					<span class="input-group-btn"><button class="btn btn-default" type="button" id="btn_search">
-						<span><i class="fa fa-search"></i> Search</span>
-					</button></span>
 				</div>
 			</div>
-		  
-		  
-		  
 		</div>
-	  </div>
-</div>
-
-	
-<script>
-$('#btn_search').click(function(e) {
-
-var text = document.getElementById('txt_search').value;
-
-function GetSearchBlockbyHeight(){
-
-	var block, xhrGetSearchBlockbyHeight;
-    if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
-	  
-		xhrGetSearchBlockbyHeight = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "blockbyheight",
-                method:"getblockheaderbyheight",
-                params: {
-                   height: parseInt(text)
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				if(data.result){
-					block = data.result.block_header;
-					window.location.href = getBlockchainUrl(block.hash);
-				} else if(data.error) {
-					wrongSearchAlert();
-				}
-            }
-        });
-}
-
-function GetSearchBlock(){
-var block, xhrGetSearchBlock;
-	if (xhrGetSearchBlock) xhrGetSearchBlock.abort();
-		xhrGetSearchBlock = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "GetSearchBlock",
-                method:"getblockbyhash",
-                params: {
-                   hash: text
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-			success: function(data){
-				if(data.result){
-					block = data.result.block;
-					sessionStorage.setItem('searchBlock', JSON.stringify(block));
-					window.location.href = getBlockchainUrl(block.hash);
-				} else if(data.error) {
-					$.ajax({
-						url: api + '/json_rpc',
-						method: "POST",
-						async: false,
-						data: JSON.stringify({
-							jsonrpc:"2.0",
-							id: "GetSearchTransaction",
-							method:"gettransaction",
-							params: {
-								hash: text
-							}
-						}),
-						dataType: 'json',
-						cache: false,
-						success: function(data){
-							  if(data.result){
-								sessionStorage.setItem('searchTransaction', JSON.stringify(data.result));
-								window.location.href = transactionExplorer.replace('{id}', text);
-							  } else if(data.error) {
-								xhrGetTsx =  $.ajax({
-									url: api + '/json_rpc',
-									method: "POST",
-									data: JSON.stringify({
-										jsonrpc:"2.0",
-										id: "GetSearchTransactionByPaymentId",
-										method:"gettransactionsbypaymentid",
-										params: {
-											payment_id: text
-										}
-									}),
-									dataType: 'json',
-									cache: 'false',
-									success: function(data){
-										if(data.result){
-											txsByPaymentId = data.result.transactions;
-											sessionStorage.setItem('txsByPaymentId', JSON.stringify(txsByPaymentId));
-											window.location.href = paymentIdExplorer.replace('{id}', text);
-										} else if(data.error) {
-											$('#page').after(
-												'<div class="alert alert-warning alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
-													'<button type="button" class="close" ' + 
-															'data-dismiss="alert" aria-hidden="true">' + 
-														'&times;' + 
-													'</button>' + 
-													'We could not find anything.' + 
-												 '</div>');
-										}
-									}
-								});
-							  
-							  }
-						}
-					});
-				}
-			}	
-		});
-}
-
-if ( text.length < 64 ) {
-	GetSearchBlockbyHeight();
-} else if ( text.length == 64 ) {
-	GetSearchBlock();
-} else {
-	wrongSearchAlert();
-}
-
-e.preventDefault();
-
-});
-
-function wrongSearchAlert() {
-	$('#page').after(
-		'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">'+
-		'<button type="button" class="close" ' + 
-		'data-dismiss="alert" aria-hidden="true">' + 
-		'&times;' + 
-		'</button>' + 
-		'<strong>Wrong search query!</strong><br /> Please enter block height or hash, transaction hash, or payment id.' + 
-		'</div>');
-}
-
-$('#txt_search').keyup(function(e){
-        if(e.keyCode === 13)
-            $('#btn_search').click();
-});
-</script>
-
-<div id="content">
-	<div class="container">
-
-		<div id="page"></div>
-
-		<p id="loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
-
-	</div>
-</div>
-
-<footer>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<p>
-					<small>
-						&copy; 2017-2019 <strong>Karbo</strong>
-					</small>
-				</p>
-				
-				<ul>
-					<li><a href="http://karbo.io/">karbo.io</li>
-					<li><a href="http://karbo.org/">karbo.org</li>
-				</ul>
-				
-			</div>
-			<div class="col-lg-4 col-md-4 col-sm-6">
-				<p>
-					<small>
-					<!-- This copyright should be left intact -->
-				
-					Powered by <a target="_blank" href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer"><i class="fa fa-github"></i> Karbowanec Blockchain Explorer</a>
-					v. 1.1.8.<br />
-					<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
-					open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
-					</small>
-				</p>
-			</div>
-			<div class="col-lg-4 col-md-4 col-sm-6">
-			
-				<strong class="text-info">Node info</strong>
-				
-				<ul class="text-info">
-					<li>Status: <span id="node_connection" class="text-danger">Offline</span></li>
-					<li>Version: <span id="node_ver">...</span></li>
-					<li>Height: <span id="node_height">...</span></li>
-					<li>Last block: <span id="node_block">...</span></li>
-					<li>Difficulty: <span id="node_diff">...</span></li>
-					<li>Alt. blocks: <span id="node_alt">...</span></li>
-					<li>RPC connections: <span id="node_rpc">...</span></li>
-					<li>Incoming P2P connections: <span id="node_inc">...</span></li>
-					<li>Outgoing P2P connects: <span id="node_out">...</span></li>
-					<li>White peers: <span id="node_white">...</span></li>
-					<li>Grey peers: <span id="node_grey">...</span></li>
-				</ul>
-
-			</div>
-		</div>
-    </div>
-</footer>
-<a href="#" class="scrollup"><i class="fa fa-chevron-circle-up"></i></a>
+	</footer>
+	<a href="#" class="scrollup"><i class="fa fa-chevron-circle-up"></i></a>
 	<script type="text/javascript">
-			jQuery(function($) { $(document).ready(function() {
-				$(window).scroll(function(){
+		jQuery(function ($) {
+			$(document).ready(function () {
+				$(window).scroll(function () {
 					if ($(this).scrollTop() > 500) {
 						$('.scrollup').fadeIn();
 					} else {
 						$('.scrollup').fadeOut();
 					}
-				}); 
-		
-				$('.scrollup').click(function(){
-					$("html, body").animate({ scrollTop: 0 }, 600);
+				});
+
+				$('.scrollup').click(function () {
+					$("html, body").animate({
+						scrollTop: 0
+					}, 600);
 					return false;
 				});
 
-				$('.scrollup').css('opacity','0.3');
-		 
-				$('.scrollup').hover(function(){
-					$(this).stop().animate({opacity: 0.9}, 400);
-				 }, function(){
-					$(this).stop().animate({opacity: 0.3}, 400);
-				});  
-					
-			});});
-	</script>	
+				$('.scrollup').css('opacity', '0.3');
+
+				$('.scrollup').hover(function () {
+					$(this).stop().animate({
+						opacity: 0.9
+					}, 400);
+				}, function () {
+					$(this).stop().animate({
+						opacity: 0.3
+					}, 400);
+				});
+
+			});
+		});
+	</script>
 </body>
+
 </html>

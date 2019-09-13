@@ -2,76 +2,122 @@
 	#mem_pool_rows tr td:first-child {
 		text-align: left;
 	}
+
 	.value {
 		color: #2780E3;
 		font-weight: 600;
 		display: block;
 		float: right;
 	}
-	
+
 	#mempool_wrapper {
-	  overflow-y: scroll;
-	  max-height: 400px;
-	  width: 100% !important;
+		overflow-y: scroll;
+		max-height: 400px;
+		width: 100% !important;
 	}
 </style>
 
 <div class="row">
 	<div class="col-sm-12 col-md-12">
 		<div class="panel panel-default" id="network-stats">
-		  <div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Stats</h3>
-		  </div>
-		  <div class="panel-body">
-			<div class="row">
-
-				<div class="col-sm-6 col-md-3">
-					<ul class="list-group" style="margin-bottom: 0px;">
-					
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Blockchain height, total amount of blocks starting from zero."><i class="fa fa-list-ol"></i> Height: <span id="networkHeight" class="value"></span></li>
-				
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks)."><i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions" class="value"></span></li>
-						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Current Base Reward (for last mined block)."><i class="fa fa-certificate"></i> Reward: <span id="currentReward" class="value"></span></li>
-						
-					</ul>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<ul class="list-group" style="margin-bottom: 0px;">
-					
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i> Supply: <span id="totalCoins" class="value"></span></li>
-						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Percent of already emitted coins related to Initial supply before Tail emission."><i class="fa fa-university" aria-hidden="true"></i> Emission: <span id="emissionPercent" class="value"></span></li>
-						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Minimum transaction fee."><i class="fa fa-percent" aria-hidden="true"></i> Min. fee: <span id="minimumFee" class="value"></span></li>
-						
-					</ul>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<ul class="list-group" style="margin-bottom: 0px;">
-					
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval."><i class="fa fa-unlock-alt"></i> Next Difficulty: <span id="networkDifficulty" class="value"></span></li>
-				
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average difficulty by last 30 blocks."><i class="fa fa-lock"></i> Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
-					
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Current estimated network hash rate. Calculated by current difficulty."><i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate" class="value"></span></li>
-						
-					</ul>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<ul class="list-group" style="margin-bottom: 0px;">
-						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average estimated network hash rate. Calculated by average difficulty."><i class="fa fa-tachometer"></i> Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li>
-
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Estimated block solve time at estimated network speed and current difficulty."><i class="fa fa-clock-o" aria-hidden="true"></i> Est. solve time: <span id="blockSolveTime" class="value"></span></li>
-						
-						<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip" data-placement="top" data-original-title="Average solve time for the recent blocks listed below."><i class="fa fa-clock-o" aria-hidden="true"></i> Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
-					
-					</ul>
-				</div>
-
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i> Stats</h3>
 			</div>
-		  </div>
+			<div class="panel-body">
+				<div class="row">
+
+					<div class="col-sm-6 col-md-3">
+						<ul class="list-group" style="margin-bottom: 0px;">
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Blockchain height, total amount of blocks starting from zero."><i
+									class="fa fa-list-ol"></i> Height: <span id="networkHeight" class="value"></span>
+							</li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="The number of transactions in the network (excluding coinbase, i.e. reward for mined blocks).">
+								<i class="fa fa fa-exchange"></i> Transactions: <span id="networkTransactions"
+									class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Current Base Reward (for last mined block)."><i
+									class="fa fa-certificate"></i> Reward: <span id="currentReward"
+									class="value"></span></li>
+
+						</ul>
+					</div>
+					<div class="col-sm-6 col-md-3">
+						<ul class="list-group" style="margin-bottom: 0px;">
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Total Karbo supply in circulation."><i class="fa fa-money"></i>
+								Supply: <span id="totalCoins" class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Percent of already emitted coins related to Initial supply before Tail emission.">
+								<i class="fa fa-university" aria-hidden="true"></i> Emission: <span id="emissionPercent"
+									class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Minimum transaction fee."><i class="fa fa-percent"
+									aria-hidden="true"></i> Min. fee: <span id="minimumFee" class="value"></span></li>
+
+						</ul>
+					</div>
+					<div class="col-sm-6 col-md-3">
+						<ul class="list-group" style="margin-bottom: 0px;">
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval.">
+								<i class="fa fa-unlock-alt"></i> Next Difficulty: <span id="networkDifficulty"
+									class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Average difficulty by last 30 blocks."><i class="fa fa-lock"></i>
+								Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Current estimated network hash rate. Calculated by current difficulty.">
+								<i class="fa fa-tachometer"></i> Hash Rate: <span id="networkHashrate"
+									class="value"></span></li>
+
+						</ul>
+					</div>
+					<div class="col-sm-6 col-md-3">
+						<ul class="list-group" style="margin-bottom: 0px;">
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Average estimated network hash rate. Calculated by average difficulty.">
+								<i class="fa fa-tachometer"></i> Avg. Hash Rate: <span id="avgHashrate"
+									class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Estimated block solve time at estimated network speed and current difficulty.">
+								<i class="fa fa-clock-o" aria-hidden="true"></i> Est. solve time: <span
+									id="blockSolveTime" class="value"></span></li>
+
+							<li class="list-group-item d-flex justify-content-between align-items-center"
+								data-toggle="tooltip" data-placement="top"
+								data-original-title="Average solve time for the recent blocks listed below."><i
+									class="fa fa-clock-o" aria-hidden="true"></i> Avg. solve time: <span
+									id="avgSolveTime" class="value"></span></li>
+
+						</ul>
+					</div>
+
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -79,28 +125,32 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
-		  <div class="panel-heading">
-		  
-			<h3 class="panel-title"><i class="fa fa-area-chart" aria-hidden="true"></i> Charts
-		  
-			<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Difficulty based on last blocks from the list below. Block size, transactions count. Load more blocks to enlarge chart range."><i class="fa fa-question-circle"></i></span>
-			</h3>
-			
-		  </div>
-		  <div class="panel-body chart-wrapper">
-			<canvas id="difficultyChart" height="210"></canvas>
-		  </div>
+			<div class="panel-heading">
+
+				<h3 class="panel-title"><i class="fa fa-area-chart" aria-hidden="true"></i> Charts
+
+					<span class="text-default" data-toggle="tooltip" data-placement="right"
+						data-original-title="Difficulty based on last blocks from the list below. Block size, transactions count. Load more blocks to enlarge chart range."><i
+							class="fa fa-question-circle"></i></span>
+				</h3>
+
+			</div>
+			<div class="panel-body chart-wrapper">
+				<canvas id="difficultyChart" height="210"></canvas>
+			</div>
 		</div>
 	</div>
 </div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-  
-		<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction pool 
-		<span class="text-default" data-toggle="tooltip" data-placement="right" data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i class="fa fa-question-circle"></i></span>
+
+		<h3 class="panel-title"><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction pool
+			<span class="text-default" data-toggle="tooltip" data-placement="right"
+				data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i
+					class="fa fa-question-circle"></i></span>
 		</h3>
-	
+
 	</div>
 	<div class="panel-body">
 		<div id="empty_mem_pool">
@@ -108,66 +158,71 @@
 		</div>
 		<div id="mem_pool" style="display: none;">
 			<div class="row">
-			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-				<div class="panel panel-default tab-panel">
-				  <div class="panel-body">
-					
-					  <ul class="nav nav-pills nav-stacked">
-						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Count: <span id="mempool_count" class="value"></span></li>
-					  </ul>
-					
-				  </div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+					<div class="panel panel-default tab-panel">
+						<div class="panel-body">
+
+							<ul class="nav nav-pills nav-stacked">
+								<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Count: <span
+										id="mempool_count" class="value"></span></li>
+							</ul>
+
+						</div>
+					</div>
 				</div>
-			  </div>
-			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-				<div class="panel panel-default tab-panel">
-				  <div class="panel-body">
-					
-					  <ul class="nav nav-pills nav-stacked">
-						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Amount: <span id="mempool_amount" class="value"></span></li>
-					  </ul>
-					
-				  </div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+					<div class="panel panel-default tab-panel">
+						<div class="panel-body">
+
+							<ul class="nav nav-pills nav-stacked">
+								<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Amount:
+									<span id="mempool_amount" class="value"></span></li>
+							</ul>
+
+						</div>
+					</div>
 				</div>
-			  </div>
-			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-				<div class="panel panel-default tab-panel">
-				  <div class="panel-body">
-					
-					  <ul class="nav nav-pills nav-stacked">
-						<li href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Fees: <span id="mempool_fees" class="value"></span></a></li>
-					  </ul>
-					
-				  </div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+					<div class="panel panel-default tab-panel">
+						<div class="panel-body">
+
+							<ul class="nav nav-pills nav-stacked">
+								<li href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom"
+									data-original-title="">Total Fees: <span id="mempool_fees" class="value"></span></a>
+								</li>
+							</ul>
+
+						</div>
+					</div>
 				</div>
-			  </div>
-			  <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-				<div class="panel panel-default tab-panel">
-				  <div class="panel-body">
-					
-					  <ul class="nav nav-pills nav-stacked">
-						<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Size: <span id="mempool_sizes" class="value"></span></li>
-					  </ul>
-				   
-				  </div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+					<div class="panel panel-default tab-panel">
+						<div class="panel-body">
+
+							<ul class="nav nav-pills nav-stacked">
+								<li data-toggle="tooltip" data-placement="bottom" data-original-title="">Total Size:
+									<span id="mempool_sizes" class="value"></span></li>
+							</ul>
+
+						</div>
+					</div>
 				</div>
-			  </div>
 			</div>
 
 			<div id="mempool_wrapper">
 				<div class="table-responsive">
 					<table class="table table-hover" id="mem_pool_table">
 						<thead>
-						<tr>
-							<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
-							<th width="10%"><i class="fa fa-money"></i> Amount</th>
-							<th width="10%"><i class="fa fa-tag"></i> Fee</th>
-							<th width="10%"><i class="fa fa-archive"></i> Size</th>
-							<th width="40%"><i class="fa fa-paw"></i> Hash</th>
-						</tr>
+							<tr>
+								<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
+								<th width="10%"><i class="fa fa-money"></i> Amount</th>
+								<th width="10%"><i class="fa fa-tag"></i> Fee</th>
+								<th width="10%"><i class="fa fa-archive"></i> Size</th>
+								<th width="40%"><i class="fa fa-paw"></i> Hash</th>
+							</tr>
 						</thead>
 						<tbody id="mem_pool_rows">
-							
+
 						</tbody>
 					</table>
 				</div>
@@ -176,101 +231,106 @@
 	</div>
 </div>
 
-
 <div class="panel panel-default">
-  <div class="panel-heading">
-	<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Recent blocks</h3>
-  </div>
-  <div class="panel-body">
-	<div class="row">
-		<div class="col-sm-8 col-md-8 col-lg-6">
-			<div class="input-group">
-				<a id="first-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-step-backward" aria-hidden="true"></i> First</a>
-				<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-backward" aria-hidden="true"></i> Older</a>
-				<span class="input-group-addon">Height:</span>
-				<input id="goto-height" type="text" class="form-control" placeholder="Height">
-				<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Go</a>
-				<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i class="fa fa-forward" aria-hidden="true"></i></a>
-				<a id="last-page" href="#" class="btn btn-default input-group-addon disabled">Last <i class="fa fa-step-forward" aria-hidden="true"></i></a>
-			</div>
-		</div>
-		
-		<div class="col-sm-4 col-md-4 col-lg-6">
-			<div class="input-group">
-				<div class="input-group-btn">
-					<a href="#" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="true">
-						Blocks per page: <span id="count_val">10</span>
-						<span class="caret"></span>
-					</a>
-					<ul id="select_blocks_count" class="dropdown-menu dropdown-menu-right">
-						<li><a href="#">10</a></li>
-						<li><a href="#">20</a></li>
-						<li><a href="#">50</a></li>
-						<li><a href="#">100</a></li>
-					</ul>
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-chain fa-fw" aria-hidden="true"></i> Recent blocks</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-sm-8 col-md-8 col-lg-6">
+				<div class="input-group">
+					<a id="first-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-step-backward"
+							aria-hidden="true"></i> First</a>
+					<a id="prev-page" href="#" class="btn btn-default input-group-addon"><i class="fa fa-backward"
+							aria-hidden="true"></i> Older</a>
+					<span class="input-group-addon">Height:</span>
+					<input id="goto-height" type="text" class="form-control" placeholder="Height">
+					<a id="goto-height-go" href="#" class="btn btn-default input-group-addon">Go</a>
+					<a id="next-page" href="#" class="btn btn-default input-group-addon disabled">Newer <i
+							class="fa fa-forward" aria-hidden="true"></i></a>
+					<a id="last-page" href="#" class="btn btn-default input-group-addon disabled">Last <i
+							class="fa fa-step-forward" aria-hidden="true"></i></a>
 				</div>
 			</div>
+
+			<div class="col-sm-4 col-md-4 col-lg-6">
+				<div class="input-group">
+					<div class="input-group-btn">
+						<a href="#" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"
+							aria-expanded="true">
+							Blocks per page: <span id="count_val">10</span>
+							<span class="caret"></span>
+						</a>
+						<ul id="select_blocks_count" class="dropdown-menu dropdown-menu-right">
+							<li><a href="#">10</a></li>
+							<li><a href="#">20</a></li>
+							<li><a href="#">50</a></li>
+							<li><a href="#">100</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th><i class="fa fa-bars"></i> Height</th>
+						<th><i class="fa fa-clock-o"></i> Date &amp; time</th>
+						<th><i class="fa fa-archive"></i> Size</th>
+						<th><i class="fa fa-paw"></i> Block Hash</th>
+						<th><i class="fa fa-unlock-alt"></i> Difficulty</th>
+						<th><i class="fa fa fa-exchange"></i> Txs</th>
+					</tr>
+				</thead>
+				<tbody id="blocks_rows">
+
+				</tbody>
+			</table>
 		</div>
 
+		<p class="text-center">
+			<button type="button" class="btn btn-default" id="loadMoreBlocks">Load More</button>
+		</p>
 	</div>
-	<div class="table-responsive">
-		<table class="table table-hover">
-			<thead>
-			<tr>
-				<th><i class="fa fa-bars"></i> Height</th>
-				<th><i class="fa fa-clock-o"></i> Date &amp; time</th>
-				<th><i class="fa fa-archive"></i> Size</th>
-				<th><i class="fa fa-paw"></i> Block Hash</th>
-				<th><i class="fa fa-unlock-alt"></i> Difficulty</th>
-				<th><i class="fa fa fa-exchange"></i> Txs</th>
-			</tr>
-			</thead>
-			<tbody id="blocks_rows">
-
-			</tbody>
-		</table>
-	</div>
-
-	<p class="text-center">
-		<button type="button" class="btn btn-default" id="loadMoreBlocks">Load More</button>
-	</p>
-	
-  </div>
 </div>
 <script>
-var block,
-	Difficulties = [],
-	MinFees = [],
-	Blocks = [],
-	Rewards = [],
-	Txses = [],
-	Sizes = [],
-	Timestamps = [],
-	time_stamps = [],
-	Solvetimes = [],
-	diffChart,
-	refresh = true;
+	var block,
+		Difficulties = [],
+		MinFees = [],
+		Blocks = [],
+		Rewards = [],
+		Txses = [],
+		Sizes = [],
+		Timestamps = [],
+		time_stamps = [],
+		Solvetimes = [],
+		diffChart,
+		refresh = true;
 
-var coinsInCirculation;
-var lastBaseReward;
+	var coinsInCirculation;
+	var lastBaseReward;
 
-currentPage = {
-        destroy: function(){
-            if (xhrGetBlocks) xhrGetBlocks.abort();
-        },
-        init: function(){
+	currentPage = {
+		destroy: function () {
+			if (xhrGetBlocks) xhrGetBlocks.abort();
+		},
+		init: function () {
 			renderLastStats();
 			$("#count_val").text(blocksPerPage);
 			$.when(
 				renderInitialBlocks()
-			).then(function() {
+			).then(function () {
 				$.when(
 					displayDiffChart()
-				).then(function() {
-					setTimeout(function(){
+				).then(function () {
+					setTimeout(function () {
 						refreshChart();
-						var currHeight = $('#blocks_rows').children().first().data('height');
-						if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
+						var currHeight = $('#blocks_rows').children().first().data(
+							'height');
+						if (currHeight + blocksPerPage >= lastStats
+							.last_known_block_index) {
 							$('#next-page').addClass('disabled');
 							$('#last-page').addClass('disabled');
 							$('#loadMoreBlocks').removeClass('disabled');
@@ -278,7 +338,7 @@ currentPage = {
 							$('#next-page').removeClass('disabled');
 							$('#last-page').removeClass('disabled');
 						}
-						if(currHeight - blocksPerPage <= 0){
+						if (currHeight - blocksPerPage <= 0) {
 							$('#prev-page').addClass('disabled');
 							$('#first-page').addClass('disabled');
 							$('#loadMoreBlocks').addClass('disabled');
@@ -286,519 +346,508 @@ currentPage = {
 					}, 100)
 				})
 			});
-        },
-        update: function(){
+		},
+		update: function () {
 			renderLastStats();
-            updateText('networkHeight', lastStats.height.toString());
-            updateText('networkTransactions', lastStats.tx_count.toString());
-            updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
-            updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
-			updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee,6));
+			updateText('networkHeight', lastStats.height.toString());
+			updateText('networkTransactions', lastStats.tx_count.toString());
+			updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
+			updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
+			updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
 			$("time.timeago").timeago();
 			getPoolTransactions();
 			var currHeight = $('#blocks_rows').children().first().data('height');
-			if(refresh){
+			if (refresh) {
 				$.when(
 					renderInitialBlocks()
-				).then(function() {
+				).then(function () {
 					refreshChart();
 				});
 			}
-			if(currHeight + blocksPerPage < lastStats.last_known_block_index){
+			if (currHeight + blocksPerPage < lastStats.last_known_block_index) {
 				$('#next-page').removeClass('disabled');
 			}
 		}
-};
+	};
 
-function renderLastStats(){
-	updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.','')),2));
-	updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.','')) / 10000000000000000000 * 100).toFixed(4) + "%");
-	updateText('currentReward', getReadableCoins(lastStats.last_block_reward,4));
-}
+	function renderLastStats() {
+		updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.', '')), 2));
+		updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.', '')) /
+			10000000000000000000 * 100).toFixed(4) + "%");
+		updateText('currentReward', getReadableCoins(lastStats.last_block_reward, 4));
+	}
 
-var xhrGetBlocks;
-$('#loadMoreBlocks').click(function(){
-    if (xhrGetBlocks) xhrGetBlocks.abort();
-        xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "test",
-                method:"f_blocks_list_json",
-                params: {
-                    count: blocksPerPage,
+	var xhrGetBlocks;
+	$('#loadMoreBlocks').click(function () {
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "test",
+				method: "f_blocks_list_json",
+				params: {
+					count: blocksPerPage,
 					height: $('#blocks_rows').children().last().data('height')
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
 				$.when(
-					 renderBlocks(data.result.blocks)
-				).then(function() {
+					renderBlocks(data.result.blocks)
+				).then(function () {
 					var currHeight = $('#blocks_rows').children().last().data('height');
-					if (currHeight === 0){
+					if (currHeight === 0) {
 						$('#loadMoreBlocks').toggleClass('disabled');
 					}
-					setTimeout(function(){
+					setTimeout(function () {
 						loadMoreChart();
 					}, 100)
 				});
-            }
-    });
-});
-
-$('#prev-page').click(function(e){
-	refresh = false;
-	clearArrays();
-    if (xhrGetBlocks) xhrGetBlocks.abort();
-	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight - blocksPerPage <= 0) ? blocksPerPage : currHeight - blocksPerPage;
-
-	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "explorer_prev_nav",
-                method:"getblockslist",
-                params: {
-                    count: blocksPerPage,
-					height: openHeight
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				$('#blocks_rows').children().remove();
-				$.when(
-					renderBlocks(data.result.blocks)
-				).then(function() {
-					setTimeout(function(){
-						refreshChart();
-					}, 100)
-				});
-            }
-    });
-	e.preventDefault();
-	
-	if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
-		$('#next-page').removeClass('disabled');
-		$('#last-page').removeClass('disabled');
-		$('#loadMoreBlocks').removeClass('disabled');
-	}
-	if(currHeight - blocksPerPage * 2 <= 0){
-		$('#prev-page').addClass('disabled');
-		$('#first-page').addClass('disabled');
-		$('#loadMoreBlocks').addClass('disabled');
-	}
-});
-
-$('#next-page').click(function(e){
-	refresh = false;
-	clearArrays();
-    if (xhrGetBlocks) xhrGetBlocks.abort();
-	var currHeight = $('#blocks_rows').children().first().data('height');
-	var openHeight = (currHeight + blocksPerPage > lastStats.last_known_block_index) ? lastStats.last_known_block_index : currHeight + blocksPerPage;
-
-	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "explorer_next_nav",
-                method:"getblockslist",
-                params: {
-                    count: blocksPerPage,
-					height: openHeight
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				$('#blocks_rows').children().remove();
-				$.when(
-					renderBlocks(data.result.blocks)
-				).then(function() {
-					setTimeout(function(){
-						refreshChart();
-					}, 100)
-				});			
-            }
-    });
-	e.preventDefault();
-	
-	if((currHeight + blocksPerPage) >= lastStats.last_known_block_index){
-		$('#next-page').addClass('disabled');
-		$('#last-page').addClass('disabled');
-		refresh = true;
-	}
-	
-	if(!(currHeight + $('#blocks_rows').size() - blocksPerPage <= 0)){
-		$('#loadMoreBlocks').removeClass('disabled');
-	}
-	
-	$('#prev-page').removeClass('disabled');
-	$('#first-page').removeClass('disabled');
-	
-});
-
-$('#first-page').click(function(e){
-	refresh = false;
-	clearArrays();
-    if (xhrGetBlocks) xhrGetBlocks.abort();
-	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "explorer_first_nav",
-                method:"getblockslist",
-                params: {
-                    count: blocksPerPage,
-					height: blocksPerPage
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				$('#blocks_rows').children().remove();
-				$.when(
-					renderBlocks(data.result.blocks)
-				).then(function() {
-					setTimeout(function(){
-						refreshChart();
-					}, 100)
-				});
-            }
-    });
-	e.preventDefault();
-	
-	$('#next-page').removeClass('disabled');
-	$('#last-page').removeClass('disabled');
-	$('#prev-page').addClass('disabled');
-	$('#first-page').addClass('disabled');	
-	$('#loadMoreBlocks').addClass('disabled');
-});
-
-$('#last-page').click(function(e){
-	refresh = true;
-	clearArrays();
-    if (xhrGetBlocks) xhrGetBlocks.abort();
-	xhrGetBlocks = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "explorer_last_nav",
-                method:"getblockslist",
-                params: {
-                    count: blocksPerPage,
-					height: lastStats.last_known_block_index
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				$('#blocks_rows').children().remove();
-				$.when(
-					renderBlocks(data.result.blocks)
-				).then(function() {
-					setTimeout(function(){
-						refreshChart();
-					}, 100)
-				});
-            }
-    });
-	e.preventDefault();
-	
-	$('#next-page').addClass('disabled');
-	$('#last-page').addClass('disabled');
-	$('#prev-page').removeClass('disabled');
-	$('#first-page').removeClass('disabled');	
-	$('#loadMoreBlocks').removeClass('disabled');
-});
-
-$('#goto-height-go').click(function() {
-	var height = document.getElementById('goto-height').value;
-	var newUrl = "./?height="+height;
-	window.location = newUrl;
-});
-
-$('#goto-height').keyup(function(e){
-        if(e.keyCode === 13)
-            $('#goto-height-go').click();
-});
-
-
-$("#select_blocks_count").on('click', 'li a', function(e){
-	$("#count_val").text($(this).text());
-	blocksPerPage = parseInt($(this).text());
-	var currHeight = $('#blocks_rows').children().first().data('height');
-if (xhrGetBlocks) xhrGetBlocks.abort();
-	xhrGetBlocks = $.ajax({
-		url: api + '/json_rpc',
-		method: "POST",
-		data: JSON.stringify({
-			jsonrpc:"2.0",
-			id: "explorer_block_count",
-			method:"getblockslist",
-			params: {
-				count: blocksPerPage,
-				height: currHeight
 			}
-		}),
-		dataType: 'json',
-		cache: 'false',
-		success: function(data){
-			$('#blocks_rows').children().remove();
-			$.when(
-				renderBlocks(data.result.blocks)
-			).then(function() {
-				setTimeout(function(){
-					refreshChart();
-				}, 100)
-			});
+		});
+	});
+
+	$('#prev-page').click(function (e) {
+		refresh = false;
+		clearArrays();
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		var currHeight = $('#blocks_rows').children().first().data('height');
+		var openHeight = (currHeight - blocksPerPage <= 0) ? blocksPerPage : currHeight - blocksPerPage;
+
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_prev_nav",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: openHeight
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+					}, 100)
+				});
+			}
+		});
+		e.preventDefault();
+
+		if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
+			$('#next-page').removeClass('disabled');
+			$('#last-page').removeClass('disabled');
+			$('#loadMoreBlocks').removeClass('disabled');
 		}
-    });
-	
-	if(currHeight + blocksPerPage >= lastStats.last_known_block_index){
-		$('#next-page').addClass('disabled');
-		$('#last-page').addClass('disabled');
-	}
-	else {
+		if (currHeight - blocksPerPage * 2 <= 0) {
+			$('#prev-page').addClass('disabled');
+			$('#first-page').addClass('disabled');
+			$('#loadMoreBlocks').addClass('disabled');
+		}
+	});
+
+	$('#next-page').click(function (e) {
+		refresh = false;
+		clearArrays();
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		var currHeight = $('#blocks_rows').children().first().data('height');
+		var openHeight = (currHeight + blocksPerPage > lastStats.last_known_block_index) ? lastStats
+			.last_known_block_index : currHeight + blocksPerPage;
+
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_next_nav",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: openHeight
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+					}, 100)
+				});
+			}
+		});
+		e.preventDefault();
+
+		if ((currHeight + blocksPerPage) >= lastStats.last_known_block_index) {
+			$('#next-page').addClass('disabled');
+			$('#last-page').addClass('disabled');
+			refresh = true;
+		}
+
+		if (!(currHeight + $('#blocks_rows').size() - blocksPerPage <= 0)) {
+			$('#loadMoreBlocks').removeClass('disabled');
+		}
+
+		$('#prev-page').removeClass('disabled');
+		$('#first-page').removeClass('disabled');
+
+	});
+
+	$('#first-page').click(function (e) {
+		refresh = false;
+		clearArrays();
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_first_nav",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: blocksPerPage
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+					}, 100)
+				});
+			}
+		});
+		e.preventDefault();
+
 		$('#next-page').removeClass('disabled');
 		$('#last-page').removeClass('disabled');
-		refresh = false;
-	}
-	$('#prev-page').removeClass('disabled');
-	$('#first-page').removeClass('disabled');
-	$('#loadMoreBlocks').removeClass('disabled');
-	if(currHeight - blocksPerPage <= 0){
 		$('#prev-page').addClass('disabled');
 		$('#first-page').addClass('disabled');
 		$('#loadMoreBlocks').addClass('disabled');
+	});
+
+	$('#last-page').click(function (e) {
+		refresh = true;
+		clearArrays();
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_last_nav",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: lastStats.last_known_block_index
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+					}, 100)
+				});
+			}
+		});
+		e.preventDefault();
+
+		$('#next-page').addClass('disabled');
+		$('#last-page').addClass('disabled');
+		$('#prev-page').removeClass('disabled');
+		$('#first-page').removeClass('disabled');
+		$('#loadMoreBlocks').removeClass('disabled');
+	});
+
+	$('#goto-height-go').click(function () {
+		var height = document.getElementById('goto-height').value;
+		var newUrl = "./?height=" + height;
+		window.location = newUrl;
+	});
+
+	$('#goto-height').keyup(function (e) {
+		if (e.keyCode === 13)
+			$('#goto-height-go').click();
+	});
+
+	$("#select_blocks_count").on('click', 'li a', function (e) {
+		$("#count_val").text($(this).text());
+		blocksPerPage = parseInt($(this).text());
+		var currHeight = $('#blocks_rows').children().first().data('height');
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_block_count",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: currHeight
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+					}, 100)
+				});
+			}
+		});
+
+		if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
+			$('#next-page').addClass('disabled');
+			$('#last-page').addClass('disabled');
+		} else {
+			$('#next-page').removeClass('disabled');
+			$('#last-page').removeClass('disabled');
+			refresh = false;
+		}
+		$('#prev-page').removeClass('disabled');
+		$('#first-page').removeClass('disabled');
+		$('#loadMoreBlocks').removeClass('disabled');
+		if (currHeight - blocksPerPage <= 0) {
+			$('#prev-page').addClass('disabled');
+			$('#first-page').addClass('disabled');
+			$('#loadMoreBlocks').addClass('disabled');
+		}
+
+		e.preventDefault();
+	});
+
+	function clearArrays() {
+		Difficulties = [];
+		MinFees = [];
+		Blocks = [];
+		Rewards = [];
+		Txses = [];
+		Sizes = [];
+		Timestamps = [];
+		time_stamps = [];
+		Solvetimes = [];
 	}
 
-	e.preventDefault();
-});
-
-
-function clearArrays(){
-	Difficulties = [];
-	MinFees = [];
-	Blocks = [];
-	Rewards = [];
-	Txses = [];
-	Sizes = [];
-	Timestamps = [];
-	time_stamps = [];
-	Solvetimes = [];
-}
-
-function renderInitialBlocks(){
-		
+	function renderInitialBlocks() {
 		var loadHeight;
-		
-		if (urlParam('height')) 
-				loadHeight = parseInt(urlParam('height'));
-            else
-				loadHeight = lastStats.height - 1;
-		
-		if((loadHeight - blocksPerPage) < 0){
+		if (urlParam('height'))
+			loadHeight = parseInt(urlParam('height'));
+		else
+			loadHeight = lastStats.height - 1;
+
+		if ((loadHeight - blocksPerPage) < 0) {
 			$('#prev-page').addClass('disabled');
 			$('#next-page').removeClass('disabled');
 		}
 
-			return $.ajax({
-				url: api + '/json_rpc',
-				method: "POST",
-				data: JSON.stringify({
-					jsonrpc:"2.0",
-					id: "explorer_init_blocks",
-					method:"getblockslist",
-					params: {
-						count: blocksPerPage,
-						height: loadHeight
-					}
-				}),
-				dataType: 'json',
-				cache: 'false',
-				success: function(data){
-					renderBlocks(data.result.blocks);
+		return $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_init_blocks",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: loadHeight
 				}
-			});
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				renderBlocks(data.result.blocks);
+			}
+		});
 
-		};
+	};
 
-    function getBlockRowElement(block, jsonString){
-
-        var row = document.createElement('tr');
-        row.setAttribute('data-json', jsonString);
-        row.setAttribute('data-height', block.height);
-        row.setAttribute('id', 'blockRow' + block.height);
-        row.setAttribute('title', block.hash);
-		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000).toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
+	function getBlockRowElement(block, jsonString) {
+		var row = document.createElement('tr');
+		row.setAttribute('data-json', jsonString);
+		row.setAttribute('data-height', block.height);
+		row.setAttribute('id', 'blockRow' + block.height);
+		row.setAttribute('title', block.hash);
+		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
+			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
-		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee,6,false)));
-        var columns =
-            '<td>' + block.height + '</td>' +
-            '<td class="date-time">' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
+		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		var columns =
+			'<td>' + block.height + '</td>' +
+			'<td class="date-time">' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="' + dateTime +
+			'"></time>)</td>' +
 			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
-            '<td class="blk-diff">' + block.difficulty + '</td>' +
-            '<td>' + block.tx_count + '</td>';
+			'<td class="blk-diff">' + block.difficulty + '</td>' +
+			'<td>' + block.tx_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
-		MinFees.push(parseFloat(getReadableCoins(block.min_tx_fee,6,false)));
+		MinFees.push(parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
 		Timestamps.push(dateTime);
 		time_stamps.push(block.timestamp);
 
-        row.innerHTML = columns;
-		
-        return row;
-    }
+		row.innerHTML = columns;
 
-    function renderBlocks(blocksResults){
+		return row;
+	}
 
-        var $blocksRows = $('#blocks_rows');
-
-        for (var i = 0; i < blocksResults.length; i ++){
-
-            var block = blocksResults[i];
-
-            var blockJson = JSON.stringify(block);
-
-            var existingRow = document.getElementById('blockRow' + block.height);
-
-            if (existingRow && existingRow.getAttribute('data-json') !== blockJson){
-                $(existingRow).replaceWith(getBlockRowElement(block, blockJson));
-            }
-            else if (!existingRow){
-
-                var blockElement = getBlockRowElement(block, blockJson);
-
-                var inserted = false;
-                var rows = $blocksRows.children().get();
-                for (var f = 0; f < rows.length; f++) {
-                    var bHeight = parseInt(rows[f].getAttribute('data-height'));
-                    if (bHeight < block.height){
-                        inserted = true;
-                        $(rows[f]).before(blockElement);
-                        break;
-                    }
-                }
-                if (!inserted) {
-                    $blocksRows.append(blockElement);
+	function renderBlocks(blocksResults) {
+		var $blocksRows = $('#blocks_rows');
+		for (var i = 0; i < blocksResults.length; i++) {
+			var block = blocksResults[i];
+			var blockJson = JSON.stringify(block);
+			var existingRow = document.getElementById('blockRow' + block.height);
+			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {
+				$(existingRow).replaceWith(getBlockRowElement(block, blockJson));
+			} else if (!existingRow) {
+				var blockElement = getBlockRowElement(block, blockJson);
+				var inserted = false;
+				var rows = $blocksRows.children().get();
+				for (var f = 0; f < rows.length; f++) {
+					var bHeight = parseInt(rows[f].getAttribute('data-height'));
+					if (bHeight < block.height) {
+						inserted = true;
+						$(rows[f]).before(blockElement);
+						break;
+					}
 				}
-            }
-        }
+				if (!inserted) {
+					$blocksRows.append(blockElement);
+				}
+			}
+		}
 		$("time.timeago").timeago();
 		calcAvgHashRate();
 		calcAvgSolveTime();
-    }
+	}
 
-	function calcAvgHashRate(){
+	function calcAvgHashRate() {
 		var sum = Difficulties.reduce(add, 0);
 		function add(a, b) {
 			return a + b;
 		}
 		var avgDiff = Math.round(sum / Difficulties.length);
 		var avgHashRate = avgDiff / blockTargetInterval;
-		
+
 		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
 		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
-        updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
-
+		updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
 	}
-	
-	function calcAvgSolveTime(){ 
+
+	function calcAvgSolveTime() {
 		ts = time_stamps.concat([]);
 		ts.sort();
 		var avg_solve_time = 0;
 		var solveTime = 0;
-		for (var i = 1; i < ts.length; i++){
+		for (var i = 1; i < ts.length; i++) {
 			solveTime += ts[i] - ts[i - 1];
 		}
 		avg_solve_time = solveTime / (ts.length - 1);
 		updateText('avgSolveTime', getReadableTime(avg_solve_time));
 	}
-	
-//  MemPool Transactions
-function getPoolTransactions(){
-  var xhrGetPool = $.ajax({
-	url: api + '/json_rpc',
-	method: "POST",
-	data: JSON.stringify({
-		jsonrpc: "2.0",
-		id: "explorer_mempool",
-		method: "gettransactionspool",
-		params: {}
-	}),
-	dataType: 'json',
-	cache: 'false',
-	success: function(newdata) {
-		if(typeof newdata.result !== "undefined") {
-            var data = newdata.result.transactions;
-			var totalAmount = 0;
-			var totalFee = 0;
-			var totalSize = 0;
-			var txcount = 0;
-			var txsRows = document.getElementById('mem_pool_rows');
-			  if (txsRows) {
-				while (txsRows.firstChild) {
-				  txsRows.removeChild(txsRows.firstChild);
-				}
-			  }
-			for (var i = 0; i < data.length; i ++){
-				var tx = data[i];
-					
-				var row = document.createElement('tr');
-				var columns =
-					'<td>' + formatDate(tx.receiveTime) + ' (<span class="mtx-ago"></span>)' + '</td>' +
-					'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
-					'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
-					'<td>' + formatBytes(parseInt(tx.size)) + '</td>' +
-					'<td>' + formatPaymentLink(tx.hash) + '</td>';
-				row.innerHTML = columns;
-				$(txsRows).append(row);
-				$(row).find('.mtx-ago').timeago('update', new Date(tx.receiveTime * 1000).toISOString());
-				
-				txcount = txcount + 1;
-				totalAmount = tx.amount_out + totalAmount;
-				totalFee = totalFee + tx.fee;
-				totalSize = totalSize + tx.size;
-				
-			}
-			updateText('mempool_count', txcount);
-			updateText('mempool_amount', getReadableCoins(totalAmount,4));
-			updateText('mempool_fees', getReadableCoins(totalFee, 8));
-			updateText('mempool_sizes', formatBytes(parseInt(totalSize)));
-			
-			if (data.length == 0) {
-				$('#mem_pool').hide();
-				$('#empty_mem_pool').show();
-			} else {
-				$('#mem_pool').show();
-				$('#empty_mem_pool').hide();
-			}
-		}
-	}
-  });
-}
 
-// Difficulty chart
-function displayDiffChart() {
-	var ctx = document.getElementById("difficultyChart");
-	var chartData = {
+	//  MemPool Transactions
+	function getPoolTransactions() {
+		var xhrGetPool = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_mempool",
+				method: "gettransactionspool",
+				params: {}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (newdata) {
+				if (typeof newdata.result !== "undefined") {
+					var data = newdata.result.transactions;
+					var totalAmount = 0;
+					var totalFee = 0;
+					var totalSize = 0;
+					var txcount = 0;
+					var txsRows = document.getElementById('mem_pool_rows');
+					if (txsRows) {
+						while (txsRows.firstChild) {
+							txsRows.removeChild(txsRows.firstChild);
+						}
+					}
+					for (var i = 0; i < data.length; i++) {
+						var tx = data[i];
+
+						var row = document.createElement('tr');
+						var columns =
+							'<td>' + formatDate(tx.receiveTime) + ' (<span class="mtx-ago"></span>)' +
+							'</td>' +
+							'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
+							'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
+							'<td>' + formatBytes(parseInt(tx.size)) + '</td>' +
+							'<td>' + formatPaymentLink(tx.hash) + '</td>';
+						row.innerHTML = columns;
+						$(txsRows).append(row);
+						$(row).find('.mtx-ago').timeago('update', new Date(tx.receiveTime * 1000)
+						.toISOString());
+
+						txcount = txcount + 1;
+						totalAmount = tx.amount_out + totalAmount;
+						totalFee = totalFee + tx.fee;
+						totalSize = totalSize + tx.size;
+
+					}
+					updateText('mempool_count', txcount);
+					updateText('mempool_amount', getReadableCoins(totalAmount, 4));
+					updateText('mempool_fees', getReadableCoins(totalFee, 8));
+					updateText('mempool_sizes', formatBytes(parseInt(totalSize)));
+
+					if (data.length == 0) {
+						$('#mem_pool').hide();
+						$('#empty_mem_pool').show();
+					} else {
+						$('#mem_pool').show();
+						$('#empty_mem_pool').hide();
+					}
+				}
+			}
+		});
+	}
+
+	// Difficulty chart
+	function displayDiffChart() {
+		var ctx = document.getElementById("difficultyChart");
+		var chartData = {
 			//labels: [].concat(Blocks).reverse(),
 			labels: [].concat(formatDate(Timestamps)).reverse(),
-			datasets: [
-			  {
+			datasets: [{
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
 				label: "Height",
@@ -811,15 +860,15 @@ function displayDiffChart() {
 				pointHitRadius: 0,
 				display: false,
 				type: 'line'
-			  },{
+			}, {
 				data: [].concat(Difficulties).reverse(),
 				yAxisID: "Difficulty",
 				label: "Difficulty",
 				backgroundColor: "rgba(220,220,220,0.2)",
 				borderColor: '#2FA4E7',
 				borderWidth: 2,
-				pointColor : "#2FA4E7",
-				pointBorderColor : "#2FA4E7",
+				pointColor: "#2FA4E7",
+				pointBorderColor: "#2FA4E7",
 				pointHighlightFill: "#2FA4E7",
 				pointBackgroundColor: "#2FA4E7",
 				pointBorderWidth: 2,
@@ -827,15 +876,15 @@ function displayDiffChart() {
 				pointHoverRadius: 3,
 				pointHitRadius: 20,
 				type: 'line'
-			  },{
+			}, {
 				data: [].concat(MinFees).reverse(),
 				yAxisID: "MinFee",
 				label: "Minimum fee",
 				backgroundColor: "rgba(237,28,36,0)",
 				borderColor: '#ED1C24',
 				borderWidth: 1,
-				pointColor : "#ED1C24",
-				pointBorderColor : "#ED1C24",
+				pointColor: "#ED1C24",
+				pointBorderColor: "#ED1C24",
 				pointHighlightFill: "#ED1C24",
 				pointBackgroundColor: "#ED1C24",
 				pointBorderWidth: 2,
@@ -843,14 +892,14 @@ function displayDiffChart() {
 				pointHoverRadius: 3,
 				pointHitRadius: 20,
 				type: 'line'
-			  },{
+			}, {
 				data: [].concat(Txses).reverse(),
 				yAxisID: "Transactions",
 				label: "Transactions",
 				backgroundColor: "rgba(255,242,0,0.4)",
 				borderWidth: 0,
 				type: 'bar'
-			  },{
+			}, {
 				data: [].concat(Sizes).reverse(),
 				yAxisID: "Sizes",
 				label: "Size",
@@ -858,10 +907,9 @@ function displayDiffChart() {
 				borderColor: '#99D9EA',
 				borderWidth: 0,
 				type: 'bar'
-			  }
-			]
+			}]
 		};
-	var options = {
+		var options = {
 			responsive: true,
 			maintainAspectRatio: false,
 			elements: {
@@ -877,279 +925,260 @@ function displayDiffChart() {
 			},
 			onClick: graphClickEvent,
 			scales: {
-			  yAxes: [{
-				id: 'Height',
-				type: 'linear',
-				position: 'left',
-				scaleLabel: {
-					display: false,
-					labelString: 'Height'
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					display:false
-				},
-				display: false
-			  },{
-				id: 'Difficulty',
-				type: 'linear',
-				position: 'left',
-				scaleLabel: {
-					display: true,
-					labelString: 'Difficulty'
-				},
-				gridLines: {
-					display:true
-				},
-				ticks: {
-					fontSize: 9,
-					display:true
-				},
-				display: true
-			  },{
-				id: 'Transactions',
-				type: 'linear',
-				position: 'right',
-				scaleLabel: {
-					display: false,
-					labelString: 'Transactions'
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					display:false
-				},
-				display: false
-			  },{
-				id: 'Sizes',
-				type: 'linear',
-				position: 'right',
-				barThickness: 10,
-				scaleLabel: {
-					display: false,
-					labelString: 'Size'
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					display:false
-				},
-				display: false
-			  },{
-				id: 'MinFee',
-				type: 'linear',
-				position: 'right',
-				scaleLabel: {
-					display: true,
-					labelString: 'Minimum Fee'
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					display:true,
-					suggestedMin: 0.001,
-					suggestedMax: 0.1
-				},
-				display: true
-			  }
-			  
-			  ],
-			  xAxes: [{
-				stacked: true,
-				//offset: true,
-				type: "time",
-				categoryPercentage: 0,
-				barPercentage: 1,
-				categorySpacing: 0,
-				barThickness: 20,
-				time: {
-                    parser: false,
-					unit: 'minute',
-					unitStepSize: 60,
-					round: 'second',
-					displayFormats: {
-                                        'millisecond': 'SSS [ms]',
-                                        'second': 'HH:mm:ss', // 11:20:01 AM
-                                        'minute': 'HH:mm', // 11:20:01 AM
-                                        'hour': 'HH:mm', // Sept 4, 5PM
-                                        'day': 'MMM Do', // Sep 4 2015
-                                        'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
-                                        'month': 'MMM YYYY', // Sept 2015
-                                        'quarter': '[Q]Q - YYYY', // Q3
-                                        'year': 'YYYY', // 2017
-                                    },
-				},
-				gridLines: {
-					display:false
-				},
-				ticks: {
-					fontSize: 9,
-					fontColor: "#CCC",
-					autoSkip: true,
-					maxRotation: 0,
-					//minRotation: 90
-					//display:false
-				}
-				//display: false
-			  }]
+				yAxes: [{
+						id: 'Height',
+						type: 'linear',
+						position: 'left',
+						scaleLabel: {
+							display: false,
+							labelString: 'Height'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 9,
+							display: false
+						},
+						display: false
+					}, {
+						id: 'Difficulty',
+						type: 'linear',
+						position: 'left',
+						scaleLabel: {
+							display: true,
+							labelString: 'Difficulty'
+						},
+						gridLines: {
+							display: true
+						},
+						ticks: {
+							fontSize: 9,
+							display: true
+						},
+						display: true
+					}, {
+						id: 'Transactions',
+						type: 'linear',
+						position: 'right',
+						scaleLabel: {
+							display: false,
+							labelString: 'Transactions'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 9,
+							display: false
+						},
+						display: false
+					}, {
+						id: 'Sizes',
+						type: 'linear',
+						position: 'right',
+						barThickness: 10,
+						scaleLabel: {
+							display: false,
+							labelString: 'Size'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 9,
+							display: false
+						},
+						display: false
+					}, {
+						id: 'MinFee',
+						type: 'linear',
+						position: 'right',
+						scaleLabel: {
+							display: true,
+							labelString: 'Minimum Fee'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 9,
+							display: true,
+							suggestedMin: 0.001,
+							suggestedMax: 0.1
+						},
+						display: true
+					}
+
+				],
+				xAxes: [{
+					stacked: true,
+					//offset: true,
+					type: "time",
+					categoryPercentage: 0,
+					barPercentage: 1,
+					categorySpacing: 0,
+					barThickness: 20,
+					time: {
+						parser: false,
+						unit: 'minute',
+						unitStepSize: 60,
+						round: 'second',
+						displayFormats: {
+							'millisecond': 'SSS [ms]',
+							'second': 'HH:mm:ss', // 11:20:01 AM
+							'minute': 'HH:mm', // 11:20:01 AM
+							'hour': 'HH:mm', // Sept 4, 5PM
+							'day': 'MMM Do', // Sep 4 2015
+							'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
+							'month': 'MMM YYYY', // Sept 2015
+							'quarter': '[Q]Q - YYYY', // Q3
+							'year': 'YYYY', // 2017
+						},
+					},
+					gridLines: {
+						display: false
+					},
+					ticks: {
+						fontSize: 9,
+						fontColor: "#CCC",
+						autoSkip: true,
+						maxRotation: 0,
+						//minRotation: 90
+						//display:false
+					}
+					//display: false
+				}]
 			},
 			tooltips: {
 				mode: 'index',
 				intersect: true,
 				//displayColors: false,
 				callbacks: {
-					title: function(tooltipItem, data) {
-						var height	= data.datasets[3].data[tooltipItem[0].index];
+					title: function (tooltipItem, data) {
+						var height = data.datasets[3].data[tooltipItem[0].index];
 						var time = new Date(data.labels[tooltipItem[0].index]).toLocaleString();
-						//return 'Block: ' + height + ' - ' + time + '';
 						return time + '';
-					},/*
-					label: function(tooltipItem, data) { 
-						var diff		= data.datasets[0].data[tooltipItem.index];
-						var txcount	= data.datasets[1].data[tooltipItem.index];
-						var size		= data.datasets[2].data[tooltipItem.index];
-						
-						var diff_swatch_color = data.datasets[0].borderColor;
-						
-						console.log(diff_swatch_color);
-						
-						var diff_swatch = '<span style="color="'+ diff_swatch_color +'">&bullet;</span>';
-						
-						var multistringText = [];
-  
-						var str1 = diff_swatch + 'Difficulty: ' + diff + '';
-						var str2 = 'Size: ' + size + '';
-						var str3 = 'Transactions: ' + txcount + '';
-  
-						multistringText.push(str1);
-						multistringText.push(str2);
-						multistringText.push(str3);
-  
-						return multistringText;
-					}*/
+					}
 				}
-			  }
-		}; 
-		
-	diffChart = new Chart(ctx,{
-    type: 'bar',
-    data: chartData,
-    options: options
-	});
-}
+			}
+		};
 
-function refreshChart() {
-	var brows   = $('#blocks_rows').children(),
-		labels  = [],
-		diffs   = [],
-		sizes   = [],
-		times   = [],
-		heights = [],
-		txsnr   = [];
-		mfees   = [];
+		diffChart = new Chart(ctx, {
+			type: 'bar',
+			data: chartData,
+			options: options
+		});
+	}
+
+	function refreshChart() {
+		var brows = $('#blocks_rows').children(),
+			labels = [],
+			diffs = [],
+			sizes = [],
+			times = [],
+			heights = [],
+			txsnr = [];
+		mfees = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
-			var diff  = row.data("json").difficulty;
+			var diff = row.data("json").difficulty;
 			var txses = row.data("json").tx_count;
-			var size  = row.data("json").cumul_size;
-			var time  = row.attr('data-dt');
-			var mfee  = row.attr('data-min-fee');
+			var size = row.data("json").cumul_size;
+			var time = row.attr('data-dt');
+			var mfee = row.attr('data-min-fee');
 
-				labels.push(label);
-				diffs.push(diff);
-				txsnr.push(txses);
-				sizes.push(size);				
-				times.push(time);				
-				mfees.push(mfee);				
+			labels.push(label);
+			diffs.push(diff);
+			txsnr.push(txses);
+			sizes.push(size);
+			times.push(time);
+			mfees.push(mfee);
 		}
 
-		if (diffChart != undefined){
+		if (diffChart != undefined) {
 			diffChart.data.labels = times.reverse();
 			diffChart.data.datasets[0].data = labels.reverse();
 			diffChart.data.datasets[1].data = diffs.reverse();
 			diffChart.data.datasets[2].data = mfees.reverse();
 			diffChart.data.datasets[3].data = txsnr.reverse();
 			diffChart.data.datasets[4].data = sizes.reverse();
-		
+
 			diffChart.update();
 		}
 
-}	
+	}
 
-function loadMoreChart() {
-	//diffChart.data.labels = [].concat(Blocks).reverse();
-	diffChart.data.labels = [].concat(Timestamps).reverse();
-	diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
-	diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
-	diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
-	diffChart.data.datasets[3].data = [].concat(Txses).reverse();
-	diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
-	
-	diffChart.update();
-}
+	function loadMoreChart() {
+		diffChart.data.labels = [].concat(Timestamps).reverse();
+		diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
+		diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
+		diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
+		diffChart.data.datasets[3].data = [].concat(Txses).reverse();
+		diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
 
-function graphClickEvent(event, array){
-	var index = array[0]._index;
-	var dataValue = diffChart.data.datasets[0].data[index];	
-	var block, xhrGetSearchBlockbyHeight;
-    if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();	
-	xhrGetSearchBlockbyHeight = $.ajax({
-            url: api + '/json_rpc',
-            method: "POST",
-            data: JSON.stringify({
-                jsonrpc:"2.0",
-                id: "blockbyheight",
-                method:"getblockheaderbyheight",
-                params: {
-                   height: dataValue
-                }
-            }),
-            dataType: 'json',
-            cache: 'false',
-            success: function(data){
-				if(data.result){
+		diffChart.update();
+	}
+
+	function graphClickEvent(event, array) {
+		var index = array[0]._index;
+		var dataValue = diffChart.data.datasets[0].data[index];
+		var block, xhrGetSearchBlockbyHeight;
+		if (xhrGetSearchBlockbyHeight) xhrGetSearchBlockbyHeight.abort();
+		xhrGetSearchBlockbyHeight = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "blockbyheight",
+				method: "getblockheaderbyheight",
+				params: {
+					height: dataValue
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				if (data.result) {
 					block = data.result.block_header;
 					window.location.href = getBlockchainUrl(block.hash);
-				} else if(data.error) {
+				} else if (data.error) {
 					wrongSearchAlert();
 				}
-            }
-    });
-}
+			}
+		});
+	}
 
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
 
-function getReadableTime(seconds){
+	function getReadableTime(seconds) {
 
-        var units = [ [60, 's.'], [60, 'min.'], [24, 'h.'],
-            [7, 'd.'], [4, 'w.'], [12, 'м.'], [1, 'y.'] ];
+		var units = [
+			[60, 's.'],
+			[60, 'min.'],
+			[24, 'h.'],
+			[7, 'd.'],
+			[4, 'w.'],
+			[12, 'м.'],
+			[1, 'y.']
+		];
 
-        function formatAmounts(amount, unit){
-            var rounded = Math.round(amount);
-            return '' + rounded + ' ' + unit + (rounded > 1 ? '' : '');
-        }
+		function formatAmounts(amount, unit) {
+			var rounded = Math.round(amount);
+			return '' + rounded + ' ' + unit + (rounded > 1 ? '' : '');
+		}
 
-        var amount = seconds;
-        for (var i = 0; i < units.length; i++){
-            if (amount < units[i][0])
-                return formatAmounts(amount, units[i][1]);
-            amount = amount / units[i][0];
-        }
-        return formatAmounts(amount,  units[units.length - 1][1]);
-}
-
+		var amount = seconds;
+		for (var i = 0; i < units.length; i++) {
+			if (amount < units[i][0])
+				return formatAmounts(amount, units[i][1]);
+			amount = amount / units[i][0];
+		}
+		return formatAmounts(amount, units[units.length - 1][1]);
+	}
 </script>
 
 <script src="js/Chart.bundle.min.js"></script>
