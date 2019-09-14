@@ -12,8 +12,8 @@ var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
 var blocksPerPage = 20;
-var whiteTheme = "css/themes/white-theme.css";
-var nightTheme = "css/themes/dark-theme.css";
+var whiteTheme = "css/light.css";
+var nightTheme = "css/dark.css";
 // pools stats by MainCoins
 var poolsStat = 
 	[
