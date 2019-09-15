@@ -1,50 +1,69 @@
 <style>
-	#mem_pool_rows tr td:first-child {
-		text-align: left;
+	table.mempool-table {
+		width: 100%;
+		border-spacing: 0;
 	}
 
-	.value {
-		font-weight: 600;
+	table.mempool-table th,
+	table.mempool-table td,
+	table.mempool-table tr,
+	table.mempool-table thead,
+	table.mempool-table tfoot
+	table.mempool-table tbody { 
 		display: block;
-		float: right;
+		text-align: center
 	}
 
-	.fixed_header tbody {
+	table.mempool-table thead tr,
+	table.mempool-table tfoot tr {
+		/* fallback */
+		width: 97%;
+		/* minus scroll bar width */
+		width: -webkit-calc(100% - 16px);
+		width:    -moz-calc(100% - 16px);
+		width:         calc(100% - 16px);
+	}
+
+	table.mempool-table tr:after {
+		content: ' ';
 		display: block;
+		visibility: hidden;
+		clear: both;
+	}
+
+	table.mempool-table tbody {
+		display: block;
+		max-height: 200px;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		max-height: 200px;
-		width: 100%;
 	}
 
-	.fixed_header thead tr,
-	.fixed_header tfoot tr {
-		display: block;
-		width: 100%;
+	table.mempool-table tbody td,
+	table.mempool-table thead th,
+	table.mempool-table tfoot td {
+		width: 10%;
+		float: left;
 	}
 
-	.fixed_header thead th,
-	.fixed_header tbody td,
-	.fixed_header tfoot td
-	{
-		min-width: 10%;
+	table.mempool-table thead th:first-child,
+	table.mempool-table tbody td:first-child,
+	table.mempool-table tfoot td:first-child {
+		min-width: 20%;
 	}
 
-	.fixed_header thead tr:first-child,
-	.fixed_header tbody tr:first-child,
-	.fixed_header tfoot tr:first-child {
-		min-width: 30%;
-	}
-
-	.fixed_header thead tr:last-child,
-	.fixed_header tbody tr:last-child,
-	.fixed_header tfoot tr:last-child {
+	table.mempool-table thead tr:last-child,
+	table.mempool-tabletbody tr:last-child,
+	table.mempool-table tfoot tr:last-child {
 		min-width: 40%;
 	}
 
 	td.date-time {
 		padding: 2px;
 		line-height: 90%;
+	}
+
+	table.mempool-table td.date-time {
+		padding-top: 10px;
 	}
 </style>
 
@@ -144,10 +163,9 @@
 	<div class="col s12">
 		<div class="card hoverable">
 			<div class="card-action grey lighten-5">
-				<h5 class="light-blue-text text-darken-4"><i class="fas fa-exchange-alt"></i> Transactions pool <span class="text-default"
-						data-toggle="tooltip" data-placement="right"
-						data-original-title="Recent transactions waiting to be included into a block. Once it happens a transaction gets into the blockchain and becomes confirmed."><i
-							class="fa fa-question-circle"></i></span></h5>
+				<h5 class="light-blue-text text-darken-4"><span class="tooltipped"
+					data-position="bottom" data-tooltip="Recent transactions waiting to be included into a block.">
+					<i class="fas fa-exchange-alt"></i> Transactions pool</span></h5>
 			</div>
 			<div class="card-content">
 				<div id="empty_mem_pool" style="display: none;">
@@ -156,7 +174,7 @@
 				<div id="mem_pool" style="display: block;">
 					<div class="row">
 						<div class="col s12 table-container">
-							<table class="highlight centered fixed_header" id="mem_pool_table">
+							<table class="highlight centered mempool-table" id="mem_pool_table">
 								<thead>
 									<tr>
 										<th><i class="far fa-clock"></i> Date &amp; time</th>
@@ -280,6 +298,10 @@
 
 	$(document).ready(function(){
 		$('select').formSelect();
+	});
+
+	$(document).ready(function(){
+    	$('.tooltipped').tooltip();
 	});
 
 	currentPage = {
@@ -793,7 +815,7 @@
 					}
 					updateText('mempool_count', txcount);
 					updateText('mempool_amount', getReadableCoins(totalAmount, 4));
-					updateText('mempool_fees', getReadableCoins(totalFee, 8));
+					updateText('mempool_fees', getReadableCoins(totalFee, 4));
 					updateText('mempool_sizes', formatBytes(parseInt(totalSize)));
 
 					if (data.length == 0) {

@@ -245,10 +245,6 @@ urlParam = function (name) {
     }
 }
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
 function hex2a(hexx) {
     var hex = hexx.toString(); //force conversion
     var str = '';

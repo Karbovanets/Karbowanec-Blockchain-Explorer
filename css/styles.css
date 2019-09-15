@@ -208,7 +208,7 @@ h4 {
     font-size: 2rem;
     font-weight: 600;
     line-height: 110%;
-    margin: 0 0 .912rem 0;
+    margin: 0;
 }
 
 .card-action h5 {
@@ -262,4 +262,23 @@ foooter,
 foooter a,
 .page-footer a {
     color: #e3f2fd;
+}
+
+.value {
+    font-weight: 600;
+    display: block;
+    float: right;
+}
+
+@media only screen and (max-width: 992px) {
+    nav .brand-logo {
+     left:60px;
+    }
+    nav .brand-logo.left,
+    nav .brand-logo.right {
+     padding:0;
+     -webkit-transform:none;
+     transform:none
+    }
+
 }
