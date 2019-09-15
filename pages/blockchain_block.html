@@ -22,13 +22,13 @@
 								Timestamp: <span id="block_timestamp"></span> &bull; <span id="block_time"></span> (<time id="block-timeago"></time>)
 							</li>
 							<li class="collection-item">
-								<i class="fas fa-hashtag fa-fw tooltipped" data-position="top" data-tooltip="The hash of the previous block."></i> 
+								<i class="fas fa-link fa-fw tooltipped" data-position="top" data-tooltip="The hash of the previous block."></i> 
 								Previous block hash: <a id="prev_hash" title="Previous block"><span id="block_prev_hash"
 								style="word-break: break-all; word-wrap: break-word;"></span></a>
 							</li>
 							<li class="collection-item">
 								<i class="fas fa-stamp fa-fw tooltipped" data-position="top" data-tooltip="A piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements."></i> 
-								Proof of work: <span id="pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
+								Proof of work: <span id="block_pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
 							</li>
 							<li class="collection-item">
 								<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="&laquo;major version&raquo;.&laquo;minor version&raquo;"></i>
@@ -71,11 +71,11 @@
 								Total block size: <span id="block_blockSize"></span>
 							</li>
 							<li class="collection-item">
-								<i class="fas fa-divide fa-fw tooltipped" data-position="top" data-tooltip="Median value of block total transactions size among last n blocks."></i>
+								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Median value of block total transactions size among last n blocks."></i>
 								Current txs median, bytes: <span id="block_currentTxsMedian"></span>
 							</li>
 							<li class="collection-item">
-								<i class="fas fa-divide fa-fw tooltipped" data-position="top" data-tooltip="Bounded from below median value that is actually used to calculate penalty."></i>
+								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Bounded from below median value that is actually used to calculate penalty."></i>
 								Effective txs median, bytes: <span id="block_effectiveTxsMedian"></span>
 							</li>
 							<li class="collection-item">
@@ -83,7 +83,7 @@
 								Reward penalty: <span id="block_rewardPenalty"></span>
 							</li>
 							<li class="collection-item">
-									<i class="fas fa-trophy fa-fw tooltipped" data-position="top" data-tooltip="Base value for calculating the block reward. Does not depend on how many transactions are included into the block. Also, this is how many coins the miner would receive if the block contains only coinbase transaction."></i>
+								<i class="fas fa-trophy fa-fw tooltipped" data-position="top" data-tooltip="Base value for calculating the block reward. Does not depend on how many transactions are included into the block. Also, this is how many coins the miner would receive if the block contains only coinbase transaction."></i>
 								Base reward: <span id="block_baseReward"></span>
 							</li>
 							<li class="collection-item">
@@ -113,9 +113,9 @@
 								<tr>
 									<th>№</th>
 									<th><i class="fa fa-paw"></i> Hash</th>
-									<th><i class="fa fa-percent"></i> Fee</th>
-									<th><i class="fa fa-money"></i> Total Amount</th>
-									<th><i class="fa fa-arrows"></i> Size</th>
+									<th><i class="fas fa-donate"></i> Fee</th>
+									<th><i class="fas fa-money-bill"></i> Total Amount</th>
+									<th><i class="fas fa-weight-hanging"></i> Size</th>
 								</tr>
 							</thead>
 							<tbody id="transactions_rows">
@@ -178,6 +178,7 @@
 		updateText('block_hash', block.hash);
 		updateText('block_depth', block.depth);
 		updateText('block_prev_hash', block.prevBlockHash);
+		updateText('block_pow_hash', block.proofOfWork);
 		document.getElementById('prev_hash').setAttribute('href', getBlockchainUrl(block.prevBlockHash));
 		updateText('block_timestamp', block.timestamp);
 		updateText('block_time', formatDate(block.timestamp));
