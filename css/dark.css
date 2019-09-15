@@ -1,8 +1,50 @@
 body {
   color: #a4a4a4;
-  background-color: #131313;
+  background-color: #111;
 }
+
+a { color: #899cb5}
 
 nav .switch label .lever::after {
     content: "\f185";
 }
+
+.card {
+  background-color: #1A2027;
+}
+
+.grey.lighten-5 {
+  background-color: #192534!important;
+}
+
+.light-blue-text.text-darken-4 {
+  color: #73859d !important;
+}
+
+.light-blue.darken-1 {
+  background-color: #253344 !important;
+}
+.light-blue.darken-3 {
+  background-color: #1C2B3D !important;
+}
+
+.light-blue.darken-4 {
+  background-color: #0F1E2F!important;
+}
+
+.black-text {
+  color: #a4a4a4 !important;
+}
+
+.btn, .btn-large, .btn-small {
+  color: #a4a4a4;
+ }
+
+ .dropdown-content li {
+  color: #a4a4a4!important;
+ }
+
+input {
+  color: #a4a4a4!important;
+}
+ 

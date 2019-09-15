@@ -393,14 +393,8 @@ function handleSearch() {
 }
 
 function wrongSearchAlert() {
-$('#page').after(
-    '<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">' +
-    '<button type="button" class="close" ' +
-    'data-dismiss="alert" aria-hidden="true">' +
-    '&times;' +
-    '</button>' +
-    '<strong>Wrong search query!</strong><br /> Please enter block height or hash, transaction hash, or payment id.' +
-    '</div>');
+  var toastHTML = '<strong>Wrong search query!</strong> Please enter block height or hash, transaction hash, or payment id.';
+  M.toast({html: toastHTML});
 }
 
 $('#txt_search').keyup(function (e) {

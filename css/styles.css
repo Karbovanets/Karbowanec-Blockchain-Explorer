@@ -85,6 +85,10 @@ nav #menu-right {
 }
 
 .dropdown-content {
+    top: 46px!important;
+}
+
+nav .dropdown-content {
     margin: 0;
     position: absolute;
     display: none;
@@ -96,10 +100,10 @@ nav #menu-right {
     white-space: nowrap;
     z-index: 1;
     will-change: width, height;
-    top: 64px!important;
+    
 }
 
-.dropdown-content li > a, .dropdown-content li > span {
+nav .dropdown-content li > a, .dropdown-content li > span {
     font-size: 16px;
     color: var(--primary);
     display: block;

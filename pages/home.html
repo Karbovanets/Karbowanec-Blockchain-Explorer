@@ -9,13 +9,40 @@
 		float: right;
 	}
 
-	#mempool_wrapper {
+	.fixed_header tbody {
+		display: block;
 		overflow-y: scroll;
-		max-height: 400px;
-		width: 100% !important;
+		overflow-x: hidden;
+		max-height: 200px;
+		width: 100%;
 	}
 
-	.table > tbody > tr > td.date-time {
+	.fixed_header thead tr,
+	.fixed_header tfoot tr {
+		display: block;
+		width: 100%;
+	}
+
+	.fixed_header thead th,
+	.fixed_header tbody td,
+	.fixed_header tfoot td
+	{
+		min-width: 10%;
+	}
+
+	.fixed_header thead tr:first-child,
+	.fixed_header tbody tr:first-child,
+	.fixed_header tfoot tr:first-child {
+		min-width: 30%;
+	}
+
+	.fixed_header thead tr:last-child,
+	.fixed_header tbody tr:last-child,
+	.fixed_header tfoot tr:last-child {
+		min-width: 40%;
+	}
+
+	td.date-time {
 		padding: 2px;
 		line-height: 90%;
 	}
@@ -128,8 +155,8 @@
 				</div>
 				<div id="mem_pool" style="display: block;">
 					<div class="row">
-						<div class="col s12 blockTable">
-							<table class="highlight centered" id="mem_pool_table">
+						<div class="col s12 table-container">
+							<table class="highlight centered fixed_header" id="mem_pool_table">
 								<thead>
 									<tr>
 										<th><i class="far fa-clock"></i> Date &amp; time</th>
@@ -747,7 +774,7 @@
 
 						var row = document.createElement('tr');
 						var columns =
-							'<td>' + formatDate(tx.receiveTime) + ' (<span class="mtx-ago"></span>)' +
+							'<td class="date-time">' + formatDate(tx.receiveTime) + '<br />(<span class="mtx-ago"></span>)' +
 							'</td>' +
 							'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
 							'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
