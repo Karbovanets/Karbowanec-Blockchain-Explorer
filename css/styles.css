@@ -15,6 +15,10 @@ body {
     background: #eef5f9;
 }
 
+strong {
+    font-weight: 700;
+}
+
 nav #stats_updated {
     margin-left: 10px
 }
@@ -204,14 +208,14 @@ nav,
     padding: 24px;
 }
 
-h4 {
+h4, .card-action h2 {
     font-size: 2rem;
     font-weight: 600;
     line-height: 110%;
     margin: 0;
 }
 
-.card-action h5 {
+.card-action h3 {
     font-size: 1.25rem;
     line-height: 110%;
     margin: 0;
@@ -270,6 +274,27 @@ foooter a,
     float: right;
 }
 
+.tab a {
+    position: relative;
+}
+
+.tab span.badge {
+    line-height: inherit;
+    position: absolute; right: 0;
+}
+
+.tabs .indicator {
+    background-color: #01579B;
+}
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: rgba(187, 222, 251, 0.2);
+}
+
+#check_tx_form label {
+    margin-right: 10px;
+}
+
 @media only screen and (max-width: 992px) {
     nav .brand-logo {
      left:60px;
@@ -280,5 +305,5 @@ foooter a,
      -webkit-transform:none;
      transform:none
     }
-
 }
+

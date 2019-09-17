@@ -201,7 +201,6 @@ function routePage(loadedCallback) {
             $('#loading').hide();
             $('#page').show().html(data);
             currentPage.init();
-            //currentPage.update();
             if (loadedCallback) loadedCallback();
         }
     });
