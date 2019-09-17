@@ -15,6 +15,10 @@ body {
     background: #eef5f9;
 }
 
+#content {
+    flex: 1 0 auto;
+}
+
 strong {
     font-weight: 700;
 }
@@ -206,6 +210,10 @@ nav,
     background-color: #fff;
     border-bottom: 1px solid #e0e0e0;
     padding: 24px;
+}
+
+h2 {
+    font-size: 2.5rem;
 }
 
 h4, .card-action h2 {

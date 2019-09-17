@@ -1,66 +1,59 @@
 <style>
-	h2 #transactionHash {
-		font-size: 20px;
-		color: #222;
-	}
+textarea {
+  border: 0 none;
+  overflow: hidden;
+  max-height:314px;
+}
 </style>
 
-<h2><i class="fa fa-money fa-fw" aria-hidden="true"></i>Check reserve proof</h2>
-
-<p>Hereby you can check a signature proving that the owner of "address" holds at least this much, optionally with a
-	challenge string "message" and as of specified height.</p>
-
-<div class="well bs-component">
-	<form class="form-horizontal" id="check_reserve_form">
-		<fieldset>
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="public_address">Address</label>
-					<input class="form-control" placeholder="Public Karbo address" id="public_address">
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="message" style="margin-bottom: 10px;">Message</label>
-					<textarea class="form-control" id="message" rows="2" spellcheck="false"></textarea>
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="signature" style="margin-bottom: 10px;">Signature</label>
-					<textarea class="form-control" id="signature" rows="10" spellcheck="false"></textarea>
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="due_height">Check as of Height</label>
-					<input class="form-control" placeholder="Karbo blockchain height" id="due_height">
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<div class="form-group">
-					<button class="btn btn-primary" type="button" id="verify">
-						<span class="fa fa-search"> Verify</span>
-					</button>
-				</div>
-			</div>
-		</fieldset>
-	</form>
-</div>
-
-
-<div class="panel panel-default" id="verification_result">
-	<div class="panel-heading">
-		<h3 class="panel-title">Verification result</h3>
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<p>Hereby you can check a signature proving that the owner of "address" holds at least this much, optionally with a
+			challenge string "message" and as of specified Karbo blockchain height.</p>
 	</div>
-	<div class="panel-body">
-
-		<p id="verified"><i class="fa fa-2x"></i> <span></span></p>
-
+<div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-piggy-bank"></i> Check reserve proof</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<form id="check_funds_form">
+							<div class="input-field col s12">
+								<input id="public_address" type="text" class="validate">
+								<label for="public_address">Address</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="message" class="materialize-textarea"></textarea>
+								<label for="message">Message</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="signature" class="materialize-textarea"></textarea>
+								<label for="signature">Signature</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="due_height" type="text" class="validate">
+								<label for="due_height">Check as of Height</label>
+							</div>
+							<div class="input-field col s12">
+								<a id="verify" class="waves-effect waves-light btn light-blue darken-4"><i class="fas fa-check"></i> Verify</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="verification_result" class="card-action">
+				<div class="row">
+					<div class="col s12 l12">
+						<p id="verified"><i class="fa fa-2x"></i> <span></span></p>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -80,17 +73,29 @@
 		destroy: function () {
 			if (xhrCheckReserve) xhrCheckReserve.abort();
 		},
-		init: function () {},
+		init: function () {
+			$('.tooltipped').tooltip();
+			M.updateTextFields();
+		},
 		update: function () {}
 	};
 
+	$('#check_funds_form').on('change keydown keyup paste cut', 'textarea', function () {  
+	$(this).height(0).height(this.scrollHeight+2);
+	if ($(this).height() >= 300) {
+		$('textarea#signature').css("overflow", "auto");
+	}
+	else {
+		$('textarea#signature').css("overflow", "hidden");
+	}
+	}).find('textarea#signature').change();
 
 	$("#verify").click(function () {
 		result_container.hide();
 		result_text.empty();
 		privateKeyType = $("[name=keyType]:checked").val();
 		if (!signature.val() || !address.val()) {
-			wrongParamAlert("Fill address and signature fields!");
+			M.toast({html: 'Fill at least Address and Signature fields!', classes: 'red'}, 5000);
 			return;
 		}
 		checkReserve();
@@ -98,35 +103,39 @@
 
 	function checkReserve() {
 		if (xhrCheckReserve) xhrCheckReserve.abort();
+		var height;
+		var hv = as_of_height.val();
+		if (hv == null || hv == "") {
+			height = lastStats.last_known_block_index;
+		} else {
+			height = parseInt(hv)
+		}
+
 		xhrCheckReserve = $.ajax({
 			url: api + '/json_rpc',
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc: "2.0",
-				id: "test",
-				method: "check_reserve_proof",
+				id: "explorer_check_funds",
+				method: "checkreserveproof",
 				params: {
 					message: message.val(),
 					address: address.val(),
 					signature: signature.val(),
-					height: parseInt(as_of_height.val())
+					height: height
 				}
 			}),
 			dataType: 'json',
 			cache: 'false',
 			success: function (data) {
 				if (data.error) {
-					wrongParamAlert(data.error.message);
+					M.toast({html: data.error.message, classes: 'red'}, 5000);
 				} else {
 					var res = data.result;
-
-					console.log(res);
-
-					result_container.removeClass("panel-default");
-					result_container.removeClass("panel-success");
-					result_container.removeClass("panel-warning");
-					result.removeClass("text-success");
-					result.removeClass("text-warning");
+					result_container.removeClass("light-green lighten-5");
+					result_container.removeClass("red lighten-4");
+					result.removeClass("teal-text text-darken-4");
+					result.removeClass("red-text text-darken-4");
 					result_icon.removeClass("fa-check");
 					result_icon.removeClass("fa-times");
 
@@ -134,39 +143,23 @@
 
 					if (isvalid) {
 						result_text.html("Signature is <strong>valid</strong> and proves that " +
-							"specified address holds at least <strong>" +
+							"specified address holds/holded at least <strong>" +
 							getReadableCoins(res.total) + "</strong>, from which " +
-							"as of height " + as_of_height.val() +
+							"as of height " + height +
 							" spent: " +
 							getReadableCoins(res.spent));
-						result_container.addClass("panel-success");
-						result.addClass("text-success");
+						result_container.addClass("light-green lighten-5");
+						result.addClass("teal-text text-darken-4");
 						result_icon.addClass("fa-check");
 					} else {
 						result_text.text("Signature is invalid!");
-						result_container.addClass("panel-warning");
-						result.addClass("text-warning");
+						result_container.addClass("red lighten-4");
+						result.addClass("red-text text-darken-4");
 						result_icon.addClass("fa-times");
 					}
 					result_container.show();
 				}
 			}
 		});
-	}
-
-
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip();
-	});
-
-	function wrongParamAlert(message) {
-		$('#page').after(
-			'<div class="alert alert-danger alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">' +
-			'<button type="button" class="close" ' +
-			'data-dismiss="alert" aria-hidden="true">' +
-			'&times;' +
-			'</button>' +
-			'<strong>' + message + '</strong><br />' +
-			'</div>');
-	}
+	}	
 </script>

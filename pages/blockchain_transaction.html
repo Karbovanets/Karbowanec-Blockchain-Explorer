@@ -192,7 +192,7 @@
 					<div class="row">
 						<div class="col s12 l12">
 							<form id="check_tx_form">
-								<p>Private Key:</p>
+								<p>Private Key</p>
 								<p>
 									<label>
 										<input class="with-gap" type="radio" name="keyType" value="tx_key" checked>
@@ -251,6 +251,7 @@
 		},
 		init: function () {
 			$('.tooltipped').tooltip();
+			M.updateTextFields();
 		},
 		update: function () {
 			if (!refresh) {

@@ -321,8 +321,7 @@
 						refreshChart();
 						var currHeight = $('#blocks_rows').children().first().data(
 							'height');
-						if (currHeight + blocksPerPage >= lastStats
-							.last_known_block_index) {
+						if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
 							$('#next-page').addClass('disabled');
 							$('#last-page').addClass('disabled');
 							$('#loadMoreBlocks').removeClass('disabled');
