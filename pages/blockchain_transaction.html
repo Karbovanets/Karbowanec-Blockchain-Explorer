@@ -20,15 +20,11 @@
 		margin: 0 20px;
 	}
 
-	#tab_menu {
-		margin-top: 30px;
-	}
 </style>
 
 <p id="tx_loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
 
 <div style="height: 10px; clear: both;"></div>
-
 <div id="tx_details" style="display: none;">
 	<div class="row" id="tx_info">
 		<div class="col s12">
@@ -121,7 +117,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="row">
 		<div class="col s12">
 			<div class="card hoverable">
@@ -187,17 +182,6 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="tx_not_found" style="display: none;">
-		<div class="row">
-			<div class="col-md-12">
-				<h3 class="text-danger"><i class="fa fa-exclamation-triangle fa-lg text-danger"></i> Transaction not found
-				</h3>
-				<pre id="tx_not_found_json"></pre>
-			</div>
-		</div>
-	</div>
-
 	<div class="row">
 		<div class="col s12">
 			<div class="card hoverable">
@@ -207,43 +191,48 @@
 				<div class="card-content">
 					<div class="row">
 						<div class="col s12 l12">
-
-					<form id="check_tx_form">
-						<p>Private Key:</p>
-						<p>
-							<label>
-								<input class="with-gap" type="radio" name="keyType" value="tx_key" checked>
-								<span>Transaction Key</span>
-							</label>
-							<label>
-								<input class="with-gap" type="radio" name="keyType" value="view_key">
-								<span>Private View Key</span>
-							</label>
-							<label>
-								<input class="with-gap" type="radio" name="keyType" value="tx_proof">
-								<span>Proof of Payment</span>
-							</label>
-							<input placeholder="Private view key, Secret transaction key or Proof of payment" id="transaction_key" type="text">
-						</p>
-						<p>Recipient public address</p>
-						<input placeholder="Receiver's public address" id="public_address" type="text">
-
-						<a id="check_transaction" class="waves-effect waves-light btn light-blue darken-4"><i class="fas fa-search"></i> Check Payment</a>
-					</form>
-
-					<div class="card-panel light-blue lighten-5" id="check_result">
-						<p>Specified address received <strong><span id="receivedAmount"></span></strong> in this
-							transaction.</p>
-
-						<p>Switch to Outputs tab to see which outputs belong to the recipient.</p>
-					</div>
-
+							<form id="check_tx_form">
+								<p>Private Key:</p>
+								<p>
+									<label>
+										<input class="with-gap" type="radio" name="keyType" value="tx_key" checked>
+										<span>Transaction Key</span>
+									</label>
+									<label>
+										<input class="with-gap" type="radio" name="keyType" value="view_key">
+										<span>Private View Key</span>
+									</label>
+									<label>
+										<input class="with-gap" type="radio" name="keyType" value="tx_proof">
+										<span>Proof of Payment</span>
+									</label>
+									<input placeholder="Private view key, Secret transaction key or Proof of payment" id="transaction_key" type="text">
+								</p>
+								<p>Recipient public address</p>
+								<p><input placeholder="Receiver's public address" id="public_address" type="text"></p>
+								<p><a id="check_transaction" class="waves-effect waves-light btn light-blue darken-4"><i class="fas fa-search"></i> Check Payment</a></p>
+							</form>
+							<div class="card-panel light-blue lighten-5" id="check_result">
+								<p>Specified address received <strong><span id="receivedAmount"></span></strong> in this
+									transaction.</p>
+								<p>Switch to Outputs tab to see which outputs belong to the recipient.</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div id="tx_not_found" style="display: none;">
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="text-danger"><i class="fa fa-exclamation-triangle fa-lg text-danger"></i> Transaction not found
+				</h3>
+				<pre id="tx_not_found_json"></pre>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 	var xhrGetTransaction, xhrCheckTransactionByKey, xhrCheckTransactionByViewKey, xhrCheckTxProof, transaction, ago;
 	var refresh = false;
