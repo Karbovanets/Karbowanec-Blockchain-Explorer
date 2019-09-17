@@ -1,4 +1,9 @@
 <style>
+	.card-action h2 {
+    	font-size: 1.25rem;
+        margin: 0;
+	}
+	
 	table.mempool-table {
 		width: 100%;
 		border-spacing: 0;
@@ -163,9 +168,9 @@
 	<div class="col s12">
 		<div class="card hoverable">
 			<div class="card-action grey lighten-5">
-				<h5 class="light-blue-text text-darken-4"><span class="tooltipped"
+				<h2 class="light-blue-text text-darken-4"><span class="tooltipped"
 					data-position="bottom" data-tooltip="Recent transactions waiting to be included into a block.">
-					<i class="fas fa-exchange-alt"></i> Transactions pool</span></h5>
+					<i class="fas fa-exchange-alt"></i> Transactions pool</span></h2>
 			</div>
 			<div class="card-content">
 				<div id="empty_mem_pool" style="display: none;">
@@ -217,7 +222,7 @@
 	<div class="col s12">
 		<div class="card hoverable">
 			<div class="card-action grey lighten-5">
-				<h5 class="light-blue-text text-darken-4"><i class="fas fa-link"></i> Recent blocks</h5>
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-link"></i> Recent blocks</h2>
 				<a class="btn-floating btn-large halfway-fab waves-effect waves-light light-blue darken-1" id="loadMoreBlocks"><i class="material-icons">add</i></a>
 			</div>
 			

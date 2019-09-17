@@ -22,7 +22,7 @@
 
 </style>
 
-<p id="tx_loading" class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i></p>
+<p id="tx_loading" class="text-center"><i class="fas fa-circle-notch fa-spin"></i></p>
 
 <div style="height: 10px; clear: both;"></div>
 <div id="tx_details" style="display: none;">
@@ -223,10 +223,12 @@
 			</div>
 		</div>
 	</div>
-	<div id="tx_not_found" style="display: none;">
+	<div class="card-panel" id="tx_not_found" style="display: none;">
 		<div class="row">
 			<div class="col-md-12">
-				<h3 class="text-danger"><i class="fa fa-exclamation-triangle fa-lg text-danger"></i> Transaction not found
+				<h3 class="text-danger">
+					<i class="fa fa-exclamation-triangle fa-lg text-danger"></i>
+					Transaction not found
 				</h3>
 				<pre id="tx_not_found_json"></pre>
 			</div>
@@ -525,16 +527,22 @@
 	$("#check_result").hide();
 
 	$("#check_transaction").click(function () {
-		"use strict";
+		doCheck();
+	});
 
+	function doCheck() {
 		$("#check_result").hide();
 		$('#receivedAmount').empty();
+		$('#outputs_rows tr').each(function () {
+			$this = $(this);
+			$this.removeClass("teal lighten-5");	
+		});
 		transactionKeyType = $("[name=keyType]:checked").val();
 		if (!transactionKey.val() || !publicAddress.val()) {
 			M.toast({html: 'Fill all fields!', classes: 'red'}, 5000);
 			return;
 		}
-
+		
 		if (transactionKeyType === "tx_key") {
 			checkTxKey();
 		} else if (transactionKeyType === "view_key") {
@@ -542,8 +550,7 @@
 		} else if (transactionKeyType === "tx_proof") {
 			checkTxProof();
 		}
-
-	});
+	}
 
 	function checkTxKey() {
 		if (xhrCheckTransactionByKey) xhrCheckTransactionByKey.abort();
