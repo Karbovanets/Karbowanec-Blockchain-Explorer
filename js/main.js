@@ -162,7 +162,7 @@ function nodeInfo() {
         $('#node_connection').html('Online').addClass('text-success').removeClass('text-danger');
         $('#node_height').html(parseInt(lastStats['height']));
         $('#node_block').html(parseInt(lastStats['last_known_block_index']));
-        $('#node_diff').html(parseInt(lastStats['next_difficulty']));
+        $('#node_diff').html(parseInt(lastStats['difficulty']));
         $('#node_alt').html(parseInt(lastStats['alt_blocks_count']));
         $('#node_rpc').html(parseInt(lastStats['rpc_connections_count']));
         $('#node_inc').html(parseInt(lastStats['incoming_connections_count']));
