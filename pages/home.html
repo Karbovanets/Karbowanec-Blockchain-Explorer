@@ -262,8 +262,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="table-responsive">
-					<table class="table table-hover">
+				<div>
+					<table class="highlight">
 						<thead>
 							<tr>
 								<th><i class="fas fa-bars"></i> Height</th>
@@ -715,6 +715,7 @@
 
 	function renderBlocks(blocksResults) {
 		var $blocksRows = $('#blocks_rows');
+		console.log(blocksResults.length);
 		for (var i = 0; i < blocksResults.length; i++) {
 			var block = blocksResults[i];
 			var blockJson = JSON.stringify(block);

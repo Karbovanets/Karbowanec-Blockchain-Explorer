@@ -1,11 +1,6 @@
-//var api = 'https://karbo.club/services/node_web';
-//var apiList = ["http://45.32.232.11:32348", "http://95.46.98.64:32348/"];
-
-var api = 'http://127.0.0.1:32348';
-var apiList = ["http://127.0.0.1:32348", "http://127.0.0.1:32348"];
-
-//var api = 'http://127.0.0.1:22348';
-//var apiList = ["http://127.0.0.1:22348", "http://127.0.0.1:22348"];
+var api = 'https://karbo.club/services/node_web';
+//var apiList = ["http://karbonode.top:32348", "http://looongcat.pp.ua:32348"];
+var apiList = ["http://108.61.198.115:32348", "http://45.32.232.11:32348"];
 
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;

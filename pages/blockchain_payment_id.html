@@ -1,25 +1,36 @@
-<h2><i class="fa fa-tag fa-fw" aria-hidden="true"></i> Payment ID <small id="paymend_id"
-        style="word-break: break-all; word-wrap: break-word;"></small></h2>
-
-<h3><i class="fa fa-exchange fa-fw" aria-hidden="true"></i> Transaction(s) with this Payment ID <span class="badge"
-        id="transactions_count"></span></h3>
-
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th><i class="fa fa-paw"></i> Hash</th>
-                <th><i class="fa fa-percent"></i> Fee</th>
-                <th><i class="fa fa-money"></i> Total Amount</th>
-                <th><i class="fa fa-arrows"></i> Size</th>
-            </tr>
-        </thead>
-        <tbody id="transactions_rows">
-
-        </tbody>
-    </table>
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+    <div class="col s12">
+        <div class="card hoverable">
+            <div class="card-action grey lighten-5">
+                <h2 class="light-blue-text text-darken-4">
+                    <i class="fas fa-tag"></i> Payment ID <small id="paymend_id"
+                       style="word-break: break-all; word-wrap: break-word;"></small></h2>
+            </div>
+            <div class="card-content">
+                <h5><i class="fas fa-exchange"></i><span 
+                    id="transactions_count"></span> transaction(s) with this Payment ID:</h5>
+                <div class="row">
+                    <div class="col s12 table-container">
+                        <table class="highlight centered">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-hashtag"></i> Hash</th>
+                                    <th><i class="fas fa-donate"></i> Fee</th>
+                                    <th><i class="fas fa-money-bill-wave-alt"></i> Total Amount</th>
+                                    <th><i class="fas fa-hdd"></i> Size</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions_rows">
+                    
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 <script>
     var paymentId, xhrGetTsx, txsByPaymentId;
 
@@ -48,7 +59,7 @@
                 data: JSON.stringify({
                     jsonrpc: "2.0",
                     id: "test",
-                    method: "k_transactions_by_payment_id",
+                    method: "gettransactionsbypaymentid",
                     params: {
                         payment_id: paymentId
                     }
@@ -65,7 +76,7 @@
     }
 
     function getTransactionCells(transaction) {
-        return '<td>' + formatPaymentLink(transaction.hash) + '</td>' +
+        return '<td style="word-break: break-all; word-wrap: break-word;">' + formatPaymentLink(transaction.hash) + '</td>' +
             '<td>' + getReadableCoins(transaction.fee, 4, true) + '</td>' +
             '<td>' + getReadableCoins(transaction.amount_out, 4, true) + '</td>' +
             '<td>' + formatBytes(parseInt(transaction.size)) + '</td>';
