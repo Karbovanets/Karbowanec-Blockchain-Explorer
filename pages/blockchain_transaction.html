@@ -51,7 +51,7 @@
 									data-tooltip="Unlock time allows you to send a transaction to someone, such that they can not spend it until after a certain number of blocks, or until a certain time."></i>
 									Unlock time: <span id="transaction.unlock_time"></span>
 								</li>
-								<li class="collection-item">
+								<li class="collection-item" id="transaction_fee">
 									<i class="fas fa-donate fa-fw tooltipped" data-position="top" data-tooltip="Money that goes to the miner, who included this transaction into block."></i>
 									Fee: <span id="transaction.fee"></span>
 								</li>
@@ -67,7 +67,7 @@
 									<i class="fas fa-mortar-pestle fa-fw tooltipped" data-position="top" data-tooltip="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."></i>
 									Mixin count: <span id="transaction.mixin"></span>
 								</li>
-								<li class="collection-item">
+								<li class="collection-item" id="transaction_version">
 									<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="Version of the transaction."></i>
 									Version: <span id="transaction.version"></span>
 								</li>
@@ -313,8 +313,7 @@
 		}
 		updateText('transaction.amount_out', getReadableCoins(transaction.totalOutputsAmount));
 		if (typeof transaction.inputs !== 'undefined' && transaction.inputs[0].type != "ff") {
-			updateText('transaction.fee', getReadableCoins(transaction.totalInputsAmount - transaction
-			.totalOutputsAmount));
+			updateText('transaction.fee', getReadableCoins(transaction.fee));
 		} else {
 			$('#transaction_fee').hide();
 		}
@@ -335,7 +334,11 @@
 			$('.transaction_payment_id').hide();
 		}
 		updateText('transaction.size', formatBytes(parseInt(transaction.size)));
-		updateText('transaction.version', transaction.version);
+		if (typeof transaction.version !== 'undefined') {
+			updateText('transaction.version', transaction.version);
+		} else {
+			$('#transaction_version').hide();
+		}
 		updateText('transaction.unlock_time', transaction.unlockTime);
 		updateText('transaction.public_key', transaction.extra.publicKey);
 		updateText('transaction.extra_raw', transaction.extra.raw);
