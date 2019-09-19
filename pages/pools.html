@@ -3,7 +3,22 @@
 <style>
 	.container {
 		width: 100%;
+		max-width:initial;
 		padding: 0 40px;
+		> .row{
+			margin: 0;
+			> .col{
+				padding: 0;
+			}
+		}
+	}
+
+	.collection.with-header .collection-header {
+		padding: 5px 25px;
+	}
+
+	.collection.with-header .collection-header h5 {
+		font-size: 1.5rem;
 	}
 
 	#pools_rows>tr>td {
@@ -23,99 +38,145 @@
 	#pools_rows>tr>td:nth-child(2) {
 		text-align: left;
 	}
+
+	#calc_profit {
+		padding: 1px 20px;
+		position: relative;
+	}
+	#calc_profit table tr { border-bottom:none }
+	#calc_profit .input-field {margin: 0}
+
 </style>
-
+<div style="height: 10px; clear: both;"></div>
 <div class="row">
-	<div class="col-sm-6 col-md-3">
-		<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-center active">
-				<i class="fa fa-tachometer"></i> Network Hashrate
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="bottom"
-				data-original-title="Current estimated network hash rate. Calculated by current difficulty.">
-				By difficulty: <span id="networkHashrate"></span>
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="bottom"
-				data-original-title="Average estimated network hash rate. Calculated by average difficulty.">
-				Average: <span id="avgHashrate"></span>
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="top" data-original-title="The overall hash rate of all known pools listed below.">
-				By pools: <span id="totalPoolsHashrate"></span>
-			</li>
-
-		</ul>
-	</div>
-	<div class="col-sm-6 col-md-2">
-		<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-center active">
-				<i class="fa fa-unlock-alt"></i> Difficulty
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="top"
-				data-original-title="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval.">
-				Current: <span id="networkDifficulty"></span>
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="bottom" data-original-title="Average difficulty by last 30 blocks.">
-				Average: <span id="avgDifficulty"></span>
-			</li>
-		</ul>
-
-	</div>
-	<div class="col-sm-6 col-md-2">
-		<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-center active">
-				<i class="fa fa-group"></i> Total
-			</li>
-
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="bottom" data-original-title="The number of miners on all known pools.">
-				Miners: <span id="total_miners"></span>
-			</li>
-			<li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="tooltip"
-				data-placement="top" data-original-title="The number of known pools.">
-				Pools: <span id="total_pools"></span>
-			</li>
-		</ul>
-	</div>
-
-	<div class="col-sm-12 col-md-5">
-		<div class="panel panel-primary" id="network-stats">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-tachometer"></i> Estimate Mining Profits</h3>
+	<div class="col s12">
+		<div class="row">
+			<div class="col s12 m6 l3">
+				<ul class="collection with-header hoverable">
+					<li class="collection-header light-blue-text text-darken-4">
+						<h5><i class="fas fa-tachometer-alt"></i> Network Hashrate</h5>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="Average estimated network hash rate. Calculated by average difficulty.">
+						By difficulty (average): <strong><span id="avgHashrate"></span></strong>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="The overall hash rate of all known pools listed below.">
+						By pools: <strong><span id="totalPoolsHashrate"></span></strong>
+					</li>
+				</ul>
 			</div>
-			<div class="panel-body">
+			<div class="col s12 m6 l2">
+				<ul class="collection with-header hoverable">
+					<li class="collection-header light-blue-text text-darken-4">
+						<h5><i class="fas fa-unlock"></i> Difficulty</h5>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="Difficulty for next block. Ratio at which at the current hashing speed blocks will be mined with 4 minutes interval.">
+						Current: <strong><span id="networkDifficulty"></span></strong>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="Average difficulty by last blocks.">
+						Average: <strong><span id="avgDifficulty"></span></strong>
+					</li>
+				</ul>
+			</div>
+			<div class="col s12 m6 l2">
+				<ul class="collection with-header hoverable">
+					<li class="collection-header light-blue-text text-darken-4">
+						<h5><i class="fas fa-users"></i> Total</h5>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="The number of miners on all known pools.">
+						Miners: <strong><span id="total_miners"></span></strong>
+					</li>
+					<li class="collection-item" data-position="top" data-tooltip="The number of known pools.">
+						Pools: <strong><span id="total_pools"></span></strong>
+					</li>
+				</ul>
+			</div>
+			<div class="col s12 m6 l5">
+				<ul class="collection with-header hoverable" style="overflow: visible;">
+					<li class="collection-header light-blue-text text-darken-4">
+						<h5><i class="fas fa-tachometer-alt"></i> Estimate Mining Profits</h5>
+					</li>
+					<li class="collection-item" id="calc_profit">
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<input type="number" class="validate" id="calcHashRate" placeholder="Enter your hash rate">
+									</td>
+									<td>
+										<div class="input-field col s12">
+											<select id="calcHashDropdown">
+												<option value="0">H/s</option>
+												<option value="1" selected>KH/s</option>
+												<option value="2">MH/s</option>
+											</select>
+										</div>
+									</td>
+									<td>
+										<span>=</span>
+										<span id="calcHashResultsHolder"><span id="calcHashAmount"></span> <span id="calcHashSymbol"></span> KRB/day</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-content">
 				<div class="row">
-					<div class="col-sm-12 col-md-12">
-						<div id="calcHashHolder">
-							<div class="input-group">
-								<input type="number" class="form-control" id="calcHashRate"
-									placeholder="Enter your hash rate">
-								<div class="input-group-btn">
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-										id="calcHashDropdown">
-										<span id="calcHashUnit" data-mul="1">KH/s</span> <span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-right" role="menu" id="calcHashUnits">
-										<li class="list-group-item d-flex justify-content-between align-items-center"><a
-												data-mul="0">H/s</a></li>
-										<li class="list-group-item d-flex justify-content-between align-items-center"><a
-												data-mul="1">KH/s</a></li>
-										<li class="list-group-item d-flex justify-content-between align-items-center"><a
-												data-mul="2">MH/s</a></li>
-									</ul>
-								</div>
-								<span class="input-group-addon">=</span>
-								<span class="input-group-addon" id="calcHashResultsHolder"><span
-										id="calcHashAmount"></span> <span id="calcHashSymbol"></span> KRB / day</span>
+					<div class="col s12">
+						<table id="network-hash" class="highlight centered">
+							<thead>
+								<tr>
+									<th><i class="fas fa-eye-dropper"></i></th>
+									<th><i class="fas fa-mountain"></i><span id="symbol"></span> Pool</th>
+									<th class="sorttable_numeric"><i class="fas fa-list-ol"></i> Height</th>
+									<th class="sorttable_numeric"><i class="fas fa-hashtag"></i>&nbsp;Hash</th>
+									<th class="sorttable_numeric"><i class="fab fa-cloudscale"></i> Hashrate, H/s</th>
+									<th class="sorttable_numeric"><i class="fas fa-users"></i> Miners</th>
+									<th class="sorttable_numeric"><i class="far fa-money-bill-alt"></i> Total Fee</th>
+									<th class="sorttable_numeric"><i class="fas fa-sign-out-alt"></i> Min. Payout</th>
+									<th class="sorttable_numeric"><i class="fas fa-cube"></i> Last Block</th>
+									<th><i class="far fa-clock"></i> Found At</th>
+								</tr>
+							</thead>
+							<tbody id="pools_rows"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 m6 l3">
+						<p class="range-field">
+							<input type="range" min="1000" max="100000" value="1000" step="1000" onchange="changBigHashrate(event)">
+						</p>
+					</div>
+					<div class="col s12">
+						<div class="row">
+							<div class="col s12 m6 l3">
+								<canvas id="poolsChart" style="margin: 0 auto;"></canvas>
+							</div>
+							<div class="col s12 m6 l3">
+								<canvas id="poolsSmallChart" style="margin: 0 auto;"></canvas>
+							</div>
+							<div class="col s12 m6 l3">
+								<canvas id="bigMinersChart" style="margin: 0 auto;"></canvas>
+							</div>
+							<div class="col s12 m6 l3">
+								<canvas id="smallMinersChart" style="margin: 0 auto;"></canvas>
 							</div>
 						</div>
 					</div>
@@ -123,57 +184,8 @@
 			</div>
 		</div>
 	</div>
-
-</div>
-<div class="table-responsive">
-	<table id="network-hash" class="table table-hover sortable">
-		<thead>
-			<tr>
-				<th><i class="fa fa-eyedropper"></i></th>
-				<th><span id="symbol"></span>&nbsp;Pools</th>
-				<th class="sorttable_numeric"><i class="fa fa-bars"></i>&nbsp;Height</th>
-				<th class="sorttable_numeric"><i class="fa fa-hashtag"></i>&nbsp;Hash</th>
-				<th class="sorttable_numeric"><i class="fa fa-tachometer"></i>&nbsp;Hashrate,&nbsp;H/s</th>
-				<th class="sorttable_numeric"><i class="fa fa-group"></i>&nbsp;Miners</th>
-				<th class="sorttable_numeric"><i class="fa fa-money"></i>&nbsp;Total Fee</th>
-				<th class="sorttable_numeric"><i class="fa fa-sign-out"></i>&nbsp;Min. Payout</th>
-				<th class="sorttable_numeric"><i class="fa fa-cube"></i>&nbsp;Last Block</th>
-				<th><i class="fa fa-clock-o"></i>&nbsp;Found At</th>
-			</tr>
-		</thead>
-		<tbody id="pools_rows">
-		</tbody>
-	</table>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-2">
-			<input type="range" min="90000" max="2100000" value="300000" step="10000"
-				onchange="changBigHashrate(event)">
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="col-lg-6 col-md-6">
-			<canvas id="poolsChart" style="margin: 0 auto;"></canvas>
-		</div>
-		<div class="col-lg-6 col-md-6">
-			<canvas id="poolsSmallChart" style="margin: 0 auto;"></canvas>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-6 col-md-6">
-			<canvas id="bigMinersChart" style="margin: 0 auto;"></canvas>
-		</div>
-		<div class="col-lg-6 col-md-6">
-			<canvas id="smallMinersChart" style="margin: 0 auto;"></canvas>
-		</div>
-	</div>
-</div>
-
-<br />
 
 <script src="js/Chart.bundle.min.js"></script>
 <script src="js/sorttable.js"></script>
@@ -183,6 +195,20 @@
 		return a - b;
 	}
 
+	$('.dropdown-trigger').dropdown();
+	/*$('.dropdown-trigger').dropdown({
+		inDuration: 300,
+		outDuration: 225,
+		hover: false, // Activate on hover
+		belowOrigin: true, // Displays dropdown below the button
+		alignment: 'left' // Displays dropdown with edge aligned to the left of button
+		}
+	);*/
+
+	$(document).ready(function(){
+		$('select').formSelect();
+	});
+
 	window.NETWORK_STAT_MAP = new Map(poolsStat);
 	window.poolNames = [];
 	window.poolHashrates = [];
@@ -191,7 +217,6 @@
 	poolMiners = [];
 	totalHashrate = 0;
 	totalMiners = 0;
-	lastReward = 0;
 	avgDiff = 0;
 	var bigHashrate = 300000;
 	var poolsRefreshed = 0;
@@ -323,14 +348,10 @@
 		destroy: function () {},
 		init: function () {
 			getBlocks();
-			renderLastBlock();
 		},
 		update: function () {
-			updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) +
-				'/sec');
 			updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 			getBlocks();
-			renderLastBlock();
 		}
 	};
 
@@ -414,7 +435,7 @@
 			title: {
 				display: true,
 				text: 'Hashrate Distribution bigger than ' + (bigHashrate / 1000).toFixed(0) + 'K',
-				fontSize: 25
+				fontSize: 20
 			},
 			tooltips: {
 				enabled: true,
@@ -462,7 +483,7 @@
 			title: {
 				display: true,
 				text: 'Hashrate Distribution smaller than ' + (bigHashrate / 1000).toFixed(0) + 'K',
-				fontSize: 25
+				fontSize: 20
 			},
 			tooltips: {
 				enabled: true,
@@ -511,7 +532,7 @@
 			title: {
 				display: true,
 				text: 'Miner Distribution smaller than ' + (bigHashrate / 1000).toFixed(0) + 'k',
-				fontSize: 25
+				fontSize: 20
 			},
 			tooltips: {
 				enabled: true,
@@ -559,7 +580,7 @@
 			title: {
 				display: true,
 				text: 'Miner Distribution bigger than ' + (bigHashrate / 1000).toFixed(0) + 'k',
-				fontSize: 25
+				fontSize: 20
 			},
 			tooltips: {
 				enabled: true,
@@ -696,8 +717,6 @@
 					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) +
 						'/sec');
 					updateText('total_miners', totalMiners);
-					updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty /
-						blockTargetInterval) + '/sec');
 					updateText('networkDifficulty', getReadableDifficultyString(lastStats
 						.difficulty, 2).toString());
 
@@ -782,9 +801,10 @@
 			method: "POST",
 			data: JSON.stringify({
 				jsonrpc: "2.0",
-				id: "test",
-				method: "f_blocks_list_json",
+				id: "explorer_blocks_list",
+				method: "getblockslist",
 				params: {
+					count: blocksPerPage,
 					height: lastStats.height - 1
 				}
 			}),
@@ -821,61 +841,20 @@
 
 		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
 		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
-		//updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
-	}
-
-	function renderLastBlock() {
-		$.ajax({
-			url: api + '/json_rpc',
-			method: "POST",
-			data: JSON.stringify({
-				jsonrpc: "2.0",
-				id: "test",
-				method: "getlastblockheader",
-				params: {
-
-				}
-			}),
-			dataType: 'json',
-			cache: 'false',
-			success: function (data) {
-				last_block_hash = data.result.block_header.hash;
-				$.ajax({
-					url: api + '/json_rpc',
-					method: "POST",
-					data: JSON.stringify({
-						jsonrpc: "2.0",
-						id: "test",
-						method: "f_block_json",
-						params: {
-							hash: last_block_hash
-						}
-					}),
-					dataType: 'json',
-					cache: 'false',
-					success: function (data) {
-						var block = data.result.block;
-						lastReward = parseInt(block.baseReward);
-					}
-				});
-			}
-		});
 	}
 
 	/* Hash Profitability Calculator */
 	$('#calcHashRate').keyup(calcEstimateProfit).change(calcEstimateProfit);
 
-	$('#calcHashUnits > li > a').click(function (e) {
-		e.preventDefault();
-		$('#calcHashUnit').text($(this).text()).data('mul', $(this).data('mul'));
+	$("#calcHashDropdown").on('change', function (e) {
 		calcEstimateProfit();
 	});
 
 	function calcEstimateProfit() {
 		try {
-			var rateUnit = Math.pow(1024, parseInt($('#calcHashUnit').data('mul')));
+			var rateUnit = Math.pow(1024, parseInt($('#calcHashDropdown').children("option:selected").val()));
 			var hashRate = parseFloat($('#calcHashRate').val()) * rateUnit;
-			var profit = (hashRate * 86400 / avgDiff /*lastStats.difficulty*/ ) * lastReward;
+			var profit = (hashRate * 86400 / avgDiff /*lastStats.difficulty*/ ) * lastStats.next_reward;
 			if (profit) {
 				updateText('calcHashAmount', getReadableCoins(profit, 2, true));
 				return;
@@ -883,4 +862,5 @@
 		} catch (e) {}
 		updateText('calcHashAmount', '');
 	}
+
 </script>
