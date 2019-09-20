@@ -45,6 +45,12 @@
 	}
 	#calc_profit table tr { border-bottom:none }
 	#calc_profit .input-field {margin: 0}
+	
+	@media only screen and (max-width: 992px) {
+		.container {
+			padding: 0 10px;
+		}
+	}
 
 </style>
 <div style="height: 10px; clear: both;"></div>
@@ -130,7 +136,7 @@
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="row">
-					<div class="col s12">
+					<div class="col s12 table-responsive">
 						<table id="network-hash" class="highlight centered">
 							<thead>
 								<tr>

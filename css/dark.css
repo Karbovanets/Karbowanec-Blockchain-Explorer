@@ -47,4 +47,18 @@ nav .switch label .lever::after {
 input {
   color: #a4a4a4!important;
 }
- 
+
+.collection.with-header .collection-header {
+  background-color: #1C2B3D !important;
+  border-bottom: 1px solid #35465B;
+  padding: 24px;
+}
+
+.collection .collection-item {
+  background-color: #192534!important;
+  line-height: 1.5rem;
+  padding: 10px 20px;
+      padding-left: 20px;
+  margin: 0;
+  border-bottom: 1px solid #35465B;
+}

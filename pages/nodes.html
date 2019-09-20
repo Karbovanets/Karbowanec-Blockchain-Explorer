@@ -29,6 +29,11 @@
 		margin-bottom: 0.49rem;
 	}
 
+	@media only screen and (max-width: 992px) {
+		.container {
+			padding: 0 10px;
+		}
+	}
 </style>
 <div style="height: 10px; clear: both;"></div>
 <div class="row">
@@ -39,7 +44,7 @@
 					<div class="card-content">
 						<div class="d-flex no-block">
 							<div class="m-r-12">
-								<span class="grey-text text-darken-1">Last block height</span>
+								<span>Last block height</span>
 								<h6 class="light-blue-text text-darken-4"><strong id="commonHeight"></strong></h6>
 							</div>
 						</div>
@@ -103,7 +108,7 @@
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="row">
-					<div class="col s12">
+					<div class="col s12 table-responsive">
 						<table id="nodesTable" class="highlight centered sortable">
 							<thead>
 								<tr>
@@ -122,8 +127,7 @@
 							<colgroup width="300"></colgroup>
 							<colgroup width="100"></colgroup>
 							<colgroup width="500"></colgroup>
-							<tbody id="nodes_rows">
-							</tbody>
+							<tbody id="nodes_rows"></tbody>
 						</table>
 					</div>
 				</div>
