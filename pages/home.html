@@ -43,8 +43,8 @@
 		overflow-x: hidden;
 	}
 
-	table.mempool-table tbody td,
 	table.mempool-table thead th,
+	table.mempool-table tbody td,
 	table.mempool-table tfoot td {
 		width: 10%;
 		float: left;
@@ -56,9 +56,9 @@
 		min-width: 20%;
 	}
 
-	table.mempool-table thead tr:last-child,
-	table.mempool-tabletbody tr:last-child,
-	table.mempool-table tfoot tr:last-child {
+	table.mempool-table thead th:last-child,
+	table.mempool-table tbody td:last-child,
+	table.mempool-table tfoot td:last-child {
 		min-width: 40%;
 	}
 
@@ -69,6 +69,12 @@
 
 	table.mempool-table td.date-time {
 		padding-top: 10px;
+	}
+
+	@media only screen and (max-width: 992px) {
+		table.mempool-table {
+			min-width: 1178px;
+		}
 	}
 </style>
 

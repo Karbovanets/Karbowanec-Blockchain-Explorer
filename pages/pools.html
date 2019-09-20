@@ -28,15 +28,16 @@
 		white-space: pre-line;
 	}
 
-	#pools_header>tr>th:first-child,
-	#pools_rows>tr>td:first-child {
-		text-align: left;
+	#pools_table thead th:last-child,
+	#pools_table tbody td:last-child,
+	#pools_table tfoot td:last-child {
+		min-width: 300px;
 	}
 
-	#pools_header>tr>th:last-child,
-	#pools_rows>tr>td:last-child,
-	#pools_rows>tr>td:nth-child(2) {
-		text-align: left;
+	#pools_table thead th:nth-child(8),
+	#pools_table tbody td:nth-child(8),
+	#pools_table tfoot td:nth-child(8) {
+		min-width: 100px;
 	}
 
 	#calc_profit {
@@ -137,7 +138,7 @@
 			<div class="card-content">
 				<div class="row">
 					<div class="col s12 table-responsive">
-						<table id="network-hash" class="highlight centered">
+						<table id="pools_table" class="highlight centered sortable">
 							<thead>
 								<tr>
 									<th><i class="fas fa-eye-dropper"></i></th>
@@ -742,7 +743,7 @@
 
 
 	function refreshChart() {
-		sorttable.makeSortable(document.getElementById("network-hash"));
+		sorttable.makeSortable(document.getElementById("pools_table"));
 		var pool_rows = $('#pools_rows').children();
 		var otherHashrate = 0;
 		var otherMiners = 0;

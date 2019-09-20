@@ -298,7 +298,17 @@ foooter a,
 }
 
 @media only screen and (max-width: 992px) {
+    
+    .container {
+        width: 100%;
+    }
+
     .navbar-fixed, nav {
+        height: auto;
+    }
+
+    .navbar-fixed nav {
+        position: sticky;
         height: auto;
     }
 
