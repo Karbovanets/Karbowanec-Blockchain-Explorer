@@ -144,7 +144,6 @@
 	</div-->
 </div>
 <div class="row">
-
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
 			<li class="collection-header"><span>Next Difficulty, Base</span>
@@ -174,6 +173,18 @@
 			<li class="collection-item">Est. solve time: <span id="blockSolveTime" class="value"></span></li>
 			<li class="collection-item">Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
 		</ul>
+	</div>
+	<div class="col s12 m6 l3">
+		<div class="card hoverable">
+			<div class="card-content">
+				<div style="height: 186px;">
+					<span>Algos distribution</span>
+					<div style="position: relative; padding: 5px 10px;">
+						<canvas id="algosChart" style="margin: 0 auto; max-width: 175px; max-height: 175px;"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -324,6 +335,10 @@
 		time_stamps = [],
 		Solvetimes = [],
 		diffChart,
+		poolsChart,
+		asicBlocks = 0,
+		gpuBlocks = 0,
+		cpuBlocks = 0,
 		refresh = true;
 
 	var coinsInCirculation;
@@ -352,6 +367,9 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						setTimeout(function () {
+							displayAlgosChart();
+						}, 100);
 						var currHeight = $('#blocks_rows').children().first().data(
 							'height');
 						if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
@@ -381,6 +399,9 @@
 					renderInitialBlocks()
 				).then(function () {
 					refreshChart();
+					setTimeout(function () {
+						poolsChart.update();
+					}, 100);
 				});
 			}
 			if (currHeight + blocksPerPage < lastStats.last_known_block_index) {
@@ -684,6 +705,9 @@
 		Timestamps = [];
 		time_stamps = [];
 		Solvetimes = [];
+		asicBlocks = 0;
+		gpuBlocks = 0;
+		cpuBlocks = 0;
 	}
 
 	function renderInitialBlocks() {
@@ -758,6 +782,14 @@
 		Sizes.push(parseInt(block.cumul_size));
 		Timestamps.push(dateTime);
 		time_stamps.push(block.timestamp);
+
+		if (block.algo === 0) {
+			asicBlocks++;
+		} else if (block.algo === 1) {
+			gpuBlocks++;
+		} else if (block.algo === 2) {
+			cpuBlocks++;
+		}
 
 		row.innerHTML = columns;
 
@@ -1223,6 +1255,40 @@
 		}
 		return formatAmounts(amount, units[units.length - 1][1]);
 	}
+
+
+	function displayAlgosChart() {
+		var ctx = document.getElementById("algosChart");
+
+		var chartData = {
+			labels: ['CN-ASIC', 'CN-GPU', 'CN-CPU'],
+			datasets: [{
+				data: [asicBlocks, gpuBlocks, cpuBlocks],
+				backgroundColor: ['#f06292', '#8bc34a', '#1565c0'],
+				borderWidth: 0,
+				segmentShowStroke: false
+			}]
+		};
+		var options = {
+			title: {
+				display: false,
+				text: 'Algos distribution',
+				fontSize: 14
+			},
+			legend: {
+				display: false,
+			},
+			responsive: true,
+			maintainAspectRatio: true
+		};
+		if (algosChart.data) algosChart.destroy();
+		window.algosChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: chartData,
+			options: options
+		});
+	}
+
 </script>
 
 <script src="js/Chart.bundle.min.js"></script>
