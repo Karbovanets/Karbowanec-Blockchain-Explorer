@@ -86,7 +86,7 @@
 			<div class="card-content">
 				<div class="d-flex no-block">
 					<div class="m-r-12">
-						<span class="grey-text text-darken-1">Height</span>
+						<span>Height</span>
 						<h4 id="networkHeight" class="light-blue-text text-darken-4"></h4>
 					</div>
 				</div>
@@ -127,7 +127,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col s12 m12 l3">
+	<!--div class="col s12 m12 l3">
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="d-flex no-block">
@@ -141,19 +141,40 @@
 				Hashrate: <span id="networkHashrate" class="value"></span>
 			</div>
 		</div>
-	</div>
-	<!--div class="col s12 m12 l3">
+	</div-->
+</div>
+<div class="row">
+
+	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Next Difficulty</span>
+			<li class="collection-header"><span>Next Difficulty, Base</span>
 				<h4 id="networkDifficulty" class="light-blue-text text-darken-4"></h4>
 			</li>
-			<li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
-			<li class="collection-item">Hash Rate: <span id="networkHashrate" class="value"></span></li>
+			<li class="collection-item">CN-ASIC: <span id="asicDifficulty" class="value"></span></li>
+			<li class="collection-item">CN-GPU: <span id="gpuDifficulty" class="value"></span></li>
+			<li class="collection-item">CN-CPU: <span id="cpuDifficulty" class="value"></span></li>
+		</ul>
+	</div>
+	<div class="col s12 m12 l3">
+		<ul class="collection with-header hoverable">
+			<li class="collection-header"><span>Hashrate, Syntetic</span><br />
+				<h4 id="networkHashrate" class="light-blue-text text-darken-4"></h4>
+			</li>
+			<li class="collection-item">CN-ASIC: <span id="asicHashrate" class="value"></span></li>
+			<li class="collection-item">CN-GPU: <span id="gpuHashrate" class="value"></span></li>
+			<li class="collection-item">CN-CPU: <span id="cpuHashrate" class="value"></span></li>
+		</ul>
+	</div>
+	<div class="col s12 m12 l3">
+		<ul class="collection with-header hoverable">
+			<li class="collection-header"><span>Average Base Difficulty</span>
+				<h4 id="avgDifficulty" class="light-blue-text text-darken-4"></h4>
+			</li>
 			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li>
 			<li class="collection-item">Est. solve time: <span id="blockSolveTime" class="value"></span></li>
 			<li class="collection-item">Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
 		</ul>
-	</div-->
+	</div>
 </div>
 
 <div class="row">
@@ -377,6 +398,15 @@
 			10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
+		updateText('asicDifficulty', getReadableDifficultyString(lastStats.multi_algo_difficulties.cryptonight, 2).toString());
+		updateText('gpuDifficulty', getReadableDifficultyString(lastStats.multi_algo_difficulties.cn_gpu, 2).toString());
+		updateText('cpuDifficulty', getReadableDifficultyString(lastStats.multi_algo_difficulties.cn_power, 2).toString());
+
+		updateText('asicHashrate', getReadableHashRateString(lastStats.multi_algo_difficulties.cryptonight / blockTargetInterval));
+		updateText('gpuHashrate', getReadableHashRateString(lastStats.multi_algo_difficulties.cn_gpu / blockTargetInterval));
+		updateText('cpuHashrate', getReadableHashRateString(lastStats.multi_algo_difficulties.cn_power / blockTargetInterval));
+
+
 		updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
 	}
 
@@ -761,8 +791,8 @@
 			}
 		}
 		$("time.timeago").timeago();
-		//calcAvgHashRate();
-		//calcAvgSolveTime();
+		calcAvgHashRate();
+		calcAvgSolveTime();
 	}
 
 	function calcAvgHashRate() {
