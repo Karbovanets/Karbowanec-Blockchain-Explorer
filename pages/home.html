@@ -156,7 +156,7 @@
 	</div>
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Hash rate, syntetic</span><br />
+			<li class="collection-header"><span>Hashrate, base</span><br />
 				<h4 id="networkHashrate" class="light-blue-text text-darken-4"></h4>
 			</li>
 			<li class="collection-item">CN-ASIC: <span id="asicHashrate" class="value"></span></li>
@@ -166,10 +166,10 @@
 	</div>
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Average base difficulty</span>
+			<li class="collection-header"><span>Average difficulty, base</span>
 				<h4 id="avgDifficulty" class="light-blue-text text-darken-4"></h4>
 			</li>
-			<li class="collection-item">Avg. hash rate: <span id="avgHashrate" class="value"></span></li>
+			<li class="collection-item">Avg. hashrate, base: <span id="avgHashrate" class="value"></span></li>
 			<li class="collection-item">Est. solve time: <span id="blockSolveTime" class="value"></span></li>
 			<li class="collection-item">Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
 		</ul>
@@ -400,7 +400,8 @@
 				).then(function () {
 					refreshChart();
 					setTimeout(function () {
-						algosChart.update();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100);
 				});
 			}
