@@ -277,6 +277,7 @@
 								<th><i class="fas fa-paw"></i> Block hash</th>
 								<th><i class="far fa-hdd"></i> Size</th>
 								<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
+								<th><i class="fas fa-microchip"></i> Algo</th>
 								<th><i class="fas fa-exchange-alt"></i> Txs</th>
 							</tr>
 						</thead>
@@ -687,6 +688,18 @@
 		});
 	};
 
+	function formatAlgo(algo){
+		if (algo == 0) {
+			return "CN-ASIC";
+		} else if (algo == 1) {
+			return "CN-GPU";
+		} else if (algo == 2) {
+			return "CN-CPU";
+		} else if (algo == -1) {
+			return "&mdash;";
+		}
+	}
+
 	function getBlockRowElement(block, jsonString) {
 		var row = document.createElement('tr');
 		row.setAttribute('data-json', jsonString);
@@ -697,6 +710,7 @@
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
 		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		row.setAttribute('data-algo', formatAlgo(block.algo));
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime +
@@ -704,6 +718,7 @@
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + '</td>' +
+			'<td>' + formatAlgo(block.algo) + '</td>' +
 			'<td>' + block.tx_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
