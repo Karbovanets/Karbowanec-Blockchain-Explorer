@@ -49,7 +49,7 @@ input {
 }
 
 .collection.with-header .collection-header {
-  background-color: #1C2B3D !important;
+  background-color: #1A2027 !important;
   border-bottom: 1px solid #35465B;
   padding: 24px;
 }
@@ -61,4 +61,13 @@ input {
       padding-left: 20px;
   margin: 0;
   border-bottom: 1px solid #35465B;
+}
+
+.switch label input[type="checkbox"]:checked + .lever {
+  background-color: #3F4B59;
+}
+
+.switch label input[type="checkbox"]:checked + .lever::after {
+  background-color: #fafafa;
+  color: #282828;
 }
