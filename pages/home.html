@@ -82,119 +82,69 @@
 
 <div class="row">
 	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Height</span>
-						<h4 id="networkHeight" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Transactions: <span id="networkTransactions"
-				class="value"></span>
-			</div>
-		</div>
+		<ul class="collection with-header hoverable">
+			<li class="collection-header">Height
+				<h4 id="networkHeight" class="right light-blue-text text-darken-4"></h4>
+			</li>
+			<li class="collection-item">Transactions <span id="networkTransactions" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">Circulating <span id="totalCoins" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">Emission <span id="emissionPercent" class="right light-blue-text text-darken-4"></span></li>
+		</ul>
 	</div>
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Circulating supply</span>
-						<h4 id="totalCoins" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Emission: <span id="emissionPercent" class="value"></span>
-			</div>
-		</div>
-	</div>
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Next reward</span>
-						<h4 id="currentReward" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Min. fee: <span id="minimumFee" class="value"></span>
-			</div>
-		</div>
-	</div>
-	<!--div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Next difficulty</span>
-						<h4 id="networkDifficulty" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Hashrate: <span id="networkHashrate" class="value"></span>
-			</div>
-		</div>
-	</div-->
-</div>
-<div class="row">
+				
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Next difficulty, base</span>
-				<h4 id="networkDifficulty" class="light-blue-text text-darken-4"></h4>
+			<li class="collection-header">Difficulty
+				<h4 id="networkDifficulty" class="right light-blue-text text-darken-4"></h4>
 			</li>
-			<li class="collection-item">CN-ASIC: <span id="asicDifficulty" class="value"></span></li>
-			<li class="collection-item">CN-GPU: <span id="gpuDifficulty" class="value"></span></li>
-			<li class="collection-item">CN-CPU: <span id="cpuDifficulty" class="value"></span></li>
+			<li class="collection-item">CN-ASIC <span id="asicDifficulty" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">CN-GPU <span id="gpuDifficulty" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">CN-CPU <span id="cpuDifficulty" class="right light-blue-text text-darken-4"></span></li>
 		</ul>
 	</div>
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Hashrate, base</span><br />
-				<h4 id="networkHashrate" class="light-blue-text text-darken-4"></h4>
+			<li class="collection-header">Hashrate
+				<h4 id="networkHashrate" class="right light-blue-text text-darken-4"></h4>
 			</li>
-			<li class="collection-item">CN-ASIC: <span id="asicHashrate" class="value"></span></li>
-			<li class="collection-item">CN-GPU: <span id="gpuHashrate" class="value"></span></li>
-			<li class="collection-item">CN-CPU: <span id="cpuHashrate" class="value"></span></li>
+			<li class="collection-item">CN-ASIC <span id="asicHashrate" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">CN-GPU <span id="gpuHashrate" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">CN-CPU <span id="cpuHashrate" class="right light-blue-text text-darken-4"></span></li>
 		</ul>
 	</div>
 	<div class="col s12 m12 l3">
 		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Average difficulty, base</span>
-				<h4 id="avgDifficulty" class="light-blue-text text-darken-4"></h4>
+			<li class="collection-header">Next reward
+				<h4 id="currentReward" class="right light-blue-text text-darken-4"></h4>
 			</li>
-			<li class="collection-item">Avg. hashrate, base: <span id="avgHashrate" class="value"></span></li>
-			<li class="collection-item">Est. solve time: <span id="blockSolveTime" class="value"></span></li>
-			<li class="collection-item">Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
+			<li class="collection-item">Min. fee <span id="minimumFee" class="right light-blue-text text-darken-4"></span></li>
+			<!--li class="collection-item">Avg. difficulty, base <span id="avgDifficulty" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">Avg. hashrate, base <span id="avgHashrate" class="right light-blue-text text-darken-4"></span></li-->
+			<li class="collection-item">Est. solve time <span id="blockSolveTime" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">Avg. solve time <span id="avgSolveTime" class="right light-blue-text text-darken-4"></span></li>
 		</ul>
-	</div>
-	<div class="col s12 m6 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div style="height: 186px;">
-					<span>Algos distribution</span>
-					<div style="position: relative; padding: 5px 10px;">
-						<canvas id="algosChart" style="margin: 0 auto; max-width: 175px; max-height: 175px;"></canvas>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>
 
 <div class="row">
-	<div class="col s12">
+	<div class="col s12 m8 l9">
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="d-flex align-items-center">
 					<div class="ml-auto">
 						<canvas id="difficultyChart" height="210"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col s12 m4 l3">
+		<div class="card hoverable">
+			<div class="card-content">
+				<div style="height: 210px;">
+					<span>Algos distribution</span>
+					<div style="position: relative; padding: 5px 10px;">
+						<canvas id="algosChart" style="margin: 0 auto; max-width: 175px; max-height: 175px;"></canvas>
 					</div>
 				</div>
 			</div>
@@ -837,8 +787,8 @@
 		var avgDiff = Math.round(sum / Difficulties.length);
 		var avgHashRate = avgDiff / blockTargetInterval;
 
-		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
-		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
+		//updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
+		//updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
 		updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
 	}
 
