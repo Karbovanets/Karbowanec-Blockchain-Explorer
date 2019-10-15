@@ -693,31 +693,6 @@
 		});
 	};
 
-	function formatAlgo(algo){
-		if (algo == 0) {
-			return "CN-ASIC";
-		} else if (algo == 1) {
-			return "CN-GPU";
-		} else if (algo == 2) {
-			return "CN-CPU";
-		} else if (algo == -1) {
-			return "CN-ASIC";
-		}
-	}
-
-	function selectAlgoDiff(b) {
-		console.log(b);
-		if (b.algo == 0) {
-			return b.algo_difficulties.cryptonight;
-		} else if (b.algo == 1) {
-			return b.algo_difficulties.cn_gpu;
-		} else if (b.algo == 2) {
-			return b.algo_difficulties.cn_power;
-		} else if (b.algo == -1) {
-			return "—";
-		}
-	}
-
 	function getBlockRowElement(block, jsonString) {
 		var row = document.createElement('tr');
 		row.setAttribute('data-json', jsonString);
@@ -735,7 +710,7 @@
 			'"></time>)</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
-			'<td class="blk-diff">' + block.difficulty + ' / ' +  selectAlgoDiff(block) + '</td>' +
+			'<td class="blk-diff">' + block.difficulty + ' / ' + block.algo_difficulty + '</td>' +
 			'<td>' + formatAlgo(block.algo) + '</td>' +
 			'<td>' + block.tx_count + '</td>';
 

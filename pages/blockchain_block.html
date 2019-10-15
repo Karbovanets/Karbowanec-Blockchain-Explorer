@@ -38,8 +38,12 @@
 							</li>
 							<li class="collection-item">
 								<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="How difficult it is to find a solution for the block. More specifically, it`s mathematical expectation for number of hashes someone needs to calculate in order to find a correct nonce value solving the block."></i>
-								Difficulty: <span id="block_difficulty"></span>
+								Base difficulty: <span id="block_difficulty"></span>
 							</li>
+							<li class="collection-item">
+								<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="Difficulty for specific block's algo."></i>
+								Algo difficulty: <span id="block_algo_difficulty"></span>
+								</li>
 							<li class="collection-item">
 								<i class="fas fa-unlock-alt fa-fw tooltipped" data-position="top" data-tooltip="Cumulative difficulty is the sum of all block's difficulties up to this block including."></i> 
 								Cumulative difficulty: <span id="block_cumulative_difficulty"></span>
@@ -80,6 +84,10 @@
 								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Bounded from below median value that is actually used to calculate penalty."></i>
 								Effective txs median, bytes: <span id="block_effectiveTxsMedian"></span>
 							</li>
+							<li class="collection-item">
+									<i class="fas fa-microchip fa-fw tooltipped" data-position="top" data-tooltip="Block's POW algo."></i>
+									Algo: <span id="block_algo"></span>
+								</li>
 							<li class="collection-item">
 								<i class="fas fa-minus-square fa-fw tooltipped" data-position="top" data-tooltip="Penalty for exceeding the median. penalty = (total_transactions_size / effective_tx_median − 1) ^ 2. No penalty if total transactions size is less then effective median. Penalty is near 100% if total txs size is twice the effective median. Greater blocks are not allowed."></i>
 								Reward penalty: <span id="block_rewardPenalty"></span>
@@ -192,6 +200,8 @@
 		updateText('block_nonce', block.nonce);
 		updateText('block_cumulative_difficulty', block.cumulativeDifficulty);
 		updateText('block_difficulty', block.difficulty);
+		updateText('block_algo_difficulty', block.algoDifficulty);
+		updateText('block_algo', formatAlgo(block.algo));
 		updateText('block_orphan', block.isOrphaned ? "Yes" : "No");
 		$("#block_orphan").addClass(block.isOrphaned ? "red-text" : "green-text");
 		updateText('block_transactions', block.transactions.length);

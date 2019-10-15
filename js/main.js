@@ -119,6 +119,18 @@ function formatPaymentLink(hash) {
     return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
 }
 
+function formatAlgo(algo){
+    if (algo == 0) {
+        return "CN-ASIC";
+    } else if (algo == 1) {
+        return "CN-GPU";
+    } else if (algo == 2) {
+        return "CN-CPU";
+    } else if (algo == -1) {
+        return "CN-ASIC";
+    }
+}
+
 function pulseLiveUpdate() {
     var stats_update = document.getElementById('stats_updated');
     stats_update.style.transition = 'opacity 100ms ease-out';
