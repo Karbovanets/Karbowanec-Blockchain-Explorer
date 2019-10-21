@@ -298,8 +298,8 @@
 		Rewards = [],
 		Txses = [],
 		Sizes = [],
+		DateTimes = [],
 		Timestamps = [],
-		time_stamps = [],
 		Solvetimes = [],
 		diffChart,
 		refresh = true;
@@ -650,8 +650,8 @@
 		Rewards = [];
 		Txses = [];
 		Sizes = [];
+		DateTimes = [];
 		Timestamps = [];
-		time_stamps = [];
 		Solvetimes = [];
 	}
 
@@ -711,8 +711,8 @@
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
-		Timestamps.push(dateTime);
-		time_stamps.push(block.timestamp);
+		DateTimes.push(dateTime);
+		Timestamps.push(block.timestamp);
 
 		row.innerHTML = columns;
 
@@ -764,7 +764,7 @@
 	}
 
 	function calcAvgSolveTime() {
-		ts = time_stamps.concat([]);
+		ts = Timestamps.concat([]);
 		ts.sort();
 		var avg_solve_time = 0;
 		var solveTime = 0;
@@ -845,7 +845,7 @@
 		var ctx = document.getElementById("difficultyChart");
 		var chartData = {
 			//labels: [].concat(Blocks).reverse(),
-			labels: [].concat(formatDate(Timestamps)).reverse(),
+			labels: [].concat(formatDate(DateTimes)).reverse(),
 			datasets: [{
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
@@ -1110,7 +1110,7 @@
 	}
 
 	function loadMoreChart() {
-		diffChart.data.labels = [].concat(Timestamps).reverse();
+		diffChart.data.labels = [].concat(DateTimes).reverse();
 		diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
 		diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
 		diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
