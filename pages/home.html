@@ -38,7 +38,7 @@
 
 	table.mempool-table tbody {
 		display: block;
-		max-height: 200px;
+		max-height: 210px;
 		overflow-y: scroll;
 		overflow-x: hidden;
 	}
@@ -269,11 +269,12 @@
 					</div>
 				</div>
 				<div class="table-responsive">
-					<table class="highlight">
+					<table class="highlight centered">
 						<thead>
 							<tr>
 								<th><i class="fas fa-bars"></i> Height</th>
-								<th><i class="far fa-clock"></i> Date &amp; time</th>
+								<th><i class="far fa-clock"></i> Date, time &amp; age</th>
+								<th><i class="fas fa-hourglass-end"></i> Lapse</th>
 								<th><i class="fas fa-paw"></i> Block hash</th>
 								<th><i class="far fa-hdd"></i> Size</th>
 								<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
@@ -700,8 +701,8 @@
 		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
 		var columns =
 			'<td>' + block.height + '</td>' +
-			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime +
-			'"></time>)</td>' +
+			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
+			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + '</td>' +
@@ -722,9 +723,10 @@
 
 	function renderBlocks(blocksResults) {
 		var $blocksRows = $('#blocks_rows');
-		console.log(blocksResults.length);
-		for (var i = 0; i < blocksResults.length; i++) {
+		for (var i = 0; i < blocksPerPage; i++) {
+			Solvetimes.push(blocksResults[i].timestamp - blocksResults[i + 1].timestamp);
 			var block = blocksResults[i];
+			block.solvetime = Solvetimes[i];
 			var blockJson = JSON.stringify(block);
 			var existingRow = document.getElementById('blockRow' + block.height);
 			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {

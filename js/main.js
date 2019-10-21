@@ -106,6 +106,11 @@ function formatDate(time) {
     return new Date(parseInt(time) * 1000).toLocaleString();
 }
 
+function formatTime(time) {
+    if (!time) return '';
+    return new Date(parseInt(time) * 1000).toISOString().substr(11, 8);
+}
+
 function formatBytes(a, b) {
     if (0 == a) return "0 Bytes";
     var c = 1024,
