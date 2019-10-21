@@ -443,6 +443,8 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100)
 				});
 			}
@@ -490,6 +492,8 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100)
 				});
 			}
@@ -536,6 +540,8 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100)
 				});
 			}
@@ -574,6 +580,8 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100)
 				});
 			}
@@ -599,6 +607,7 @@
 	});
 
 	$("#select_blocks_count").on('change', function (e) {
+		clearArrays();
 		blocksPerPage = parseInt(e.target.value);
 		var currHeight = $('#blocks_rows').children().first().data('height');
 		if (xhrGetBlocks) xhrGetBlocks.abort();
@@ -623,6 +632,8 @@
 				).then(function () {
 					setTimeout(function () {
 						refreshChart();
+						if(algosChart != undefined)
+							algosChart.update();
 					}, 100)
 				});
 			}
