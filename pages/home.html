@@ -806,7 +806,8 @@
 		var ctx = document.getElementById("difficultyChart");
 		var chartData = {
 			labels: [].concat(formatDate(DateTimes)).reverse(),
-			datasets: [{
+			datasets: [
+			{
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
 				label: "Height",
@@ -833,7 +834,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 10,
+				pointHitRadius: 5,
 				type: 'line'
 			}, {
 				data: [].concat(MinFees).reverse(),
@@ -849,7 +850,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 10,
+				pointHitRadius: 5,
 				type: 'line'
 			}, {
 				data: [].concat(Txses).reverse(),
@@ -857,6 +858,7 @@
 				label: "Transactions",
 				backgroundColor: "rgba(100,255,218,0.5)",
 				borderWidth: 0,
+				pointHitRadius: 5,
 				type: 'bar'
 			}, {
 				data: [].concat(Sizes).reverse(),
@@ -865,7 +867,8 @@
                 backgroundColor: "rgba(198,255,0,0.5)",
                 data: [].concat(Solvetimes).reverse(),
                 borderColor: '#99D9EA',
-                borderWidth: 0,
+				borderWidth: 0,
+				pointHitRadius: 5,
                 type: 'bar'
             }, {
 				data: [].concat(Solvetimes).reverse(),
@@ -874,6 +877,7 @@
 				backgroundColor: "rgba(255,192,0,0.1)",
 				borderColor: '#FFC000',
 				borderWidth: 0,
+				pointHitRadius: 5,
 				type: 'bar'
 			}]
 		};
@@ -892,14 +896,14 @@
 			},
 			legend: {
 				labels: {
+					position: 'top',
 					filter: function(legendItem, chartData) {
 						if (legendItem.datasetIndex === 0) {
 							return false;
 						}
 						return true;
 					}
-				},
-				position: 'bottom'
+				}
 			},
 			onClick: graphClickEvent,
 			scales: {
@@ -981,8 +985,7 @@
 							labelString: 'Minimum fee'
 						},
 						gridLines: {
-							display: false,
-							zeroLineColor: "#E5E5E5"
+							display: false
 						},
 						ticks: {
 							fontSize: 8,
@@ -1040,11 +1043,9 @@
 					},
 					ticks: {
 						fontSize: 9,
-						fontColor: "#CCC",
 						autoSkip: true,
 						maxRotation: 0,
 						//minRotation: 90
-						//display:false
 					}
 					//display: false
 				}]
@@ -1052,7 +1053,6 @@
 			tooltips: {
 				mode: 'index',
 				intersect: true,
-				//displayColors: false,
 				callbacks: {
 					title: function (tooltipItem, data) {
 						var height = data.datasets[3].data[tooltipItem[0].index];
