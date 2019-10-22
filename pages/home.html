@@ -81,88 +81,46 @@
 <div style="height: 10px; clear: both;"></div>
 
 <div class="row">
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Height</span>
-						<h4 id="networkHeight" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Transactions: <span id="networkTransactions"
-				class="value"></span>
-			</div>
-		</div>
-	</div>
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Circulating supply</span>
-						<h4 id="totalCoins" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Emission: <span id="emissionPercent" class="value"></span>
-			</div>
-		</div>
-	</div>
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Next reward</span>
-						<h4 id="currentReward" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Min. fee: <span id="minimumFee" class="value"></span>
-			</div>
-		</div>
-	</div>
-	<div class="col s12 m12 l3">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="d-flex no-block">
-					<div class="m-r-12">
-						<span>Next difficulty</span>
-						<h4 id="networkDifficulty" class="light-blue-text text-darken-4"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="card-action grey lighten-5">
-				Hashrate: <span id="networkHashrate" class="value"></span>
-			</div>
-		</div>
-	</div>
-	<!--div class="col s12 m12 l3">
-		<ul class="collection with-header hoverable">
-			<li class="collection-header"><span>Next Difficulty</span>
-				<h4 id="networkDifficulty" class="light-blue-text text-darken-4"></h4>
+	<div class="col m4 l3 s12">
+		<ul class="collection hoverable">
+			<li class="collection-item">
+				Height: <span id="networkHeight" class="value light-blue-text text-darken-4"></span>
 			</li>
-			<li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
-			<li class="collection-item">Hash Rate: <span id="networkHashrate" class="value"></span></li>
-			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li>
-			<li class="collection-item">Est. solve time: <span id="blockSolveTime" class="value"></span></li>
-			<li class="collection-item">Avg. solve time: <span id="avgSolveTime" class="value"></span></li>
-		</ul>
-	</div-->
-</div>
-
-<div class="row">
-	<div class="col s12">
+			<li class="collection-item">
+				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
+									(<span id="emissionPercent"></span>)</span>
+			</li>
+			<li class="collection-item">
+				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Est. solve time: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Avg. solve time: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<!--li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
+			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li-->
+		</ul>	
+	</div>
+	<div class="col m8 l9 s12">
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="d-flex align-items-center">
 					<div class="ml-auto">
-						<canvas id="difficultyChart" height="210"></canvas>
+						<canvas id="difficultyChart" height="342"></canvas>
 					</div>
 				</div>
 			</div>
@@ -724,9 +682,9 @@
 	function renderBlocks(blocksResults) {
 		var $blocksRows = $('#blocks_rows');
 		for (var i = 0; i < blocksPerPage; i++) {
-			Solvetimes.push(blocksResults[i].timestamp - blocksResults[i + 1].timestamp);
+			Solvetimes.push(Math.abs(blocksResults[i].timestamp - blocksResults[i + 1].timestamp));
 			var block = blocksResults[i];
-			block.solvetime = blocksResults[i].timestamp - blocksResults[i + 1].timestamp;
+			block.solvetime = Math.abs(blocksResults[i].timestamp - blocksResults[i + 1].timestamp);
 			var blockJson = JSON.stringify(block);
 			var existingRow = document.getElementById('blockRow' + block.height);
 			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {
@@ -749,8 +707,8 @@
 			}
 		}
 		$("time.timeago").timeago();
-		//calcAvgHashRate();
-		//calcAvgSolveTime();
+		calcAvgHashRate();
+		calcAvgSolveTime();
 	}
 
 	function calcAvgHashRate() {
@@ -761,8 +719,8 @@
 		var avgDiff = Math.round(sum / Difficulties.length);
 		var avgHashRate = avgDiff / blockTargetInterval;
 
-		updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
-		updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
+		//updateText('avgDifficulty', getReadableDifficultyString(avgDiff, 2).toString());
+		//updateText('avgHashrate', getReadableHashRateString(avgDiff / blockTargetInterval));
 		updateText('blockSolveTime', getReadableTime(lastStats.difficulty / avgHashRate));
 	}
 
@@ -847,14 +805,13 @@
 	function displayDiffChart() {
 		var ctx = document.getElementById("difficultyChart");
 		var chartData = {
-			//labels: [].concat(Blocks).reverse(),
 			labels: [].concat(formatDate(DateTimes)).reverse(),
 			datasets: [{
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
 				label: "Height",
 				backgroundColor: "rgba(0,0,0,0)",
-				borderColor: 'rgba(0,0,0,0)',
+				borderColor: "rgba(0,0,0,0)",
 				borderWidth: 0,
 				pointBorderWidth: 0,
 				pointRadius: 0,
@@ -929,14 +886,25 @@
 				}
 			},
 			title: {
-				display: false
+				display: true,
+				text: 'Network difficulty, Blocks info and Min. fee',
+				fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;"
 			},
 			legend: {
-				display: false
+				labels: {
+					filter: function(legendItem, chartData) {
+						if (legendItem.datasetIndex === 0) {
+							return false;
+						}
+						return true;
+					}
+				},
+				position: 'bottom'
 			},
 			onClick: graphClickEvent,
 			scales: {
-				yAxes: [{
+				yAxes: [
+					{
 						id: 'Height',
 						type: 'linear',
 						position: 'left',
@@ -964,8 +932,12 @@
 							display: false
 						},
 						ticks: {
-							fontSize: 9,
-							display: true
+							fontSize: 8,
+							display: true,
+							callback: function(value) {
+								//return value.substr(0, 10);//truncate
+								return getReadableDifficultyString(value, 2);
+							},
 						},
 						display: true
 					}, {
@@ -1009,10 +981,11 @@
 							labelString: 'Minimum fee'
 						},
 						gridLines: {
-							display: false
+							display: false,
+							zeroLineColor: "#E5E5E5"
 						},
 						ticks: {
-							fontSize: 9,
+							fontSize: 8,
 							display: true,
 							suggestedMin: 0.001,
 							suggestedMax: 0.1
@@ -1062,6 +1035,7 @@
 						},
 					},
 					gridLines: {
+						color: '#D2D2D2',
 						display: false
 					},
 					ticks: {
@@ -1085,6 +1059,11 @@
 						var time = new Date(data.labels[tooltipItem[0].index]).toLocaleString();
 						return time + '';
 					}
+				}
+			},
+			hover: {
+				onHover: function(e, el) {
+					$("#difficultyChart").css("cursor", el[0] ? "pointer" : "default");
 				}
 			}
 		};
