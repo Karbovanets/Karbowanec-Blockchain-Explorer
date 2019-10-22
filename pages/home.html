@@ -38,7 +38,7 @@
 
 	table.mempool-table tbody {
 		display: block;
-		max-height: 210px;
+		max-height: 212px;
 		overflow-y: scroll;
 		overflow-x: hidden;
 	}
@@ -726,7 +726,7 @@
 		for (var i = 0; i < blocksPerPage; i++) {
 			Solvetimes.push(blocksResults[i].timestamp - blocksResults[i + 1].timestamp);
 			var block = blocksResults[i];
-			block.solvetime = Solvetimes[i];
+			block.solvetime = blocksResults[i].timestamp - blocksResults[i + 1].timestamp;
 			var blockJson = JSON.stringify(block);
 			var existingRow = document.getElementById('blockRow' + block.height);
 			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {
