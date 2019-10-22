@@ -543,10 +543,53 @@
 		$('#loadMoreBlocks').removeClass('disabled');
 	});
 
-	$('#goto-height-go').click(function () {
-		var height = document.getElementById('goto-height').value;
-		var newUrl = "./?height=" + height;
-		window.location = newUrl;
+	$('#goto-height-go').click(function (e) {
+		var gotoHeight = parseInt(document.getElementById('goto-height').value);
+		clearArrays();
+		
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_last_nav",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: gotoHeight
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+						var currHeight = $('#blocks_rows').children().first().data(
+						'height');
+						if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
+							$('#next-page').addClass('disabled');
+							$('#last-page').addClass('disabled');
+							$('#loadMoreBlocks').removeClass('disabled');
+						} else {
+							$('#next-page').removeClass('disabled');
+							$('#last-page').removeClass('disabled');
+						}
+						if (currHeight - blocksPerPage <= 0) {
+							$('#prev-page').addClass('disabled');
+							$('#first-page').addClass('disabled');
+							$('#loadMoreBlocks').addClass('disabled');
+						}
+					}, 100)
+				});
+			}
+		});
+
+		e.preventDefault();
 	});
 
 	$('#goto-height').keyup(function (e) {
