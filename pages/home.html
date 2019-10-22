@@ -890,11 +890,12 @@
 				}
 			},
 			title: {
-				display: true,
+				display: false,
 				text: 'Network difficulty, Blocks info and Min. fee',
 				fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;"
 			},
 			legend: {
+				display: false,
 				labels: {
 					position: 'top',
 					filter: function(legendItem, chartData) {
@@ -939,7 +940,6 @@
 							fontSize: 8,
 							display: true,
 							callback: function(value) {
-								//return value.substr(0, 10);//truncate
 								return getReadableDifficultyString(value, 2);
 							},
 						},
@@ -1014,7 +1014,6 @@
 				],
 				xAxes: [{
 					stacked: true,
-					//offset: true,
 					type: "time",
 					categoryPercentage: 0,
 					barPercentage: 1,
@@ -1047,7 +1046,6 @@
 						maxRotation: 0,
 						//minRotation: 90
 					}
-					//display: false
 				}]
 			},
 			tooltips: {
