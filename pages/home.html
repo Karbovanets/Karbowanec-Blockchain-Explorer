@@ -38,7 +38,7 @@
 
 	table.mempool-table tbody {
 		display: block;
-		max-height: 212px;
+		max-height: 214px;
 		overflow-y: scroll;
 		overflow-x: hidden;
 	}
@@ -876,7 +876,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 20,
+				pointHitRadius: 10,
 				type: 'line'
 			}, {
 				data: [].concat(MinFees).reverse(),
@@ -892,7 +892,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 20,
+				pointHitRadius: 10,
 				type: 'line'
 			}, {
 				data: [].concat(Txses).reverse(),
@@ -903,10 +903,19 @@
 				type: 'bar'
 			}, {
 				data: [].concat(Sizes).reverse(),
-				yAxisID: "Sizes",
-				label: "Size",
-				backgroundColor: "rgba(198,255,0,0.5)",
-				borderColor: '#99D9EA',
+                yAxisID: "Sizes",
+                label: "Size, bytes",
+                backgroundColor: "rgba(198,255,0,0.5)",
+                data: [].concat(Solvetimes).reverse(),
+                borderColor: '#99D9EA',
+                borderWidth: 0,
+                type: 'bar'
+            }, {
+				data: [].concat(Solvetimes).reverse(),
+				yAxisID: "Solvetimes",
+				label: "Solve time, s",
+				backgroundColor: "rgba(255,192,0,0.1)",
+				borderColor: '#FFC000',
 				borderWidth: 0,
 				type: 'bar'
 			}]
@@ -979,7 +988,6 @@
 						id: 'Sizes',
 						type: 'linear',
 						position: 'right',
-						barThickness: 10,
 						scaleLabel: {
 							display: false,
 							labelString: 'Size'
@@ -998,7 +1006,7 @@
 						position: 'right',
 						scaleLabel: {
 							display: true,
-							labelString: 'Minimum Fee'
+							labelString: 'Minimum fee'
 						},
 						gridLines: {
 							display: false
@@ -1010,8 +1018,23 @@
 							suggestedMax: 0.1
 						},
 						display: true
+					}, {
+						id: 'Solvetimes',
+						type: 'linear',
+						position: 'right',
+						scaleLabel: {
+							display: false,
+							labelString: 'Solve time'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 9,
+							display: false
+						},
+						display: false
 					}
-
 				],
 				xAxes: [{
 					stacked: true,
@@ -1020,7 +1043,7 @@
 					categoryPercentage: 0,
 					barPercentage: 1,
 					categorySpacing: 0,
-					barThickness: 20,
+					barThickness: 5,
 					time: {
 						parser: false,
 						unit: 'minute',
@@ -1080,8 +1103,9 @@
 			sizes = [],
 			times = [],
 			heights = [],
-			txsnr = [];
-		mfees = [];
+			txsnr = [],
+			mfees = [],
+			lapses = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
@@ -1090,6 +1114,7 @@
 			var size = row.data("json").cumul_size;
 			var time = row.attr('data-dt');
 			var mfee = row.attr('data-min-fee');
+			var lapse = row.data("json").solvetime;
 
 			labels.push(label);
 			diffs.push(diff);
@@ -1097,6 +1122,7 @@
 			sizes.push(size);
 			times.push(time);
 			mfees.push(mfee);
+			lapses.push(lapse);
 		}
 
 		if (diffChart != undefined) {
@@ -1106,6 +1132,7 @@
 			diffChart.data.datasets[2].data = mfees.reverse();
 			diffChart.data.datasets[3].data = txsnr.reverse();
 			diffChart.data.datasets[4].data = sizes.reverse();
+			diffChart.data.datasets[5].data = lapses.reverse();
 
 			diffChart.update();
 		}
@@ -1119,6 +1146,7 @@
 		diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
 		diffChart.data.datasets[3].data = [].concat(Txses).reverse();
 		diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
+		diffChart.data.datasets[5].data = [].concat(Solvetimes).reverse();
 
 		diffChart.update();
 	}
