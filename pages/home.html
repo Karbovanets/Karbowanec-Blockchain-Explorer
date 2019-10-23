@@ -575,14 +575,17 @@
 							$('#next-page').addClass('disabled');
 							$('#last-page').addClass('disabled');
 							$('#loadMoreBlocks').removeClass('disabled');
+							refresh = true;
 						} else {
 							$('#next-page').removeClass('disabled');
 							$('#last-page').removeClass('disabled');
+							refresh = false;
 						}
 						if (currHeight - blocksPerPage <= 0) {
 							$('#prev-page').addClass('disabled');
 							$('#first-page').addClass('disabled');
 							$('#loadMoreBlocks').addClass('disabled');
+							refresh = false;
 						}
 					}, 100)
 				});
