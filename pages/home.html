@@ -313,6 +313,9 @@
 			$("time.timeago").timeago();
 			getPoolTransactions();
 			var currHeight = $('#blocks_rows').children().first().data('height');
+			if (currHeight + blocksPerPage < lastStats.last_known_block_index) {
+				refresh = false;
+			}
 			if (refresh) {
 				$.when(
 					renderInitialBlocks()
