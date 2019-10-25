@@ -87,7 +87,7 @@
 				<h4 id="networkHeight" class="right light-blue-text text-darken-4"></h4>
 			</li>
 			<li class="collection-item">Transactions <span id="networkTransactions" class="right light-blue-text text-darken-4"></span></li>
-			<li class="collection-item">Circulating <span id="totalCoins" class="right light-blue-text text-darken-4"></span></li>
+			<li class="collection-item">Supply <span id="totalCoins" class="right light-blue-text text-darken-4"></span></li>
 			<li class="collection-item">Emission <span id="emissionPercent" class="right light-blue-text text-darken-4"></span></li>
 		</ul>
 	</div>
@@ -251,11 +251,12 @@
 					</div>
 				</div>
 				<div class="table-responsive">
-					<table class="highlight">
+					<table class="highlight centered">
 						<thead>
 							<tr>
 								<th><i class="fas fa-bars"></i> Height</th>
-								<th><i class="far fa-clock"></i> Date &amp; time</th>
+								<th><i class="far fa-clock"></i> Date, time &amp; age</th>
+								<th><i class="fas fa-hourglass-end"></i> Lapse</th>
 								<th><i class="fas fa-paw"></i> Block hash</th>
 								<th><i class="far fa-hdd"></i> Size</th>
 								<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
@@ -344,6 +345,9 @@
 			$("time.timeago").timeago();
 			getPoolTransactions();
 			var currHeight = $('#blocks_rows').children().first().data('height');
+			if (currHeight + blocksPerPage < lastStats.last_known_block_index) {
+				refresh = false;
+			}
 			if (refresh) {
 				$.when(
 					renderInitialBlocks()
@@ -595,10 +599,56 @@
 		$('#loadMoreBlocks').removeClass('disabled');
 	});
 
-	$('#goto-height-go').click(function () {
-		var height = document.getElementById('goto-height').value;
-		var newUrl = "./?height=" + height;
-		window.location = newUrl;
+	$('#goto-height-go').click(function (e) {
+		var gotoHeight = parseInt(document.getElementById('goto-height').value);
+		clearArrays();
+		
+		if (xhrGetBlocks) xhrGetBlocks.abort();
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_goto_height",
+				method: "getblockslist",
+				params: {
+					count: blocksPerPage,
+					height: gotoHeight
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				$('#blocks_rows').children().remove();
+				$.when(
+					renderBlocks(data.result.blocks)
+				).then(function () {
+					setTimeout(function () {
+						refreshChart();
+						var currHeight = $('#blocks_rows').children().first().data(
+						'height');
+						if (currHeight + blocksPerPage >= lastStats.last_known_block_index) {
+							$('#next-page').addClass('disabled');
+							$('#last-page').addClass('disabled');
+							$('#loadMoreBlocks').removeClass('disabled');
+							refresh = true;
+						} else {
+							$('#next-page').removeClass('disabled');
+							$('#last-page').removeClass('disabled');
+							refresh = false;
+						}
+						if (currHeight - blocksPerPage <= 0) {
+							$('#prev-page').addClass('disabled');
+							$('#first-page').addClass('disabled');
+							$('#loadMoreBlocks').addClass('disabled');
+							refresh = false;
+						}
+					}, 100)
+				});
+			}
+		});
+
+		e.preventDefault();
 	});
 
 	$('#goto-height').keyup(function (e) {
@@ -717,8 +767,8 @@
 		row.setAttribute('data-algo', formatAlgo(block.algo));
 		var columns =
 			'<td>' + block.height + '</td>' +
-			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime +
-			'"></time>)</td>' +
+			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
+			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + ' / ' + block.algo_difficulty + '</td>' +
@@ -750,8 +800,10 @@
 
 	function renderBlocks(blocksResults) {
 		var $blocksRows = $('#blocks_rows');
-		for (var i = 0; i < blocksResults.length; i++) {
+		for (var i = 0; i < blocksPerPage; i++) {
+			Solvetimes.push(Math.abs(blocksResults[i].timestamp - blocksResults[i + 1].timestamp));
 			var block = blocksResults[i];
+			block.solvetime = Math.abs(blocksResults[i].timestamp - blocksResults[i + 1].timestamp);
 			var blockJson = JSON.stringify(block);
 			var existingRow = document.getElementById('blockRow' + block.height);
 			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {
@@ -872,14 +924,14 @@
 	function displayDiffChart() {
 		var ctx = document.getElementById("difficultyChart");
 		var chartData = {
-			//labels: [].concat(Blocks).reverse(),
 			labels: [].concat(formatDate(DateTimes)).reverse(),
-			datasets: [{
+			datasets: [
+			{
 				data: [].concat(Blocks).reverse(),
 				yAxisID: "Height",
 				label: "Height",
 				backgroundColor: "rgba(0,0,0,0)",
-				borderColor: 'rgba(0,0,0,0)',
+				borderColor: "rgba(0,0,0,0)",
 				borderWidth: 0,
 				pointBorderWidth: 0,
 				pointRadius: 0,
@@ -901,7 +953,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 20,
+				pointHitRadius: 5,
 				type: 'line'
 			}, {
 				data: [].concat(MinFees).reverse(),
@@ -917,7 +969,7 @@
 				pointBorderWidth: 1,
 				pointRadius: 2,
 				pointHoverRadius: 3,
-				pointHitRadius: 20,
+				pointHitRadius: 5,
 				type: 'line'
 			}, {
 				data: [].concat(Txses).reverse(),
@@ -925,14 +977,26 @@
 				label: "Transactions",
 				backgroundColor: "rgba(100,255,218,0.5)",
 				borderWidth: 0,
+				pointHitRadius: 5,
 				type: 'bar'
 			}, {
 				data: [].concat(Sizes).reverse(),
-				yAxisID: "Sizes",
-				label: "Size",
-				backgroundColor: "rgba(198,255,0,0.5)",
-				borderColor: '#99D9EA',
+                yAxisID: "Sizes",
+                label: "Size, bytes",
+                backgroundColor: "rgba(198,255,0,0.5)",
+                data: [].concat(Solvetimes).reverse(),
+                borderColor: '#99D9EA',
 				borderWidth: 0,
+				pointHitRadius: 5,
+                type: 'bar'
+            }, {
+				data: [].concat(Solvetimes).reverse(),
+				yAxisID: "Solvetimes",
+				label: "Solve time, s",
+				backgroundColor: "rgba(255,192,0,0.1)",
+				borderColor: '#FFC000',
+				borderWidth: 0,
+				pointHitRadius: 5,
 				type: 'bar'
 			}]
 		};
@@ -945,14 +1009,26 @@
 				}
 			},
 			title: {
-				display: false
+				display: false,
+				text: 'Network difficulty, Blocks info and Min. fee',
+				fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;"
 			},
 			legend: {
-				display: false
+				display: false,
+				labels: {
+					position: 'top',
+					filter: function(legendItem, chartData) {
+						if (legendItem.datasetIndex === 0) {
+							return false;
+						}
+						return true;
+					}
+				}
 			},
 			onClick: graphClickEvent,
 			scales: {
-				yAxes: [{
+				yAxes: [
+					{
 						id: 'Height',
 						type: 'linear',
 						position: 'left',
@@ -980,8 +1056,11 @@
 							display: false
 						},
 						ticks: {
-							fontSize: 9,
-							display: true
+							fontSize: 8,
+							display: true,
+							callback: function(value) {
+								return getReadableDifficultyString(value, 2);
+							},
 						},
 						display: true
 					}, {
@@ -1004,7 +1083,6 @@
 						id: 'Sizes',
 						type: 'linear',
 						position: 'right',
-						barThickness: 10,
 						scaleLabel: {
 							display: false,
 							labelString: 'Size'
@@ -1023,29 +1101,43 @@
 						position: 'right',
 						scaleLabel: {
 							display: true,
-							labelString: 'Minimum Fee'
+							labelString: 'Minimum fee'
+						},
+						gridLines: {
+							display: false
+						},
+						ticks: {
+							fontSize: 8,
+							display: true,
+							suggestedMin: 0.001,
+							suggestedMax: 0.1
+						},
+						display: true
+					}, {
+						id: 'Solvetimes',
+						type: 'linear',
+						position: 'right',
+						scaleLabel: {
+							display: false,
+							labelString: 'Solve time'
 						},
 						gridLines: {
 							display: false
 						},
 						ticks: {
 							fontSize: 9,
-							display: true,
-							suggestedMin: 0.001,
-							suggestedMax: 0.1
+							display: false
 						},
-						display: true
+						display: false
 					}
-
 				],
 				xAxes: [{
 					stacked: true,
-					//offset: true,
 					type: "time",
 					categoryPercentage: 0,
 					barPercentage: 1,
 					categorySpacing: 0,
-					barThickness: 20,
+					barThickness: 5,
 					time: {
 						parser: false,
 						unit: 'minute',
@@ -1064,29 +1156,31 @@
 						},
 					},
 					gridLines: {
+						color: '#D2D2D2',
 						display: false
 					},
 					ticks: {
 						fontSize: 9,
-						fontColor: "#CCC",
 						autoSkip: true,
 						maxRotation: 0,
 						//minRotation: 90
-						//display:false
 					}
-					//display: false
 				}]
 			},
 			tooltips: {
 				mode: 'index',
 				intersect: true,
-				//displayColors: false,
 				callbacks: {
 					title: function (tooltipItem, data) {
 						var height = data.datasets[3].data[tooltipItem[0].index];
 						var time = new Date(data.labels[tooltipItem[0].index]).toLocaleString();
 						return time + '';
 					}
+				}
+			},
+			hover: {
+				onHover: function(e, el) {
+					$("#difficultyChart").css("cursor", el[0] ? "pointer" : "default");
 				}
 			}
 		};
@@ -1105,8 +1199,9 @@
 			sizes = [],
 			times = [],
 			heights = [],
-			txsnr = [];
-		mfees = [];
+			txsnr = [],
+			mfees = [],
+			lapses = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
@@ -1115,6 +1210,7 @@
 			var size = row.data("json").cumul_size;
 			var time = row.attr('data-dt');
 			var mfee = row.attr('data-min-fee');
+			var lapse = row.data("json").solvetime;
 
 			labels.push(label);
 			diffs.push(diff);
@@ -1122,6 +1218,7 @@
 			sizes.push(size);
 			times.push(time);
 			mfees.push(mfee);
+			lapses.push(lapse);
 		}
 
 		if (diffChart != undefined) {
@@ -1131,6 +1228,7 @@
 			diffChart.data.datasets[2].data = mfees.reverse();
 			diffChart.data.datasets[3].data = txsnr.reverse();
 			diffChart.data.datasets[4].data = sizes.reverse();
+			diffChart.data.datasets[5].data = lapses.reverse();
 
 			diffChart.update();
 		}
@@ -1151,6 +1249,7 @@
 		diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
 		diffChart.data.datasets[3].data = [].concat(Txses).reverse();
 		diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
+		diffChart.data.datasets[5].data = [].concat(Solvetimes).reverse();
 
 		diffChart.update();
 

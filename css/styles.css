@@ -359,3 +359,10 @@ foooter a,
     }
 }
 
+@media only screen and (min-width: 991px) {
+
+    .container {
+        width: 85%;
+    }
+
+}

@@ -1,115 +1,116 @@
 <div style="height: 10px; clear: both;"></div>
-
 <div class="row">
 	<div class="col s12">
-		<div class="card hoverable">
-			<div class="card-action grey lighten-5">
-				<h2 class="light-blue-text text-darken-4"><i class="fa fa-cube fa-fw" aria-hidden="true"></i> Block <small tooltipped data-position="top" data-tooltip="Unique fingerprint of the block." id="block_hash"
-					style="word-break: break-all; word-wrap: break-word;"></small></h2>
+		<h2 class="light-blue-text text-darken-4">
+			<i class="fa fa-cube fa-fw" aria-hidden="true"></i> Block 
+			<small tooltipped data-position="top" data-tooltip="Unique fingerprint of the block." id="block_hash" style="word-break: break-all; word-wrap: break-word;"></small>
+		</h2>
+	</div>
+</div>
+<div class="row">
+	<div class="card-content">
+		<div class="row">
+			<div class="col s12 l8">
+				<ul class="collection">
+					<li class="collection-item">
+						<i class="fas fa-bars fa-fw tooltipped" data-position="top" data-tooltip="Block index in the chain, counting from zero (i.e. genesis block)."></i> 
+						Index: <span id="block_index"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-check-double fa-fw tooltipped" data-position="top" data-tooltip="Confirmations, block depth from the tip of the chain."></i> 
+						Depth: <span id="block_depth"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-clock fa-fw tooltipped" data-position="top" data-tooltip="Block timestamp displayed as UTC. The timestamp correctness it up to miner, who mined the block."></i> 
+						Timestamp: <span id="block_timestamp"></span> &bull; <span id="block_time"></span> (<time id="block-timeago"></time>)
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-link fa-fw tooltipped" data-position="top" data-tooltip="The hash of the previous block."></i> 
+						Previous block hash: <a id="prev_hash" title="Previous block"><span id="block_prev_hash"
+						style="word-break: break-all; word-wrap: break-word;"></span></a>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-stamp fa-fw tooltipped" data-position="top" data-tooltip="A piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements."></i> 
+						Proof of work: <span id="block_pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="&laquo;major version&raquo;.&laquo;minor version&raquo;"></i>
+						Version: <span id="block_version"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="How difficult it is to find a solution for the block. More specifically, it`s mathematical expectation for number of hashes someone needs to calculate in order to find a correct nonce value solving the block."></i>
+						Base difficulty: <span id="block_difficulty"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="Difficulty for specific block's algo."></i>
+						Algo difficulty: <span id="block_algo_difficulty"></span>
+						</li>
+					<li class="collection-item">
+						<i class="fas fa-unlock-alt fa-fw tooltipped" data-position="top" data-tooltip="Cumulative difficulty is the sum of all block's difficulties up to this block including."></i> 
+						Cumulative difficulty: <span id="block_cumulative_difficulty"></span>
+					</li>
+					<li class="collection-item">
+					<i class="fas fa-coins fa-fw tooltipped" data-position="top" data-tooltip="Cumulative amount of coins issued by all the blocks in blockchain from the genesis and up to this block."></i>
+						Total coins in the network: <span id="block_totalCoins"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-archive fa-fw tooltipped" data-position="top" data-tooltip="Cumulative number of transactions in the blockchain, from the genesis block and up to this block."></i>
+						Total transactions in the network: <span id="block_totalTransactions"></span>
+					</li>
+				</ul>
 			</div>
-			<div class="card-content">
-				<div class="row">
-					<div class="col s12 l8">
-						<ul class="collection">
-							<li class="collection-item">
-								<i class="fas fa-bars fa-fw tooltipped" data-position="top" data-tooltip="Block index in the chain, counting from zero (i.e. genesis block)."></i> 
-								Index: <span id="block_index"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-check-double fa-fw tooltipped" data-position="top" data-tooltip="Confirmations, block depth from the tip of the chain."></i> 
-								Depth: <span id="block_depth"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-clock fa-fw tooltipped" data-position="top" data-tooltip="Block timestamp displayed as UTC. The timestamp correctness it up to miner, who mined the block."></i> 
-								Timestamp: <span id="block_timestamp"></span> &bull; <span id="block_time"></span> (<time id="block-timeago"></time>)
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-link fa-fw tooltipped" data-position="top" data-tooltip="The hash of the previous block."></i> 
-								Previous block hash: <a id="prev_hash" title="Previous block"><span id="block_prev_hash"
-								style="word-break: break-all; word-wrap: break-word;"></span></a>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-stamp fa-fw tooltipped" data-position="top" data-tooltip="A piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements."></i> 
-								Proof of work: <span id="block_pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="&laquo;major version&raquo;.&laquo;minor version&raquo;"></i>
-								Version: <span id="block_version"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="How difficult it is to find a solution for the block. More specifically, it`s mathematical expectation for number of hashes someone needs to calculate in order to find a correct nonce value solving the block."></i>
-								Base difficulty: <span id="block_difficulty"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="Difficulty for specific block's algo."></i>
-								Algo difficulty: <span id="block_algo_difficulty"></span>
-								</li>
-							<li class="collection-item">
-								<i class="fas fa-unlock-alt fa-fw tooltipped" data-position="top" data-tooltip="Cumulative difficulty is the sum of all block's difficulties up to this block including."></i> 
-								Cumulative difficulty: <span id="block_cumulative_difficulty"></span>
-							</li>
-							<li class="collection-item">
-							<i class="fas fa-coins fa-fw tooltipped" data-position="top" data-tooltip="Cumulative amount of coins issued by all the blocks in blockchain from the genesis and up to this block."></i>
-								Total coins in the network: <span id="block_totalCoins"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-archive fa-fw tooltipped" data-position="top" data-tooltip="Cumulative number of transactions in the blockchain, from the genesis block and up to this block."></i>
-								Total transactions in the network: <span id="block_totalTransactions"></span>
-							</li>
-						</ul>
-					</div>
-					<div class="col s12 l4">
-						<ul class="collection">
-							<li class="collection-item">
-								<i class="fas fa-code-branch fa-fw tooltipped" data-position="top" data-tooltip="True, if the block belongs to an alternative chain. In such case all the transactions, excluding coinbase, are removed from the block back to transaction pool to be included in another block. It means there is no reward for the miner."></i>
-								Orphan: <span id="block_orphan"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-puzzle-piece fa-fw tooltipped" data-position="top" data-tooltip="The nonce a field whose value is adjusted by miners so that the hash of the block will meet difficulty requirement. Any change to the block data (such as the nonce) will make the block hash completely different."></i>
-								Nonce: <span id="block_nonce"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Cumulative size of all transactions in the block, including coinbase. In case it's exceeding 'effective txs median' the reward penalty occurs and therefore miner receives less reward."></i>
-								Total transactions size: <span id="block_transactionsSize"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Size of the whole block, i.e. block header plus all transactions."></i>
-								Total block size: <span id="block_blockSize"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Median value of block total transactions size among last n blocks."></i>
-								Current txs median, bytes: <span id="block_currentTxsMedian"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Bounded from below median value that is actually used to calculate penalty."></i>
-								Effective txs median, bytes: <span id="block_effectiveTxsMedian"></span>
-							</li>
-							<li class="collection-item">
-									<i class="fas fa-microchip fa-fw tooltipped" data-position="top" data-tooltip="Block's POW algo."></i>
-									Algo: <span id="block_algo"></span>
-								</li>
-							<li class="collection-item">
-								<i class="fas fa-minus-square fa-fw tooltipped" data-position="top" data-tooltip="Penalty for exceeding the median. penalty = (total_transactions_size / effective_tx_median − 1) ^ 2. No penalty if total transactions size is less then effective median. Penalty is near 100% if total txs size is twice the effective median. Greater blocks are not allowed."></i>
-								Reward penalty: <span id="block_rewardPenalty"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-trophy fa-fw tooltipped" data-position="top" data-tooltip="Base value for calculating the block reward. Does not depend on how many transactions are included into the block. Also, this is how many coins the miner would receive if the block contains only coinbase transaction."></i>
-								Base reward: <span id="block_baseReward"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-donate fa-fw tooltipped" data-position="top" data-tooltip="um of fees for all transactions in the block."></i>
-								Transactions fee: <span id="block_transactionsFee"></span>
-							</li>
-							<li class="collection-item">
-								<i class="fas fa-award fa-fw tooltipped" data-position="top" data-tooltip="Actual amount of coins the miner received for finding the block: reward = base_reward × (1 − penalty) + transactions_fees"></i>
-								Reward: <span id="block_reward"></span>
-							</li>
-						</ul>
-					</div>
-				</div>
+			<div class="col s12 l4">
+				<ul class="collection">
+					<li class="collection-item">
+						<i class="fas fa-code-branch fa-fw tooltipped" data-position="top" data-tooltip="True, if the block belongs to an alternative chain. In such case all the transactions, excluding coinbase, are removed from the block back to transaction pool to be included in another block. It means there is no reward for the miner."></i>
+						Orphan: <span id="block_orphan"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-puzzle-piece fa-fw tooltipped" data-position="top" data-tooltip="The nonce a field whose value is adjusted by miners so that the hash of the block will meet difficulty requirement. Any change to the block data (such as the nonce) will make the block hash completely different."></i>
+						Nonce: <span id="block_nonce"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Cumulative size of all transactions in the block, including coinbase. In case it's exceeding 'effective txs median' the reward penalty occurs and therefore miner receives less reward."></i>
+						Total transactions size: <span id="block_transactionsSize"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Size of the whole block, i.e. block header plus all transactions."></i>
+						Total block size: <span id="block_blockSize"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Median value of block total transactions size among last n blocks."></i>
+						Current txs median, bytes: <span id="block_currentTxsMedian"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Bounded from below median value that is actually used to calculate penalty."></i>
+						Effective txs median, bytes: <span id="block_effectiveTxsMedian"></span>
+					</li>
+					<li class="collection-item">
+							<i class="fas fa-microchip fa-fw tooltipped" data-position="top" data-tooltip="Block's POW algo."></i>
+							Algo: <span id="block_algo"></span>
+						</li>
+					<li class="collection-item">
+						<i class="fas fa-minus-square fa-fw tooltipped" data-position="top" data-tooltip="Penalty for exceeding the median. penalty = (total_transactions_size / effective_tx_median − 1) ^ 2. No penalty if total transactions size is less then effective median. Penalty is near 100% if total txs size is twice the effective median. Greater blocks are not allowed."></i>
+						Reward penalty: <span id="block_rewardPenalty"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-trophy fa-fw tooltipped" data-position="top" data-tooltip="Base value for calculating the block reward. Does not depend on how many transactions are included into the block. Also, this is how many coins the miner would receive if the block contains only coinbase transaction."></i>
+						Base reward: <span id="block_baseReward"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-donate fa-fw tooltipped" data-position="top" data-tooltip="um of fees for all transactions in the block."></i>
+						Transactions fee: <span id="block_transactionsFee"></span>
+					</li>
+					<li class="collection-item">
+						<i class="fas fa-award fa-fw tooltipped" data-position="top" data-tooltip="Actual amount of coins the miner received for finding the block: reward = base_reward × (1 − penalty) + transactions_fees"></i>
+						Reward: <span id="block_reward"></span>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row">
 	<div class="col s12">
 		<div class="card hoverable">
 			<div class="card-action grey lighten-5">

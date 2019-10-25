@@ -22,99 +22,91 @@
 
 </style>
 
-<p id="tx_loading" class="center-align"><i class="fas fa-circle-notch fa-spin"></i></p>
-
 <div style="height: 10px; clear: both;"></div>
+<p id="tx_loading" class="center-align"><i class="fas fa-circle-notch fa-spin"></i></p>
+<div class="row">
+	<div class="col s12">
+		<h2 class="light-blue-text text-darken-4">
+			<i class="fas fa-exchange-alt"></i> Transaction 
+			<small class="tooltipped" data-position="top" data-tooltip="Unique fingerprint of the transaction." id="transaction.hash" style="word-break: break-all; word-wrap: break-word;"></small>
+		</h2>
+	</div>
+</div>	
 <div id="tx_details" style="display: none;">
 	<div class="row" id="tx_info">
-		<div class="col s12">
-			<div class="card hoverable">
-				<div class="card-action grey lighten-5">
-					<h2 class="light-blue-text text-darken-4"><i class="fas fa-exchange-alt"></i> 
-						Transaction <small class="tooltipped"
-						data-position="top" data-tooltip="Unique fingerprint of the transaction." id="transaction.hash"
-						style="word-break: break-all; word-wrap: break-word;"></small></h2>
-				</div>
-				<div class="card-content">
-					<div class="row">
-						<div class="col s12 l4">
-							<ul class="collection">
-								<li class=" collection-item" id="tx_unconfirmed" style="display: none;">
-									<i class="fa fa-exclamation-triangle fa-fw red-text tooltipped" data-position="top" data-tooltip="The transaction is not included into block yet and therefore is not wtitten into blockchain."></i>
-									<span class="red-text">Unconfirmed transaction</span>
-								</li>
-								<li class="tx_block collection-item">
-									<i class="fas fa-bars fa-fw"></i> Block height: <span id="block.height"></span>
-								</li>
-								<li class="collection-item">
-									<i class="fas fa-unlock-alt fa-fw tooltipped" data-position="top" 
-									data-tooltip="Unlock time allows you to send a transaction to someone, such that they can not spend it until after a certain number of blocks, or until a certain time."></i>
-									Unlock time: <span id="transaction.unlock_time"></span>
-								</li>
-								<li class="collection-item" id="transaction_fee">
-									<i class="fas fa-donate fa-fw tooltipped" data-position="top" data-tooltip="Money that goes to the miner, who included this transaction into block."></i>
-									Fee: <span id="transaction.fee"></span>
-								</li>
-								<li class="collection-item">
-									<i class="fas fa-money-bill-wave-alt fa-fw tooltipped" data-position="top" data-tooltip="It does not mean that this is the amount that is actually transferred."></i>
-									Sum of outputs: <span id="transaction.amount_out"></span>
-								</li>
-								<li class="collection-item" data-position="top" data-tooltip="">
-									<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Size of the transaction."></i>
-									Size: <span id="transaction.size"></span>
-								</li>
-								<li class="collection-item" id="div_transaction_mixin">
-									<i class="fas fa-mortar-pestle fa-fw tooltipped" data-position="top" data-tooltip="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."></i>
-									Mixin count: <span id="transaction.mixin"></span>
-								</li>
-								<li class="collection-item" id="transaction_version">
-									<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="Version of the transaction."></i>
-									Version: <span id="transaction.version"></span>
-								</li>
-							</ul>
-						</div>
-
-						<div class="col s12 l8">
-							<ul class="collection">
-								<li class="tx_block collection-item">
-									<i class="fas fa-hashtag fa-fw"></i> Block hash: <span id="block.hash" style="word-break: break-all;"></span>
-								</li>
-								<li class="collection-item" id="confirmations" style="display: none;">
-									<i class="fas fa-check-double fa-fw tooltipped" data-position="top" data-tooltip="The number of network confirmations."></i> 
-									Confirmations: <span
-									id="transaction.confirmations"></span> &bull; First confirmation time: <span
-									id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)
-								<li>
-								<li class="transaction_payment_id collection-item" style="display: none;">
-									<i class="fas fa-fingerprint fa-fw tooltipped" data-position="top" 
-									data-tooltip="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."></i>
-									<span>Payment ID: <span id="transactionPaymentId"
-									style="word-break: break-all; word-wrap: break-word;"></span>
-								</li>
-								<li class="transaction_payment_id collection-item" style="display: none;">
-									<i class="fas fa-comment fa-fw"></i> Decoded Payment ID: <code id="transaction.paymentIdDecifer"
-									style="word-break: break-all; word-wrap: break-word;"></code></span>
-								</li>
-								
-								<li class="collection-item">
-									<i class="fas fa-paperclip" fa-fw tooltipped" data-position="top" data-tooltip="An arbitrary amount of arbitrary data can be added in a transaction.
-									The extra field contains data with a high level structure. Several fields are predefined, such as public key, or extra nonce."></i> 
-									Extra (raw): <span id="transaction.extra_raw"
-									style="word-break: break-all; word-wrap: break-word;"></span>
-								</li>
-								<li class="collection-item">
-									<i class="fa fa-key fa-fw tooltipped" data-position="top" data-tooltip="The transaction Public Key, R, is in the extra part of the transaction data structure."></i>
-									Public Key: <span id="transaction.public_key" style="word-break: break-all; word-wrap: break-word;"></span>
-								</li>
-								<li id="transaction_extra_nonce" style="display: none;" class="collection-item">
-									<i class="fas fa-puzzle-piece fa-fw tooltipped" data-position="top" data-tooltip="Extra nonce."></i>
-									Extra nonce: <span id="transaction.extra_nonce"></span>
-								</li>
-							</ul>
-						</div>				
-					</div>
-				</div>
-			</div>
+		<div class="col s12 l4">
+			<ul class="collection">
+				<li class=" collection-item" id="tx_unconfirmed" style="display: none;">
+					<i class="fa fa-exclamation-triangle fa-fw red-text tooltipped" data-position="top" data-tooltip="The transaction is not included into block yet and therefore is not wtitten into blockchain."></i>
+					<span class="red-text">Unconfirmed transaction</span>
+				</li>
+				<li class="tx_block collection-item">
+					<i class="fas fa-bars fa-fw"></i> Block height: <span id="block.height"></span>
+				</li>
+				<li class="collection-item">
+					<i class="fas fa-unlock-alt fa-fw tooltipped" data-position="top" 
+					data-tooltip="Unlock time allows you to send a transaction to someone, such that they can not spend it until after a certain number of blocks, or until a certain time."></i>
+					Unlock time: <span id="transaction.unlock_time"></span>
+				</li>
+				<li class="collection-item" id="transaction_fee">
+					<i class="fas fa-donate fa-fw tooltipped" data-position="top" data-tooltip="Money that goes to the miner, who included this transaction into block."></i>
+					Fee: <span id="transaction.fee"></span>
+				</li>
+				<li class="collection-item">
+					<i class="fas fa-money-bill-wave-alt fa-fw tooltipped" data-position="top" data-tooltip="It does not mean that this is the amount that is actually transferred."></i>
+					Sum of outputs: <span id="transaction.amount_out"></span>
+				</li>
+				<li class="collection-item" data-position="top" data-tooltip="">
+					<i class="fas fa-weight-hanging fa-fw tooltipped" data-position="top" data-tooltip="Size of the transaction."></i>
+					Size: <span id="transaction.size"></span>
+				</li>
+				<li class="collection-item" id="div_transaction_mixin">
+					<i class="fas fa-mortar-pestle fa-fw tooltipped" data-position="top" data-tooltip="Denotes how many random inputs are mixed within this transactions in order to achieve desired level of anonimity. Mixin count 1 means no additional inputs are mixed in and thus each input can be traced back."></i>
+					Mixin count: <span id="transaction.mixin"></span>
+				</li>
+				<li class="collection-item" id="transaction_version">
+					<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="Version of the transaction."></i>
+					Version: <span id="transaction.version"></span>
+				</li>
+			</ul>
+		</div>
+		<div class="col s12 l8">
+			<ul class="collection">
+				<li class="tx_block collection-item">
+					<i class="fas fa-hashtag fa-fw"></i> Block hash: <span id="block.hash" style="word-break: break-all;"></span>
+				</li>
+				<li class="collection-item" id="confirmations" style="display: none;">
+					<i class="fas fa-check-double fa-fw tooltipped" data-position="top" data-tooltip="The number of network confirmations."></i> 
+					Confirmations: <span
+					id="transaction.confirmations"></span> &bull; First confirmation time: <span
+					id="transaction.timestamp"></span> (<time class="transaction-timeago"></time>)
+				<li>
+				<li class="transaction_payment_id collection-item" style="display: none;">
+					<i class="fas fa-fingerprint fa-fw tooltipped" data-position="top" 
+					data-tooltip="Optional user-defined hexadecimal characters string. Can be used by anyone to distinguish the transactions easier."></i>
+					<span>Payment ID: <span id="transactionPaymentId"
+					style="word-break: break-all; word-wrap: break-word;"></span>
+				</li>
+				<li class="transaction_payment_id collection-item" style="display: none;">
+					<i class="fas fa-comment fa-fw"></i> Decoded Payment ID: <code id="transaction.paymentIdDecifer"
+					style="word-break: break-all; word-wrap: break-word;"></code></span>
+				</li>
+				
+				<li class="collection-item">
+					<i class="fas fa-paperclip" fa-fw tooltipped" data-position="top" data-tooltip="An arbitrary amount of arbitrary data can be added in a transaction.
+					The extra field contains data with a high level structure. Several fields are predefined, such as public key, or extra nonce."></i> 
+					Extra (raw): <span id="transaction.extra_raw"
+					style="word-break: break-all; word-wrap: break-word;"></span>
+				</li>
+				<li class="collection-item">
+					<i class="fa fa-key fa-fw tooltipped" data-position="top" data-tooltip="The transaction Public Key, R, is in the extra part of the transaction data structure."></i>
+					Public Key: <span id="transaction.public_key" style="word-break: break-all; word-wrap: break-word;"></span>
+				</li>
+				<li id="transaction_extra_nonce" style="display: none;" class="collection-item">
+					<i class="fas fa-puzzle-piece fa-fw tooltipped" data-position="top" data-tooltip="Extra nonce."></i>
+					Extra nonce: <span id="transaction.extra_nonce"></span>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div class="row">
