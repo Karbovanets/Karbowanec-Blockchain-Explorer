@@ -345,10 +345,8 @@ function handleSearch() {
                         cache: false,
                         success: function (data) {
                             if (data.result) {
-                                sessionStorage.setItem('searchTransaction', JSON
-                                    .stringify(data.result));
-                                window.location.href = transactionExplorer.replace(
-                                    '{id}', text);
+                                sessionStorage.setItem('searchTransaction', JSON.stringify(data.result));
+                                window.location.href = transactionExplorer.replace('{id}', text);
                             } else if (data.error) {
                                 xhrGetTsx = $.ajax({
                                     url: api + '/json_rpc',
@@ -365,24 +363,12 @@ function handleSearch() {
                                     cache: 'false',
                                     success: function (data) {
                                         if (data.result) {
-                                            txsByPaymentId = data.result
-                                                .transactions;
-                                            sessionStorage.setItem(
-                                                'txsByPaymentId', JSON
-                                                    .stringify(
-                                                        txsByPaymentId));
-                                            window.location.href =
-                                                paymentIdExplorer.replace(
-                                                    '{id}', text);
+                                            txsByPaymentId = data.result.transactions;
+                                            sessionStorage.setItem('txsByPaymentId', JSON.stringify(txsByPaymentId));
+                                            window.location.href = paymentIdExplorer.replace('{id}', text);
                                         } else if (data.error) {
-                                            $('#page').after(
-                                                '<div class="alert alert-warning alert-dismissable fade in" style="position: fixed; right: 50px; top: 50px;">' +
-                                                '<button type="button" class="close" ' +
-                                                'data-dismiss="alert" aria-hidden="true">' +
-                                                '&times;' +
-                                                '</button>' +
-                                                'We could not find anything.' +
-                                                '</div>');
+                                            var toastHTML = 'We could not find anything.';
+                                            M.toast({html: toastHTML});
                                         }
                                     }
                                 });
