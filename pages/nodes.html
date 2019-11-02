@@ -20,7 +20,6 @@
 	}
 
 	#nodes_rows td:first-child,
-	#nodes_rows td:last-child,
 	#nodes_rows td:nth-child(9) {
 		text-align: left;
 	}
@@ -122,6 +121,7 @@
 									<th class="sorttable_numeric"><i class="fas fa-arrow-circle-up"></i>&nbsp;OUT</th>
 									<th class="sorttable_numeric"><i class="fas fa-flag"></i>&nbsp;Version</th>
 									<th><i class="fas fa-clock"></i>&nbsp;Start time</th>
+									<th><i class="fas fa-hourglass-end"></i>&nbsp;Uptime</th>
 								</tr>
 							</thead>
 							<colgroup width="300"></colgroup>
@@ -137,7 +137,7 @@
 </div>
 
 <script src="js/sorttable.js"></script>
-
+<script src="js/moment.min.js"></script>
 <script>
 	function cmp(a, b) {
 		return a - b;
@@ -195,6 +195,7 @@
 	}
 
 	function getNodes() {
+		var now = new Date();
 		nodesStat.forEach(function (node) {
 
 			var url = node[0];
@@ -218,34 +219,43 @@
 			}).done(function (data, success) {
 
 				var nodeHeight = data.height - 1; // we need last block here not blockchain height
-				var nodeHash = data.top_block_hash;
+				var nodeHash = "&mdash;";
+				if (typeof data.top_block_hash !== "undefined") {
+					nodeHash = data.top_block_hash;
+					Hashes.push(nodeHash);
+				}
 				Heights.push(nodeHeight);
-				Hashes.push(nodeHash);
-				var dateTime = new Date(data.start_time * 1000).toISOString();
+				var dateTime;
+				var uptime = "&mdash;";
+				var startTime = "&mdash;";
 				if (!isNaN(data.start_time)) {
-					var datestring = formatDate(data.start_time);
-					var agostring = $.timeago(dateTime);
+					startTime = formatDate(data.start_time);
+					dateTime = new Date(data.start_time * 1000).toISOString();
+					uptime = moment.duration(moment(now).diff(moment(dateTime))).humanize();
+				}
+				var rpcCount = "&mdash;";
+				if (!isNaN(data.rpc_connections_count)) {
+					rpcCount = data.rpc_connections_count;
 				}
 				$('#nodes_rows').append('<tr><td id=node-' + url + '><a target=blank href="' + url +
 					'/getinfo">' + url + '</a></td><td class="height" id=nodeHeight-' + url + '>' +
 					nodeHeight + '</td><td class="break-word hash" id=nodeHash-' + url + '>' +
 					nodeHash + '</td><td id=known-' + url + '>' + data.last_known_block_index +
 					'</td><td class="difficulty" id=diff-' + url + '>' + data.difficulty +
-					'</td><td id=rpc-' + url + '>' + data.rpc_connections_count + '</td><td id=inc-' +
+					'</td><td id=rpc-' + url + '>' + rpcCount + '</td><td id=inc-' +
 					url + '>' + data.incoming_connections_count + '</td><td id=out-' + url + '>' + data
 					.outgoing_connections_count + '</td><td class="version" id=ver-' + url + '>' + data
-					.version + '</td><td class="date-time">' + formatDate(data.start_time) +
-					' (<span class="timeago">' + agostring + '</span>)</td></tr>');
+					.version + '</td><td class="date-time">' + startTime +
+					'</td><td id="uptime-'+ url +'">' + uptime + '</td></tr>');
 				Versions.push(data.version);
 				nextDifficulties.push(parseInt(data.difficulty));
 				totalNodes++;
 				nodesRefreshed++;
 				updateText('totalNodes', totalNodes);
+
+				setCommons();
 			});
 		});
-		setTimeout(function () {
-			setCommons();
-		}, 500);
 	}
 
 	// Refresh
@@ -257,7 +267,7 @@
 		Heights = [];
 		Hashes = [];
 		it = -1;
-
+		var now = new Date();
 		nodesStat.forEach(function (node) {
 
 			var url = node[0];
@@ -281,35 +291,43 @@
 			}).done(function (data, success) {
 
 				var nodeHeight = data.height - 1; // we need last block here not blockchain height
-				var nodeHash = data.top_block_hash;
+				var nodeHash = "&mdash;";
+				if (typeof data.top_block_hash !== "undefined") {
+					nodeHash = data.top_block_hash;
+					Hashes.push(nodeHash);
+				}
 				Heights.push(nodeHeight);
-				Hashes.push(nodeHash);
-				var dateTime = new Date(data.start_time * 1000).toISOString();
+				var dateTime;
+				var uptime = "&mdash;";
 				if (!isNaN(data.start_time)) {
-					var datestring = formatDate(data.start_time);
-					var agostring = $.timeago(dateTime);
+					dateTime = new Date(data.start_time * 1000).toISOString();
+					agostring = $.timeago(dateTime);
+					uptime = moment.duration(moment(now).diff(moment(dateTime))).humanize();
+				}
+				var rpcCount = "&mdash;";
+				if (!isNaN(data.rpc_connections_count)) {
+					rpcCount = data.rpc_connections_count;
 				}
 				updateText('nodeHeight-' + url, nodeHeight);
 				updateText('nodeHash-' + url, nodeHash);
 				updateText('known-' + url, data.last_known_block_index);
 				updateText('diff-' + url, data.difficulty);
-				updateText('rpc-' + url, data.rpc_connections_count);
+				updateText('rpc-' + url, rpcCount);
 				updateText('inc-' + url, data.incoming_connections_count);
 				updateText('out-' + url, data.outgoing_connections_count);
 				updateText('ver-' + url, data.version);
+				updateText('uptime-' + url, uptime);
 				Versions.push(data.version);
 				nextDifficulties.push(parseInt(data.difficulty));
 				totalNodes++;
 				nodesRefreshed++;
 				updateText('totalNodes', totalNodes);
 			});
+
+			setCommons();
 		});
 
-		setTimeout(function () {
-			setCommons();
-		}, 500);
-
-	}, 60000);
+	}, refreshDelay);
 
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip();

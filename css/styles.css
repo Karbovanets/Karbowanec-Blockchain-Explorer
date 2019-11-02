@@ -329,7 +329,8 @@ foooter a,
         display: inline-block;
         position: relative;
     }
-
+}
+@media only screen and (max-width: 1500px) {
     .table-responsive {
         display: grid;
         grid-gap: 10px;
@@ -338,7 +339,7 @@ foooter a,
           repeat(6, calc(50% - 40px))
           10px;
         grid-template-rows: minmax(150px, 1fr);
-        overflow: scroll;
+        overflow-x: scroll;
     }
     .table-responsive table tr td {
         white-space: nowrap;
