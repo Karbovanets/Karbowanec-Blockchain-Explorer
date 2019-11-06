@@ -667,6 +667,9 @@
 						}
 						$("#check_result").show();
 					}
+					else {
+						M.toast({html: 'Invalid signature', classes: 'red'}, 5000);
+					}
 				}
 			}
 		});
