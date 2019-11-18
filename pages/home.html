@@ -334,9 +334,8 @@
 		updateText('networkHeight', lastStats.height.toString());
 		updateText('networkTransactions', lastStats.tx_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
-		updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.', '')), 2));
-		updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.', '')) /
-			10000000000000000000 * 100).toFixed(4) + "%");
+		updateText('totalCoins', getReadableCoins(lastStats.already_generated_coins, 2));
+		updateText('emissionPercent', (lastStats.already_generated_coins / 10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
 		updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
