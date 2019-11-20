@@ -87,40 +87,64 @@
 				Height: <span id="networkHeight" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
-			</li>
-			<li class="collection-item">
-				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
-			</li>
-			<li class="collection-item">
 				Transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
-			</li>
-			<li class="collection-item">
-				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
-									(<span id="emissionPercent"></span>)</span>
 			</li>
 			<li class="collection-item">
 				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
 			</li>
+		</ul>
+	</div>
+	<div class="col m4 l3 s12">
+		<ul class="collection hoverable">
+			<li class="collection-item">
+				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+			</li>		
 			<li class="collection-item">
 				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Est. solve time: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
+		</ul>
+	</div>
+	<div class="col m4 l3 s12">
+		<ul class="collection hoverable">
+			<li class="collection-item">
+				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
+						(<span id="emissionPercent"></span>)</span>
+			</li>
 			<li class="collection-item">
 				Avg. solve time: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
+		</ul>
+	</div>
+	<div class="col m4 l3 s12">
+		<ul class="collection hoverable">
+			<li class="collection-item">	
+				Next stake: <span id="nextStake" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">	
+				Locked: <span class="value light-blue-text text-darken-4"><span id="lockedStakes"></span>
+					(<span id="emissionPercentLocked"></span>)</span>
+			</li>
+			<li class="collection-item">	
+				Est. interest (PD): <span id="stakeInterest" class="value light-blue-text text-darken-4"></span>
+			</li>			
+		</ul>
+	</div>
 			<!--li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
 			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li-->
-		</ul>	
-	</div>
-	<div class="col m8 l9 s12">
+</div>
+<div class="row">
+	<div class="col m12 l12 s12">
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="d-flex align-items-center">
 					<div class="ml-auto">
-						<canvas id="difficultyChart" height="342"></canvas>
+						<canvas id="difficultyChart" height="250"></canvas>
 					</div>
 				</div>
 			</div>
@@ -339,6 +363,11 @@
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
 		updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
+
+		updateText('nextStake', getReadableCoins(lastStats.next_stake,2));
+        updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked,2));
+        updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
+        updateText('stakeInterest', (lastStats.next_reward * 100 / lastStats.next_stake).toFixed(2) + "%");
 	}
 
 	var xhrGetBlocks;
