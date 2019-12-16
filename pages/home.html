@@ -71,56 +71,63 @@
 		padding-top: 10px;
 	}
 
-	@media only screen and (max-width: 992px) {
-		table.mempool-table {
-			min-width: 1178px;
-		}
+	table.mempool-table {
+		min-width: 1178px;
 	}
+
 </style>
 
 <div style="height: 10px; clear: both;"></div>
 
 <div class="row">
-	<div class="col m4 l3 s12">
+	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
 				Height: <span id="networkHeight" class="value light-blue-text text-darken-4"></span>
-			</li>
-			<li class="collection-item">
-				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
-			</li>
-			<li class="collection-item">
-				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
-									(<span id="emissionPercent"></span>)</span>
+						(<span id="emissionPercent"></span>)</span>
 			</li>
+		</ul>
+	</div>
+	<div class="col m4 l4 s12">
+		<ul class="collection hoverable">
 			<li class="collection-item">
-				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
-			</li>
+				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+			</li>		
 			<li class="collection-item">
 				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Est. solve time: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
+		</ul>
+	</div>
+	<div class="col m4 l4 s12">
+		<ul class="collection hoverable">
+			<li class="collection-item">
+				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
+			</li>
 			<li class="collection-item">
 				Avg. solve time: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
-			<!--li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
-			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li-->
-		</ul>	
+		</ul>
 	</div>
-	<div class="col m8 l9 s12">
+</div>
+<div class="row">
+	<div class="col m12 l12 s12">
 		<div class="card hoverable">
 			<div class="card-content">
 				<div class="d-flex align-items-center">
 					<div class="ml-auto">
-						<canvas id="difficultyChart" height="342"></canvas>
+						<canvas id="difficultyChart" height="250"></canvas>
 					</div>
 				</div>
 			</div>
@@ -332,14 +339,14 @@
 
 	function renderLastStats() {
 		updateText('networkHeight', lastStats.height.toString());
-		updateText('networkTransactions', lastStats.tx_count.toString());
+		updateText('networkTransactions', lastStats.transactions_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 		updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.', '')), 2));
 		updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.', '')) /
 			10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
-		updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
+		updateText('minimumFee', getReadableCoins(lastStats.min_fee, 6));
 	}
 
 	var xhrGetBlocks;
@@ -712,15 +719,15 @@
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
 			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
-			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
+			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + '</td>' +
-			'<td>' + block.tx_count + '</td>';
+			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
 		MinFees.push(parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
-		Txses.push(parseInt(block.tx_count));
-		Sizes.push(parseInt(block.cumul_size));
+		Txses.push(parseInt(block.transactions_count));
+		Sizes.push(parseInt(block.cumulative_size));
 		DateTimes.push(dateTime);
 		Timestamps.push(block.timestamp);
 
@@ -817,7 +824,7 @@
 
 						var row = document.createElement('tr');
 						var columns =
-							'<td class="date-time">' + formatDate(tx.receiveTime) + '<br />(<span class="mtx-ago"></span>)' +
+							'<td class="date-time">' + formatDate(tx.receive_time) + '<br />(<span class="mtx-ago"></span>)' +
 							'</td>' +
 							'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
 							'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
@@ -825,7 +832,7 @@
 							'<td>' + formatPaymentLink(tx.hash) + '</td>';
 						row.innerHTML = columns;
 						$(txsRows).append(row);
-						$(row).find('.mtx-ago').timeago('update', new Date(tx.receiveTime * 1000)
+						$(row).find('.mtx-ago').timeago('update', new Date(tx.receive_time * 1000)
 						.toISOString());
 
 						txcount = txcount + 1;
@@ -1137,8 +1144,8 @@
 			var row = $(brows[i]);
 			var label = row.data("json").height;
 			var diff = row.data("json").difficulty;
-			var txses = row.data("json").tx_count;
-			var size = row.data("json").cumul_size;
+			var txses = row.data("json").transactions_count;
+			var size = row.data("json").cumulative_size;
 			var time = row.attr('data-dt');
 			var mfee = row.attr('data-min-fee');
 			var lapse = row.data("json").solvetime;

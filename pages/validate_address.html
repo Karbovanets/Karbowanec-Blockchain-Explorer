@@ -97,15 +97,15 @@
 					result.removeClass("red-text text-darken-4");
 					result_icon.removeClass("fa-check");
 					result_icon.removeClass("fa-times");
-					var isvalid = JSON.parse(res.isvalid);
+					var isvalid = JSON.parse(res.is_valid);
 					if (isvalid) {
 						result_text.text("Address is valid");
 						result_container.addClass("light-green lighten-5");
 						result.addClass("teal-text text-darken-2");
 						result_icon.addClass("fa-check");
 						keys_container.show();
-						viewPublicKey.text(res.viewPublicKey);
-						spendPublicKey.text(res.spendPublicKey);
+						viewPublicKey.text(res.view_public_key);
+						spendPublicKey.text(res.spend_public_key);
 					} else {
 						result_text.text("Address is invalid!");
 						result_container.addClass("red lighten-4");

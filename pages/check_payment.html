@@ -325,8 +325,8 @@
 				id: "test",
 				method: "checktransactionkey",
 				params: {
-					txid: transactionHash.val(),
-					txkey: transactionKey.val(),
+					transaction_id: transactionHash.val(),
+					transaction_key: transactionKey.val(),
 					address: publicAddress.val()
 				}
 			}),
@@ -372,7 +372,7 @@
 				id: "test",
 				method: "checktransactionbyviewkey",
 				params: {
-					txid: transactionHash.val(),
+					transaction_id: transactionHash.val(),
 					view_key: privateViewKey,
 					address: publicAddress.val()
 				}
@@ -413,9 +413,9 @@
 				id: "test",
 				method: "checktransactionproof",
 				params: {
-					tx_id: transactionHash.val(),
+					transaction_id: transactionHash.val(),
 					signature: transactionKey.val(),
-					dest_address: publicAddress.val()
+					destination_address: publicAddress.val()
 				}
 			}),
 			dataType: 'json',
