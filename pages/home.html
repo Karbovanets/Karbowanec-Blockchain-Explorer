@@ -97,26 +97,26 @@
 	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+				Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
 			</li>		
 			<li class="collection-item">
 				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Est. solve time: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
+				Est. T: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
 	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+				Reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Avg. solve time: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
+				Avg. T: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
@@ -713,7 +713,7 @@
 		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
-		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
@@ -724,7 +724,7 @@
 			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
-		MinFees.push(parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		MinFees.push(parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.transactions_count));
 		Sizes.push(parseInt(block.cumulative_size));
