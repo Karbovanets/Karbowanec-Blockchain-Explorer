@@ -1,11 +1,13 @@
 var api = 'https://karbo.club/services/node_web';
-var apiList = ["http://45.32.232.11:32348", "http://95.46.98.64:32348/"];
+var apiList = ["http://karbonode.top:32348", "http://looongcat.pp.ua:32348"];
+
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
 var symbol = 'KRB';
 var refreshDelay = 30000;
-var whiteTheme = "css/themes/white-theme.css";
-var nightTheme = "css/themes/dark-theme.css";
+var blocksPerPage = 20;
+var whiteTheme = "css/light.css";
+var nightTheme = "css/dark.css";
 // pools stats by MainCoins
 var poolsStat = 
 	[
@@ -71,7 +73,6 @@ var poolsStat =
     ];
 var nodesStat = 
 	[
-        ["https://grabbers.pp.ua:32448"],
         ["http://krbnode.cf:32348"],
 		["http://krb.sberex.com:32348"],
 		["http://n.karboon.pp.ua:32348"],
@@ -151,5 +152,8 @@ var nodesStat =
 		["http://212.227.192.145:32348"],
 		["http://51.15.75.207:32348"],
 		["http://104.207.130.36:32348"],
-		["http://178.128.164.245:32348"]
+		["http://178.128.164.245:32348"],
+		["http://144.91.94.65:32348"],
+		["http://209.97.173.38:32348"],
+		["http://45.32.50.10:32348"]
     ];

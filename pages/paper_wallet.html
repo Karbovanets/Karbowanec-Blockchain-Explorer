@@ -1,20 +1,30 @@
-<h2><i class="fa fa-money fa-fw" aria-hidden="true"></i>Paper Wallet</h2>
-
+<div style="height: 10px; clear: both;"></div>
 <div class="row">
-	<div class="col-md-12">
-		<div style="margin-bottom: 1em;">
-			<button class="btn btn-primary btn-lg" type="button" id="generate_paper_wallet">
-				<span class="fa fa-cogs"></span> Generate
-			</button>
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-wallet"></i> Paper Wallet</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<div id="paperwallet_result"></div>
+					</div>
+				</div>
+			</div>
+			<div id="validation_result" class="card-action">
+				<div class="row">
+					<div class="col s12 l12">
+						<button class="waves-effect waves-light btn light-blue darken-4" type="button" id="generate_paper_wallet">
+							<span class="fas fa-cogs"></span> Generate
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
- <div class="panel panel-default" id="validation_result">
-  <div class="panel-body">
-	<div id="paperwallet_result">
-	</div>
-  </div>
- </div>
+
 <script src="js/crypto_utils.js"></script>
 <script>
 	currentPage = {
@@ -32,7 +42,6 @@
 		generateWallet();
 	});
 	
-
 	function generateWallet() {
 		$("#paperwallet_result").empty();
 
@@ -41,20 +50,20 @@
 		var mnemonic = mn_encode(seed, "english");
 
 		$("#paperwallet_result").append(
-			'<div>' +
-				'<h3><i class="fa fa-envelope-o" aria-hidden="true"></i> Address</h3>' +
-				'<p class="text-primary"><strong style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.public_addr + '</strong></p>' +
-				'<h3><i class="fa fa-key" aria-hidden="true"></i> Mnemonic Seed</h3>' +
-				'<p class="text-danger" style="font-family: monospace, monospace;">' + mnemonic + '</p>' +
-				'<h3><i class="fa fa-key" aria-hidden="true"></i> Legacy GUI Keys</h3>' +
-				'<p class="text-danger" style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.privateKeys + '</p>' +
-				'<h3><i class="fa fa-key" aria-hidden="true"></i> View Keys</h3>' +
-				'<p class="text-success"><strong>Public:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.view.pub + '</span></p>' +
-				'<p class="text-danger"><strong>Secret:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.view.sec + '</span></p>' +
-				'<h3><i class="fa fa-key" aria-hidden="true"></i> Spend Keys</h3>' +
-				'<p class="text-success"><strong>Public:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.spend.pub + '</span></p>' +
-				'<p class="text-danger"><strong>Secret:</strong> <span style="font-family: monospace, monospace; word-wrap: break-word;">' + keys.spend.sec + '</span></p>' +
-			'</div>'
+			'<ul class="collection">' +
+				'<li class=" collection-item"><i class="fas fa-envelope"></i> Address' +
+				'<p class="indigo-text text-darken-4"><strong style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.public_addr + '</strong></p></li>' +
+				'<li class=" collection-item"><i class="fas fa-pen-alt"></i> Mnemonic Seed' +
+				'<p class="red-text text-accent-4" style="font-family: Inconsolata, monospace;">' + mnemonic + '</li>' +
+				'<li class=" collection-item"><i class="fas fa-key"></i> Legacy GUI Keys' +
+				'<p class="red-text text-accent-4" style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.privateKeys + '</p></li>' +
+				'<li class=" collection-item"><i class="fas fa-key"></i> View Keys' +
+				'<p class="teal-text text-accent-4"><strong>Public:</strong> <span style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.view.pub + '</span></p>' +
+				'<p class="red-text text-accent-4"><strong>Secret:</strong> <span style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.view.sec + '</span></p></li>' +
+				'<li class=" collection-item"><i class="fas fa-key"></i> Spend Keys' +
+				'<p class="teal-text text-accent-4"><strong>Public:</strong> <span style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.spend.pub + '</span></p>' +
+				'<p class="red-text text-accent-4"><strong>Secret:</strong> <span style="font-family: Inconsolata, monospace; word-wrap: break-word;">' + keys.spend.sec + '</span></p></li>' +
+			'</ul>'
 		);
 	}
 </script>
