@@ -71,11 +71,10 @@
 		padding-top: 10px;
 	}
 
-	@media only screen and (max-width: 992px) {
-		table.mempool-table {
-			min-width: 1178px;
-		}
+	table.mempool-table {
+		min-width: 1178px;
 	}
+
 </style>
 
 <div style="height: 10px; clear: both;"></div>
@@ -97,46 +96,44 @@
 	<div class="col m4 l3 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Next difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+				Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
 			</li>		
 			<li class="collection-item">
 				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Est. solve time: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
+				Est. T: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
 	<div class="col m4 l3 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Next reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+				Reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
 				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
 						(<span id="emissionPercent"></span>)</span>
 			</li>
 			<li class="collection-item">
-				Avg. solve time: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
+				Avg. T: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
 	<div class="col m4 l3 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">	
-				Next stake: <span id="nextStake" class="value light-blue-text text-darken-4"></span>
+				Stake: <span id="nextStake" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">	
 				Locked: <span class="value light-blue-text text-darken-4"><span id="lockedStakes"></span>
 					(<span id="emissionPercentLocked"></span>)</span>
 			</li>
 			<li class="collection-item">	
-				Est. interest (PD): <span id="stakeInterest" class="value light-blue-text text-darken-4"></span>
+				Est. interest: <span id="stakeInterest" class="value light-blue-text text-darken-4"></span>
 			</li>			
 		</ul>
 	</div>
-			<!--li class="collection-item">Average Difficulty: <span id="avgDifficulty" class="value"></span></li>
-			<li class="collection-item">Avg. Hash Rate: <span id="avgHashrate" class="value"></span></li-->
 </div>
 <div class="row">
 	<div class="col m12 l12 s12">
@@ -356,18 +353,17 @@
 
 	function renderLastStats() {
 		updateText('networkHeight', lastStats.height.toString());
-		updateText('networkTransactions', lastStats.tx_count.toString());
+		updateText('networkTransactions', lastStats.transactions_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 		updateText('totalCoins', getReadableCoins(lastStats.already_generated_coins, 2));
 		updateText('emissionPercent', (lastStats.already_generated_coins / 10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
-		updateText('minimumFee', getReadableCoins(lastStats.min_tx_fee, 6));
-
-		updateText('nextStake', getReadableCoins(lastStats.next_stake,2));
-        updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked,2));
-        updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
-        updateText('stakeInterest', (lastStats.next_reward * 100 / lastStats.next_stake).toFixed(2) + "%");
+		updateText('minimumFee', getReadableCoins(lastStats.min_fee, 6));
+		updateText('nextStake', getReadableCoins(lastStats.next_stake, 2));
+		updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked,2));
+		updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
+		updateText('stakeInterest', (lastStats.next_stake / 10 / lastStats.next_reward / 100).toFixed(4) + "%");
 	}
 
 	var xhrGetBlocks;
@@ -734,21 +730,21 @@
 		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
-		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
 			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
-			'<td>' + formatBytes(parseInt(block.cumul_size)) + '</td>' +
+			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + '</td>' +
-			'<td>' + block.tx_count + '</td>';
+			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
-		MinFees.push(parseFloat(getReadableCoins(block.min_tx_fee, 6, false)));
+		MinFees.push(parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
-		Txses.push(parseInt(block.tx_count));
-		Sizes.push(parseInt(block.cumul_size));
+		Txses.push(parseInt(block.transactions_count));
+		Sizes.push(parseInt(block.cumulative_size));
 		DateTimes.push(dateTime);
 		Timestamps.push(block.timestamp);
 
@@ -845,7 +841,7 @@
 
 						var row = document.createElement('tr');
 						var columns =
-							'<td class="date-time">' + formatDate(tx.receiveTime) + '<br />(<span class="mtx-ago"></span>)' +
+							'<td class="date-time">' + formatDate(tx.receive_time) + '<br />(<span class="mtx-ago"></span>)' +
 							'</td>' +
 							'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
 							'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
@@ -853,7 +849,7 @@
 							'<td>' + formatPaymentLink(tx.hash) + '</td>';
 						row.innerHTML = columns;
 						$(txsRows).append(row);
-						$(row).find('.mtx-ago').timeago('update', new Date(tx.receiveTime * 1000)
+						$(row).find('.mtx-ago').timeago('update', new Date(tx.receive_time * 1000)
 						.toISOString());
 
 						txcount = txcount + 1;
@@ -1165,8 +1161,8 @@
 			var row = $(brows[i]);
 			var label = row.data("json").height;
 			var diff = row.data("json").difficulty;
-			var txses = row.data("json").tx_count;
-			var size = row.data("json").cumul_size;
+			var txses = row.data("json").transactions_count;
+			var size = row.data("json").cumulative_size;
 			var time = row.attr('data-dt');
 			var mfee = row.attr('data-min-fee');
 			var lapse = row.data("json").solvetime;

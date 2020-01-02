@@ -1,6 +1,5 @@
 var api = 'https://karbo.club/services/node_web';
-//var apiList = ["http://karbonode.top:32348", "http://looongcat.pp.ua:32348"];
-var apiList = ["http://108.61.198.115:32348", "http://45.32.232.11:32348"];
+var apiList = ["http://karbonode.top:32348", "http://looongcat.pp.ua:32348"];
 
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
@@ -74,7 +73,6 @@ var poolsStat =
     ];
 var nodesStat = 
 	[
-        ["https://grabbers.pp.ua:32448"],
         ["http://krbnode.cf:32348"],
 		["http://krb.sberex.com:32348"],
 		["http://n.karboon.pp.ua:32348"],

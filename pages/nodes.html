@@ -211,6 +211,9 @@
 				purl = url;
 			}
 
+			var nurl = new URL(url);
+			var nname = nurl.hostname;
+
 			$.ajax({
 				url: purl + '/getinfo',
 				dataType: 'json',
@@ -219,34 +222,34 @@
 			}).done(function (data, success) {
 
 				var nodeHeight = data.height - 1; // we need last block here not blockchain height
-				var nodeHash = "&mdash;";
+				var nodeHash = "—";
 				if (typeof data.top_block_hash !== "undefined") {
 					nodeHash = data.top_block_hash;
 					Hashes.push(nodeHash);
 				}
 				Heights.push(nodeHeight);
 				var dateTime;
-				var uptime = "&mdash;";
-				var startTime = "&mdash;";
+				var uptime = "—";
+				var startTime = "—";
 				if (!isNaN(data.start_time)) {
 					startTime = formatDate(data.start_time);
 					dateTime = new Date(data.start_time * 1000).toISOString();
 					uptime = moment.duration(moment(now).diff(moment(dateTime))).humanize();
 				}
-				var rpcCount = "&mdash;";
+				var rpcCount = "—";
 				if (!isNaN(data.rpc_connections_count)) {
 					rpcCount = data.rpc_connections_count;
 				}
-				$('#nodes_rows').append('<tr><td id=node-' + url + '><a target=blank href="' + url +
-					'/getinfo">' + url + '</a></td><td class="height" id=nodeHeight-' + url + '>' +
-					nodeHeight + '</td><td class="break-word hash" id=nodeHash-' + url + '>' +
-					nodeHash + '</td><td id=known-' + url + '>' + data.last_known_block_index +
-					'</td><td class="difficulty" id=diff-' + url + '>' + data.difficulty +
-					'</td><td id=rpc-' + url + '>' + rpcCount + '</td><td id=inc-' +
-					url + '>' + data.incoming_connections_count + '</td><td id=out-' + url + '>' + data
-					.outgoing_connections_count + '</td><td class="version" id=ver-' + url + '>' + data
+				$('#nodes_rows').append('<tr><td id=node-' + nname + '><a target=blank href="' + url +
+					'/getinfo">' + nname + '</a></td><td class="height" id=nodeHeight-' + nname + '>' +
+					nodeHeight + '</td><td class="break-word hash" id=nodeHash-' + nname + '>' +
+					nodeHash + '</td><td id=known-' + nname + '>' + data.last_known_block_index +
+					'</td><td class="difficulty" id=diff-' + nname + '>' + data.difficulty +
+					'</td><td id=rpc-' + nname + '>' + rpcCount + '</td><td id=inc-' +
+					nname + '>' + data.incoming_connections_count + '</td><td id=out-' + nname + '>' + data
+					.outgoing_connections_count + '</td><td class="version" id=ver-' + nname + '>' + data
 					.version + '</td><td class="date-time">' + startTime +
-					'</td><td id="uptime-'+ url +'">' + uptime + '</td></tr>');
+					'</td><td id="uptime-'+ nname +'">' + uptime + '</td></tr>');
 				Versions.push(data.version);
 				nextDifficulties.push(parseInt(data.difficulty));
 				totalNodes++;
@@ -283,48 +286,51 @@
 				purl = url;
 			}
 
+			var nurl = new URL(url);
+			var nname = nurl.hostname;
+
 			$.ajax({
 				url: purl + '/getinfo',
 				dataType: 'json',
 				type: 'GET',
-				cache: 'false'
-			}).done(function (data, success) {
+				cache: 'false',
+				success: function(data) {
+					var nodeHeight = data.height - 1; // we need last block here not blockchain height
+					var nodeHash = "—";
+					if (typeof data.top_block_hash !== "undefined") {
+						nodeHash = data.top_block_hash;
+						Hashes.push(nodeHash);
+					}
+					Heights.push(nodeHeight);
+					var dateTime;
+					var uptime = "—";
+					if (!isNaN(data.start_time)) {
+						dateTime = new Date(data.start_time * 1000).toISOString();
+						agostring = $.timeago(dateTime);
+						uptime = moment.duration(moment(now).diff(moment(dateTime))).humanize();
+					}
+					var rpcCount = "—";
+					if (!isNaN(data.rpc_connections_count)) {
+						rpcCount = data.rpc_connections_count;
+					}
+					updateText('nodeHeight-' + nname, nodeHeight);
+					updateText('nodeHash-' + nname, nodeHash);
+					updateText('known-' + nname, data.last_known_block_index);
+					updateText('diff-' + nname, data.difficulty);
+					updateText('rpc-' + nname, rpcCount);
+					updateText('inc-' + nname, data.incoming_connections_count);
+					updateText('out-' + nname, data.outgoing_connections_count);
+					updateText('ver-' + nname, data.version);
+					updateText('uptime-' + nname, uptime);
+					Versions.push(data.version);
+					nextDifficulties.push(parseInt(data.difficulty));
+					totalNodes++;
+					nodesRefreshed++;
+					updateText('totalNodes', totalNodes);
 
-				var nodeHeight = data.height - 1; // we need last block here not blockchain height
-				var nodeHash = "&mdash;";
-				if (typeof data.top_block_hash !== "undefined") {
-					nodeHash = data.top_block_hash;
-					Hashes.push(nodeHash);
+					setCommons();
 				}
-				Heights.push(nodeHeight);
-				var dateTime;
-				var uptime = "&mdash;";
-				if (!isNaN(data.start_time)) {
-					dateTime = new Date(data.start_time * 1000).toISOString();
-					agostring = $.timeago(dateTime);
-					uptime = moment.duration(moment(now).diff(moment(dateTime))).humanize();
-				}
-				var rpcCount = "&mdash;";
-				if (!isNaN(data.rpc_connections_count)) {
-					rpcCount = data.rpc_connections_count;
-				}
-				updateText('nodeHeight-' + url, nodeHeight);
-				updateText('nodeHash-' + url, nodeHash);
-				updateText('known-' + url, data.last_known_block_index);
-				updateText('diff-' + url, data.difficulty);
-				updateText('rpc-' + url, rpcCount);
-				updateText('inc-' + url, data.incoming_connections_count);
-				updateText('out-' + url, data.outgoing_connections_count);
-				updateText('ver-' + url, data.version);
-				updateText('uptime-' + url, uptime);
-				Versions.push(data.version);
-				nextDifficulties.push(parseInt(data.difficulty));
-				totalNodes++;
-				nodesRefreshed++;
-				updateText('totalNodes', totalNodes);
 			});
-
-			setCommons();
 		});
 
 	}, refreshDelay);
