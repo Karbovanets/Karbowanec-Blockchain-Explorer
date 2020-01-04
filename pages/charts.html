@@ -1,0 +1,190 @@
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+		<div class="card-action grey lighten-5">
+			<h2 class="light-blue-text text-darken-4"><i class="fas fa-chart-area"></i> Historical charts</h2>
+		</div>
+		<div class="card-content">
+			
+            <div id="chart_container" style="height: 500px; min-width: 310px"></div>
+            
+		</div>
+	</div>
+</div>
+<script src="js/highstock.js"></script>
+<script src="js/moment.min.js"></script>
+<script>
+Difficulties = [],
+Heights = [],
+Rewards = [],
+Sizes = [],
+Supplies = [],
+Dates = [],
+Transactions = []
+
+currentPage = {
+		destroy: function () {
+			
+		},
+		init: function () {
+			renderChart();
+		},
+		update: function () {
+			
+		}
+	};
+
+    var start_height = 1;
+        
+function renderChart() {
+	var xhrGetStats;
+    if (xhrGetStats) xhrGetStats.abort();
+    xhrGetStats = $.ajax({
+        url: api + '/json_rpc',
+        method: "POST",
+        data: JSON.stringify({
+            jsonrpc: "2.0",
+            id: "explorer_range_stats",
+            method: "getstatsinrange",
+            params: {
+                start_height: start_height,
+                end_height: lastStats.height - 1
+            }
+        }),
+        dataType: 'json',
+        cache: 'false',
+        success: function (data) {
+            data.result.stats.forEach(function (e) {
+                Difficulties.push(e.difficulty);
+                Heights.push(e.height);
+                Rewards.push(parseFloat(getReadableCoins(e.reward, 4)));
+                Sizes.push(parseInt(e.block_size));
+                Supplies.push(parseFloat(getReadableCoins(e.already_generated_coins, 2)));
+                var dateTime = new Date(e.timestamp * 1000).toISOString();
+                Dates.push(dateTime);
+                Transactions.push(e.already_generated_transactions);
+            });
+            
+            createChart();
+        }
+    });
+}
+
+/**
+ * Create the chart when all data is loaded
+ * @returns {undefined}
+ */
+function createChart() {
+
+  Highcharts.stockChart('chart_container', {
+
+    rangeSelector: {
+        selected: 1,
+        enabled: true
+    },
+
+    xAxis: [{
+        	categories: [].concat(Dates),
+	        crosshair: true,
+	        type: 'datetime',
+	        labels: {
+	        	enabled: true,
+	        	step: 1,
+	        	formatter: function() {
+	        		return moment(this.value).format("DD.MM.YYYY HH:mm");
+	        		}	        	
+	        	}
+		    }],
+
+    yAxis: [
+                { labels: { enabled: false}, title: { text: null }},
+                { labels: { enabled: false}, title: { text: null }},
+                { labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+                { labels: { enabled: false}, title: { text: null }},
+                { labels: { enabled: false}, title: { text: null }}
+        	],
+
+    tooltip: {
+			shared: true,
+			formatter: function() {
+		        var s = '<b>'+ this.x +'</b>';
+
+		        $.each(this.points, function(i, point) {
+                    s += '<br/><span style="color:' + point.color + '">\u25CF</span>: ' + point.series.name + ': ' + (i==3 ? formatBytes(point.y) : point.y);
+                    if(i==2 || i==4) s+= ' KRB';
+		        });
+
+		        return s;
+		    },
+    },
+
+	plotOptions: {
+	    series: {
+	            label: {
+	                connectorAllowed: false
+	            },
+	            marker: {
+                	enabled: false,
+                	size: 2
+                },
+                //showInNavigator: true               
+	    }
+	},
+
+    series: [   
+                {
+		        name: 'Difficulty',
+		        data: [].concat(Difficulties),
+		        yAxis: 0,
+		        color: '#7cb5ec',
+		        type: 'areaspline',
+		        fillOpacity: 0.3
+                }, {
+                name: 'Height',
+	        	data: [].concat(Heights),
+	        	color: '#b6b6b6',
+	        	dashStyle: 'ShortDash'
+		    	}, {
+		        name: 'Reward',
+		        data: [].concat(Rewards),
+		        yAxis: 1,
+		        color: '#b84a5b'
+		    	}, {
+		        name: 'Block Size',
+		        data: [].concat(Sizes),
+		        yAxis: 2,
+		        color: '#f7a35c'
+		    	}, {
+	        	name: 'Supply',
+	        	data: [].concat(Supplies),
+	        	yAxis: 3,
+	        	color: '#666666'
+                }, {
+		        name: 'Transactions',
+		        data: [].concat(Transactions),
+		        yAxis: 4,
+		        color: '#90ed7d'
+                }
+    ],
+
+    responsive: {
+        rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+        }]
+    }
+ });
+
+}
+
+</script>
