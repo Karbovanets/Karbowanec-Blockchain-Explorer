@@ -7,8 +7,8 @@
 		</div>
 		<div class="card-content">
 			
-            <div id="chart_container" style="height: 500px; min-width: 310px"></div>
-            
+			<div id="chart_container" style="height: 500px; min-width: 310px"></div>
+			
 		</div>
 	</div>
 </div>
@@ -35,40 +35,66 @@ currentPage = {
 		}
 	};
 
-    var start_height = 1;
-        
+	var start_height = 1;
+		
 function renderChart() {
 	var xhrGetStats;
-    if (xhrGetStats) xhrGetStats.abort();
-    xhrGetStats = $.ajax({
-        url: api + '/json_rpc',
-        method: "POST",
-        data: JSON.stringify({
-            jsonrpc: "2.0",
-            id: "explorer_range_stats",
-            method: "getstatsinrange",
-            params: {
-                start_height: start_height,
-                end_height: lastStats.height - 1
-            }
-        }),
-        dataType: 'json',
-        cache: 'false',
-        success: function (data) {
-            data.result.stats.forEach(function (e) {
-                Difficulties.push(e.difficulty);
-                Heights.push(e.height);
-                Rewards.push(parseFloat(getReadableCoins(e.reward, 4)));
-                Sizes.push(parseInt(e.block_size));
-                Supplies.push(parseFloat(getReadableCoins(e.already_generated_coins, 2)));
-                var dateTime = new Date(e.timestamp * 1000).toISOString();
-                Dates.push(dateTime);
-                Transactions.push(e.already_generated_transactions);
-            });
-            
-            createChart();
-        }
-    });
+	if (xhrGetStats) xhrGetStats.abort();
+	xhrGetStats = $.ajax({
+		url: api + '/json_rpc',
+		method: "POST",
+		data: JSON.stringify({
+			jsonrpc: "2.0",
+			id: "explorer_range_stats",
+			method: "getstatsinrange",
+			params: {
+				start_height: start_height,
+				end_height: lastStats.height - 1
+			}
+		}),
+		dataType: 'json',
+		cache: 'false',
+		success: function (data) {
+			data.result.stats.forEach(function (e) {
+				var timestamp = e.timestamp * 1000;
+
+				var d_a = [];
+				d_a.push(timestamp);
+				d_a.push(e.difficulty);
+				Difficulties.push(d_a);
+				
+				var h_a = [];
+				h_a.push(timestamp);
+				h_a.push(e.height);
+				Heights.push(h_a);
+
+				var r_a = [];
+				r_a.push(timestamp);
+				r_a.push(parseFloat(getReadableCoins(e.reward, 4)));
+				Rewards.push(r_a);
+
+				var z_a = [];
+				z_a.push(timestamp);
+				z_a.push(e.block_size);
+				Sizes.push(z_a);
+
+				var s_a = [];
+				s_a.push(timestamp);
+				s_a.push(parseFloat(getReadableCoins(e.already_generated_coins, 2)));
+				Supplies.push(s_a);
+
+				var t_a = [];
+				t_a.push(timestamp);
+				t_a.push(e.already_generated_transactions);
+				Transactions.push(t_a);
+
+			});
+			
+			console.log(Difficulties);
+
+			createChart();
+		}
+	});
 }
 
 /**
@@ -79,110 +105,100 @@ function createChart() {
 
   Highcharts.stockChart('chart_container', {
 
-    rangeSelector: {
-        selected: 1,
-        enabled: true
-    },
-
-    xAxis: [{
-        	categories: [].concat(Dates),
-	        crosshair: true,
-	        type: 'datetime',
-	        labels: {
-	        	enabled: true,
-	        	step: 1,
-	        	formatter: function() {
-	        		return moment(this.value).format("DD.MM.YYYY HH:mm");
-	        		}	        	
-	        	}
-		    }],
-
-    yAxis: [
-                { labels: { enabled: false}, title: { text: null }},
-                { labels: { enabled: false}, title: { text: null }},
-                { labels: { enabled: false}, title: { text: null }},
-				{ labels: { enabled: false}, title: { text: null }},
-                { labels: { enabled: false}, title: { text: null }},
-                { labels: { enabled: false}, title: { text: null }}
-        	],
-
-    tooltip: {
-			shared: true,
-			formatter: function() {
-		        var s = '<b>'+ this.x +'</b>';
-
-		        $.each(this.points, function(i, point) {
-                    s += '<br/><span style="color:' + point.color + '">\u25CF</span>: ' + point.series.name + ': ' + (i==3 ? formatBytes(point.y) : point.y);
-                    if(i==2 || i==4) s+= ' KRB';
-		        });
-
-		        return s;
-		    },
-    },
-
-	plotOptions: {
-	    series: {
-	            label: {
-	                connectorAllowed: false
-	            },
-	            marker: {
-                	enabled: false,
-                	size: 2
-                },
-                //showInNavigator: true               
-	    }
+	rangeSelector: {
+		selected: 5,
+		enabled: true
 	},
 
-    series: [   
-                {
-		        name: 'Difficulty',
-		        data: [].concat(Difficulties),
-		        yAxis: 0,
-		        color: '#7cb5ec',
-		        type: 'areaspline',
-		        fillOpacity: 0.3
-                }, {
-                name: 'Height',
-	        	data: [].concat(Heights),
-	        	color: '#b6b6b6',
-	        	dashStyle: 'ShortDash'
-		    	}, {
-		        name: 'Reward',
-		        data: [].concat(Rewards),
-		        yAxis: 1,
-		        color: '#b84a5b'
-		    	}, {
-		        name: 'Block Size',
-		        data: [].concat(Sizes),
-		        yAxis: 2,
-		        color: '#f7a35c'
-		    	}, {
-	        	name: 'Supply',
-	        	data: [].concat(Supplies),
-	        	yAxis: 3,
-	        	color: '#666666'
-                }, {
-		        name: 'Transactions',
-		        data: [].concat(Transactions),
-		        yAxis: 4,
-		        color: '#90ed7d'
-                }
-    ],
+	yAxis: [
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }}
+			],
 
-    responsive: {
-        rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                    }
-                }
-        }]
-    }
+	tooltip: {
+			shared: true,
+			formatter: function() {
+				var s = '';
+
+				$.each(this.points, function(i, point) {
+					s += '<br/><span style="color:' + point.color + '">\u25CF</span>: ' + point.series.name + ': ' + (i==3 ? formatBytes(point.y) : point.y);
+					if(i==2 || i==4) s+= ' KRB';
+				});
+
+				return s;
+			},
+	},
+
+	plotOptions: {
+		series: {
+				label: {
+					connectorAllowed: false
+				},
+				marker: {
+					enabled: false,
+					size: 2
+				}		  
+		}
+	},
+
+	series: [   
+				{
+				name: 'Difficulty',
+				data: [].concat(Difficulties),
+				yAxis: 0,
+				color: '#7cb5ec',
+				type: 'areaspline',
+				fillOpacity: 0.3
+				}, {
+				name: 'Height',
+				data: [].concat(Heights),
+				type: 'spline',
+				color: '#b6b6b6'
+				}, {
+				name: 'Reward',
+				data: [].concat(Rewards),
+				type: 'spline',
+				yAxis: 1,
+				color: '#b84a5b'
+				}, {
+				name: 'Block Size',
+				data: [].concat(Sizes),
+				type: 'spline',
+				yAxis: 2,
+				color: '#f7a35c'
+				}, {
+				name: 'Supply',
+				data: [].concat(Supplies),
+				type: 'spline',
+				yAxis: 3,
+				color: '#666666'
+				}, {
+				name: 'Transactions',
+				data: [].concat(Transactions),
+				type: 'spline',
+				yAxis: 4,
+				color: '#90ed7d'
+				}
+	],
+
+	responsive: {
+		rules: [{
+				condition: {
+					maxWidth: 500
+				},
+				chartOptions: {
+					legend: {
+						layout: 'horizontal',
+						align: 'center',
+						verticalAlign: 'bottom'
+					}
+				}
+		}]
+	}
  });
 
 }
