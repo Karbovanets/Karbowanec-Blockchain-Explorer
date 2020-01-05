@@ -1,3 +1,16 @@
+<style>
+	#loading_spinner {
+		position: absolute;
+		top: 300px;
+		font-size: 48px;
+		color: Dodgerblue;
+		width: 100%;
+		line-height: 100%;
+		text-align: center;
+	}
+
+</style>
+
 <div style="height: 10px; clear: both;"></div>
 <div class="row">
 	<div class="col s12">
@@ -8,7 +21,7 @@
 		<div class="card-content">
 			
 			<div id="chart_container" style="height: 500px; min-width: 310px"></div>
-			
+			<div id="loading_spinner" class="text-center"><i class="fas fa-circle-notch fa-spin"></i></div>
 		</div>
 	</div>
 </div>
@@ -28,14 +41,15 @@ currentPage = {
 			
 		},
 		init: function () {
-			renderChart();
+			
 		},
 		update: function () {
 			
 		}
 	};
 
-	var start_height = 1;
+var start_height = 1;
+var end_height = lastStats.height - 1;
 		
 function renderChart() {
 	var xhrGetStats;
@@ -49,12 +63,13 @@ function renderChart() {
 			method: "getstatsinrange",
 			params: {
 				start_height: start_height,
-				end_height: lastStats.height - 1
+				end_height: end_height
 			}
 		}),
 		dataType: 'json',
 		cache: 'false',
 		success: function (data) {
+			console.log("Fetching data on node took " + data.result.duration + " s.");
 			data.result.stats.forEach(function (e) {
 				var timestamp = e.timestamp * 1000;
 
@@ -85,13 +100,11 @@ function renderChart() {
 
 				var t_a = [];
 				t_a.push(timestamp);
-				t_a.push(e.already_generated_transactions);
+				t_a.push(e.transactions_count);
 				Transactions.push(t_a);
 
 			});
 			
-			console.log(Difficulties);
-
 			createChart();
 		}
 	});
@@ -163,19 +176,19 @@ function createChart() {
 				data: [].concat(Rewards),
 				type: 'spline',
 				yAxis: 1,
-				color: '#b84a5b'
+				color: '#b21016'
 				}, {
 				name: 'Block Size',
 				data: [].concat(Sizes),
 				type: 'spline',
 				yAxis: 2,
-				color: '#f7a35c'
+				color: 'rgba(247,163,92,0.3)'
 				}, {
 				name: 'Supply',
 				data: [].concat(Supplies),
 				type: 'spline',
 				yAxis: 3,
-				color: '#666666'
+				color: '#a349a4'
 				}, {
 				name: 'Transactions',
 				data: [].concat(Transactions),
@@ -201,6 +214,9 @@ function createChart() {
 	}
  });
 
+ $('#loading_spinner').hide();
+
 }
 
+renderChart();
 </script>
