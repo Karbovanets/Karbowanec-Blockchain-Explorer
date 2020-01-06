@@ -368,7 +368,14 @@ function handleSearch() {
         });
     }
 
-    if (text.length < 64) {
+    if (text.length == 95) {
+        if (addressPattern.test(text)) {
+            var toastHTML = 'It looks like you want to check the balance of this address or look up its history. Well, in Karbo this is impossible.';
+            M.toast({html: toastHTML});
+        } else {
+            wrongSearchAlert();
+        }
+    } else if (text.length < 64) {
         GetSearchBlockbyHeight();
     } else if (text.length == 64) {
         GetSearchBlock();
@@ -379,7 +386,7 @@ function handleSearch() {
 }
 
 function wrongSearchAlert() {
-  var toastHTML = '<strong>Wrong search query!</strong> Please enter block height or hash, transaction hash, or payment id.';
+  var toastHTML = 'Wrong search query! Please enter block height or hash, transaction hash, or payment id.';
   M.toast({html: toastHTML});
 }
 
