@@ -76,6 +76,14 @@ nav #menu-right {
 
 .nav-wrapper .input-field input[type="search"] {
     background-color: rgba(255, 255, 255, 0.2);
+    padding-left: 3rem;
+    padding-right: 3rem;
+    width: calc(100% - 6rem);
+    color: #fff;
+}
+
+.input-field input[type="search"] ~ .mdi-navigation-close, .input-field input[type="search"] ~ .material-icons {
+    right: 0.5rem;
 }
 
 .hidden{
