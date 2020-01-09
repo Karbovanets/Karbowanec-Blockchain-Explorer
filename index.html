@@ -230,13 +230,15 @@
 
 	$('#close_nav_search').hide();
 	$('#close_nav_search').click(function () {
-    	$('#txt_search').val("");
+		$('#txt_search').val("");
 	});
 	$('#txt_search').focus(function () {
-    	$('#close_nav_search').show();
+		$('#close_nav_search').show();
 	});
 	$('#txt_search').blur(function () {
-    	$('#close_nav_search').hide();
+		setTimeout(function () {
+			$('#close_nav_search').hide();
+		}, 300)
 	});
 </script>
 </body>
