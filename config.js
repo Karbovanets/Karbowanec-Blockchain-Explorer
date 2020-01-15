@@ -8,6 +8,7 @@ var refreshDelay = 30000;
 var blocksPerPage = 20;
 var whiteTheme = "css/light.css";
 var nightTheme = "css/dark.css";
+var addressPattern = new RegExp("^K[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{94}$");
 // pools stats by MainCoins
 var poolsStat = 
 	[
