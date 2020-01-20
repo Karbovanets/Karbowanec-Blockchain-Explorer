@@ -602,7 +602,7 @@
 				id: "test",
 				method: "checktransactionbyviewkey",
 				params: {
-					txid: transactionHash,
+					transaction_id: transactionHash,
 					view_key: privateViewKey,
 					address: publicAddress.val()
 				}
@@ -641,9 +641,9 @@
 				id: "test",
 				method: "checktransactionproof",
 				params: {
-					tx_id: transactionHash,
+					transaction_id: transactionHash,
 					signature: transactionKey.val(),
-					dest_address: publicAddress.val()
+					destination_address: publicAddress.val()
 				}
 			}),
 			dataType: 'json',
