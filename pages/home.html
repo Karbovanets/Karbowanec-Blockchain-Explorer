@@ -363,7 +363,8 @@
 		updateText('nextStake', getReadableCoins(lastStats.next_stake, 2));
 		updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked,2));
 		updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
-		updateText('stakeInterest', (lastStats.next_stake / 10 / lastStats.next_reward / 100).toFixed(4) + "%");
+		// interest for shortest 10 blocks term deposit of max stake (per annum, for simplicity current reward is taken (in fact it changes over the year))
+		updateText('stakeInterest', ((360 * 365 / 10 * lastStats.next_reward) / lastStats.next_stake).toFixed(4) + "%");
 	}
 
 	var xhrGetBlocks;
