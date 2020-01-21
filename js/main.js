@@ -370,8 +370,7 @@ function handleSearch() {
 
     if (text.length == 95) {
         if (addressPattern.test(text)) {
-            var toastHTML = 'It looks like you want to check the balance of this address or look up its history. Well, in Karbo this is impossible.';
-            M.toast({html: toastHTML});
+            window.location.href = getBlockchainUrl(text);
         } else {
             wrongSearchAlert();
         }
