@@ -1,6 +1,7 @@
 var blockchainExplorer = "./?hash={id}#block";
 var transactionExplorer = "./?hash={id}#transaction";
 var paymentIdExplorer = "./?hash={id}#payment_id";
+var addressExplorer = "./?address={id}#address";
 
 $(function () {
     $("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
@@ -370,7 +371,7 @@ function handleSearch() {
 
     if (text.length == 95) {
         if (addressPattern.test(text)) {
-            window.location.href = getBlockchainUrl(text);
+            window.location.href = addressExplorer.replace('{id}', text);
         } else {
             wrongSearchAlert();
         }
