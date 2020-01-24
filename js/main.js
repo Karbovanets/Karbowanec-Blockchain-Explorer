@@ -1,6 +1,7 @@
 var blockchainExplorer = "./?hash={id}#block";
 var transactionExplorer = "./?hash={id}#transaction";
 var paymentIdExplorer = "./?hash={id}#payment_id";
+var addressExplorer = "./?address={id}#address";
 
 $(function () {
     $("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
@@ -368,7 +369,13 @@ function handleSearch() {
         });
     }
 
-    if (text.length < 64) {
+    if (text.length == 95) {
+        if (addressPattern.test(text)) {
+            window.location.href = addressExplorer.replace('{id}', text);
+        } else {
+            wrongSearchAlert();
+        }
+    } else if (text.length < 64) {
         GetSearchBlockbyHeight();
     } else if (text.length == 64) {
         GetSearchBlock();
@@ -379,7 +386,7 @@ function handleSearch() {
 }
 
 function wrongSearchAlert() {
-  var toastHTML = '<strong>Wrong search query!</strong> Please enter block height or hash, transaction hash, or payment id.';
+  var toastHTML = 'Wrong search query! Please enter block height or hash, transaction hash, or payment id.';
   M.toast({html: toastHTML});
 }
 

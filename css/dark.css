@@ -71,3 +71,8 @@ input {
   background-color: #fafafa;
   color: #282828;
 }
+
+.card-panel {
+  background-color: #192534!important;
+  color: #a4a4a4;
+}

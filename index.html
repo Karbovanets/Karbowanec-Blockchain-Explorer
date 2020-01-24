@@ -43,11 +43,11 @@
 					</ul>
 					<form class="header-search" action="javascript:handleSearch()">
 						<div class="input-field">
-							<input id="txt_search" type="search"
-								placeholder="Search by block height / hash, transaction hash, payment id">
+							<input id="txt_search" type="search" tabindex="-1"
+								placeholder="Search by block height / hash, transaction hash, payment id, address">
 							<label id="btn_search" class="label-icon" for="txt_search"><i
 									class="material-icons">search</i></label>
-							<i class="material-icons">close</i>
+							<i class="material-icons" id="close_nav_search">close</i>
 						</div>
 					</form>
 					<ul class="right">
@@ -142,6 +142,11 @@
 	<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html"
 		href="#payment_id"> Transactions by Payment ID
 	</a></li>
+
+	<li style="display:none;"><a class="hot_link" data-page="address.html" 
+		href="#address"> Address
+	</a></li>
+
 </header>
 <div id="content">
 	<div class="container">
@@ -233,6 +238,18 @@
 		}
 	);
 
+	$('#close_nav_search').hide();
+	$('#close_nav_search').click(function () {
+		$('#txt_search').val("");
+	});
+	$('#txt_search').focus(function () {
+		$('#close_nav_search').show();
+	});
+	$('#txt_search').blur(function () {
+		setTimeout(function () {
+			$('#close_nav_search').hide();
+		}, 300)
+	});
 </script>
 </body>
 </html>
