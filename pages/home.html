@@ -256,7 +256,7 @@
 								<th><i class="fas fa-hourglass-end"></i> Lapse</th>
 								<th><i class="fas fa-paw"></i> Block hash</th>
 								<th><i class="far fa-hdd"></i> Size</th>
-								<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
+								<th><i class="fas fa-unlock-alt"></i> Base / Actual Difficulty</th>
 								<th><i class="fas fa-exchange-alt"></i> Txs</th>
 							</tr>
 						</thead>
@@ -738,7 +738,7 @@
 			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
-			'<td class="blk-diff">' + block.difficulty + '</td>' +
+			'<td class="blk-diff">' + block.base_difficulty + ' / ' + block.actual_difficulty + '</td>' +
 			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
