@@ -252,11 +252,12 @@
 						<thead>
 							<tr>
 								<th><i class="fas fa-bars"></i> Height</th>
-								<th><i class="far fa-clock"></i> Date, time &amp; age</th>
+								<th><i class="far fa-clock"></i> Date, Time &amp; Age</th>
 								<th><i class="fas fa-hourglass-end"></i> Lapse</th>
 								<th><i class="fas fa-paw"></i> Block hash</th>
 								<th><i class="far fa-hdd"></i> Size</th>
-								<th><i class="fas fa-unlock-alt"></i> Base / Actual Difficulty</th>
+								<th><i class="fas fa-unlock-alt"></i> Base / Actual Diff.</th>
+								<th><i class="fas fa-ticket-alt"></i> Stake</th>
 								<th><i class="fas fa-exchange-alt"></i> Txs</th>
 							</tr>
 						</thead>
@@ -360,8 +361,8 @@
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
 		updateText('minimumFee', getReadableCoins(lastStats.min_fee, 6));
-		updateText('nextStake', getReadableCoins(lastStats.next_stake, 2));
-		updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked,2));
+		updateText('nextStake', getReadableCoins(lastStats.base_stake, 2));
+		updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked, 2));
 		updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
 		// interest for shortest 10 blocks term deposit of max stake (per annum, for simplicity current reward is taken (in fact it changes over the year))
 		updateText('stakeInterest', ((360 * 365 / 10 * lastStats.next_reward) / lastStats.next_stake).toFixed(4) + "%");
@@ -739,6 +740,7 @@
 			'<td><a href="' + getBlockchainUrl(block.hash) + '"><span class="color-hash-wrapper">' + colorHash(block.hash) + '</span></a>' + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.base_difficulty + ' / ' + block.actual_difficulty + '</td>' +
+			'<td>' + getReadableCoins(block.actual_stake, 4) + '</td>' +
 			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
