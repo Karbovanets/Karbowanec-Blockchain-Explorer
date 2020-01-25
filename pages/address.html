@@ -1,0 +1,125 @@
+<style>
+	#keys_container p {
+		color: black;
+	}
+</style>
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-id-badge"></i>  Address</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+                        <strong id="address"></strong>
+					</div>
+				</div>
+			</div>
+			<div id="validation_result" class="card-action">
+				<div class="row">
+					<div class="col s12 l12">
+						<p id="verified"><i class="fas fa-2x"></i> <span></span></p>
+						<div id="keys_container">
+							<p>View Public Key: <span id="viewPublicKey"></span></p>
+							<p>Spend Public Key: <span id="spendPublicKey"></span></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+    <div class="col s12 s12">
+      <div class="card-panel">
+        <p>
+            This is all we can say about this address. If you wanted to check this address' balance 
+            or look up its history, we regret to upset you, but in Karbo this is impossible thanks to CryptoNote technology.
+        </p>
+        <p> 
+            Balance and history of the particular address are hidden. Anonymity is implemented by <em>ring signatures</em> to hide the sender and <em>one-time addresses</em> that are hiding the recipient.
+        </p>
+        <p>
+            Unique one-time addresses and ring signatures of transactions are providing resistance to blockchain analysis.
+
+            Every transaction only increases entropy and creates additional obstacles for those who wish to dig into financial operations with Karbo.
+        </p>
+    </div>
+  </div>
+</div>
+
+<script>
+    var xhrValidateAddress;
+    var address = urlParam('address');
+    $('#address').text(address);
+	var viewPublicKey = $("#viewPublicKey");
+	var spendPublicKey = $("#spendPublicKey");
+	var result = $('#verified');
+	var result_icon = $("#verified").find("i");
+	var result_text = $("#verified").find("span");
+	var result_container = $("#validation_result");
+	var keys_container = $("#keys_container");
+	result_container.hide();
+
+	currentPage = {
+		destroy: function () {
+			if (xhrValidateAddress) xhrValidateAddress.abort();
+		},
+		init: function () {
+			$('.tooltipped').tooltip();
+		},
+		update: function () {}
+	};
+
+    validateAddress();
+
+	function validateAddress() {
+		if (xhrValidateAddress) xhrValidateAddress.abort();
+		xhrValidateAddress = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "test",
+				method: "validateaddress",
+				params: {
+					address: address,
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				if (data.error) {
+					M.toast({html: data.error.message, classes: 'red'}, 5000);
+				} else {
+					var res = data.result;
+					result_container.removeClass("light-green lighten-5");
+					result_container.removeClass("red lighten-4");
+					result.removeClass("teal-text text-darken-4");
+					result.removeClass("red-text text-darken-4");
+					result_icon.removeClass("fa-check");
+					result_icon.removeClass("fa-times");
+					var isvalid = JSON.parse(res.is_valid);
+					if (isvalid) {
+						result_text.text("Address is valid");
+						result_container.addClass("light-green lighten-5");
+						result.addClass("teal-text text-darken-2");
+						result_icon.addClass("fa-check");
+						keys_container.show();
+						viewPublicKey.text(res.view_public_key);
+						spendPublicKey.text(res.spend_public_key);
+					} else {
+						result_text.text("Address is invalid!");
+						result_container.addClass("red lighten-4");
+						result.addClass("red-text text-darken-4");
+						result_icon.addClass("fa-times");
+						keys_container.hide();
+					}
+					result_container.show();
+				}
+			}
+		});
+	}
+</script>

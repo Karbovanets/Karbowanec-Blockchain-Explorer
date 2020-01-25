@@ -44,7 +44,7 @@
 					<form class="header-search" action="javascript:handleSearch()">
 						<div class="input-field">
 							<input id="txt_search" type="search" tabindex="-1"
-								placeholder="Search by block height / hash, transaction hash, payment id">
+								placeholder="Search by block height / hash, transaction hash, payment id, address">
 							<label id="btn_search" class="label-icon" for="txt_search"><i
 									class="material-icons">search</i></label>
 							<i class="material-icons" id="close_nav_search">close</i>
@@ -65,6 +65,11 @@
 						<li>
 							<a class="hot_link menu" data-page="nodes.html" href="#nodes">
 								<i class="material-icons">cloud</i>
+							</a>
+						</li>
+						<li>
+							<a class="hot_link menu" data-page="charts.html" href="#charts">
+								<i class="material-icons">bar_chart</i>
 							</a>
 						</li>
 						<li>
@@ -137,6 +142,11 @@
 	<li style="display:none;"><a class="hot_link" data-page="blockchain_payment_id.html"
 		href="#payment_id"> Transactions by Payment ID
 	</a></li>
+
+	<li style="display:none;"><a class="hot_link" data-page="address.html" 
+		href="#address"> Address
+	</a></li>
+
 </header>
 <div id="content">
 	<div class="container">
@@ -179,7 +189,7 @@
 						Powered by <a target="_blank"
 							href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer">
 							<i class="fab fa-github"></i> Karbowanec Blockchain Explorer</a>
-						v. 1.2.2.<br />
+						v. 1.2.3.<br />
 						<span class="text-muted">Partially based on <strong>cryptonote-universal-pool</strong><br />
 							open sourced under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL</a></span>
 					</small>
@@ -214,7 +224,7 @@
 	</div>
 	<div class="footer-copyright">
 		<div class="container">
-			&copy; 2017-2019 <strong>Karbo Developers</strong>
+			&copy; 2017-2020 <strong>Karbo Developers</strong>
 		</div>
 	</div>
 </footer>

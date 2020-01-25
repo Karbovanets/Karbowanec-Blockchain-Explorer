@@ -483,8 +483,8 @@
 
 		if (urlParam('highlight')) {
 			var $highlight = $('#outputs_rows tr').eq(urlParam('highlight'));
-			$highlight.addClass("info");
-			$highlight.children().eq(2).addClass("text-danger");
+			$highlight.addClass("red lighten-5");
+			$highlight.children().eq(2).addClass("red-text text-darken-4");
 			$highlight.get(0).scrollIntoView(true);
 		}
 	}
@@ -602,7 +602,7 @@
 				id: "test",
 				method: "checktransactionbyviewkey",
 				params: {
-					txid: transactionHash,
+					transaction_id: transactionHash,
 					view_key: privateViewKey,
 					address: publicAddress.val()
 				}
@@ -641,9 +641,9 @@
 				id: "test",
 				method: "checktransactionproof",
 				params: {
-					tx_id: transactionHash,
+					transaction_id: transactionHash,
 					signature: transactionKey.val(),
-					dest_address: publicAddress.val()
+					destination_address: publicAddress.val()
 				}
 			}),
 			dataType: 'json',

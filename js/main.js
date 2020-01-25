@@ -1,6 +1,7 @@
 var blockchainExplorer = "./?hash={id}#block";
 var transactionExplorer = "./?hash={id}#transaction";
 var paymentIdExplorer = "./?hash={id}#payment_id";
+var addressExplorer = "./?address={id}#address";
 
 $(function () {
     $("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
@@ -370,8 +371,7 @@ function handleSearch() {
 
     if (text.length == 95) {
         if (addressPattern.test(text)) {
-            var toastHTML = 'It looks like you want to check the balance of this address or look up its history. Well, in Karbo this is impossible.';
-            M.toast({html: toastHTML});
+            window.location.href = addressExplorer.replace('{id}', text);
         } else {
             wrongSearchAlert();
         }
