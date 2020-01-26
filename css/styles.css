@@ -245,6 +245,18 @@ tfoot, tfoot tr, tfoot td {
     line-height: inherit;
 }
 
+.container {
+    width: 100%;
+    max-width:initial;
+    padding: 0 40px;
+    > .row{
+        margin: 0;
+        > .col{
+            padding: 0;
+        }
+    }
+}
+
 .footer-copyright {
     overflow: hidden;
     min-height: 50px;
