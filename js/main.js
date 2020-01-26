@@ -410,8 +410,8 @@ jQuery(function ($) {
 function colorHash(hash) {
     var chunks = [];
     var chunkSize = 6;
-    var html = hash.substr(0, 4);
-    hash = hash.substr(4, 60);
+    var html = "";
+    hash = hash + "ff";
 
     while (hash) {
         if (hash.length < chunkSize) {
@@ -424,7 +424,7 @@ function colorHash(hash) {
         }
     }
     
-    for (var i = 0; i < 10; i++){
+    for (var i = 0; i < 11; i++){
         html += '<span class="color-hash" style="background-color: #'+ chunks[i] +';"></span>';
     }
     
