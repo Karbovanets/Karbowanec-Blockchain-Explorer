@@ -96,7 +96,7 @@
 	<div class="col m4 l3 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+				Base Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
 			</li>		
 			<li class="collection-item">
 				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
@@ -123,14 +123,14 @@
 	<div class="col m4 l3 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">	
-				Stake: <span id="nextStake" class="value light-blue-text text-darken-4"></span>
+				Base Stake: <span id="nextStake" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">	
 				Locked: <span class="value light-blue-text text-darken-4"><span id="lockedStakes"></span>
 					(<span id="emissionPercentLocked"></span>)</span>
 			</li>
 			<li class="collection-item">	
-				Est. interest: <span id="stakeInterest" class="value light-blue-text text-darken-4"></span>
+				Est. interest p.a.: <span id="stakeInterest" class="value light-blue-text text-darken-4"></span>
 			</li>			
 		</ul>
 	</div>
@@ -258,6 +258,7 @@
 								<th><i class="far fa-hdd"></i> Size</th>
 								<th><i class="fas fa-unlock-alt"></i> Base / Actual Diff.</th>
 								<th><i class="fas fa-ticket-alt"></i> Stake</th>
+								<th><i class="fas fa-history"></i> Unlock / Term</th>
 								<th><i class="fas fa-exchange-alt"></i> Txs</th>
 							</tr>
 						</thead>
@@ -362,7 +363,7 @@
 		updateText('lockedStakes', getReadableCoins(lastStats.total_coins_locked, 2));
 		updateText('emissionPercentLocked', (lastStats.total_coins_locked / lastStats.already_generated_coins * 100).toFixed(2) + "%");
 		// interest for shortest 10 blocks term deposit of max stake (per annum, for simplicity current reward is taken (in fact it changes over the year))
-		updateText('stakeInterest', ((360 * 365 / 10 * lastStats.next_reward) / lastStats.next_stake).toFixed(4) + "%");
+		updateText('stakeInterest', ((360 * 365 / 10 * lastStats.next_reward) / lastStats.base_stake).toFixed(4) + "%");
 	}
 
 	var xhrGetBlocks;
@@ -734,13 +735,14 @@
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
 			'<td class"solvetime">' + formatTime(block.solvetime) + '</td>' +
-			'<td><a href="' + getBlockchainUrl(block.hash) + '"><span class="color-hash-wrapper">' + colorHash(block.hash) + '</span></a>' + '</td>' +
+			'<td><a href="' + getBlockchainUrl(block.hash) + '"><span class="color-hash-wrapper tooltipped" data-position="top" data-tooltip="'+ block.hash +'">' + /*colorHash(*/block.hash/*)*/ + '</span></a>' + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.base_difficulty + ' / ' + block.actual_difficulty + '</td>' +
 			'<td>' + getReadableCoins(block.actual_stake, 4) + '</td>' +
+			'<td>' + block.unlock_time +  ' / ' + (block.unlock_time - block.height) + ' blocks'  +  '</td>' +
 			'<td>' + block.transactions_count + '</td>';
 
-		Difficulties.push(parseInt(block.difficulty));
+		Difficulties.push(parseInt(block.base_difficulty));
 		MinFees.push(parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.transactions_count));
@@ -1160,7 +1162,7 @@
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
-			var diff = row.data("json").difficulty;
+			var diff = row.data("json").base_difficulty;
 			var txses = row.data("json").transactions_count;
 			var size = row.data("json").cumulative_size;
 			var time = row.attr('data-dt');
@@ -1260,6 +1262,7 @@
 		}
 		return formatAmounts(amount, units[units.length - 1][1]);
 	}
-</script>
 
+	
+</script>
 <script src="js/Chart.bundle.min.js"></script>
