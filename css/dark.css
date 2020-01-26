@@ -76,3 +76,5 @@ input {
   background-color: #192534!important;
   color: #a4a4a4;
 }
+
+table.highlight>tbody>tr:hover{background-color:rgba(242, 242, 242, 0.1)}
