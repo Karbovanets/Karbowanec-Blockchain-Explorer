@@ -17,6 +17,10 @@ nav .switch label .lever::after {
   background-color: #192534!important;
 }
 
+.grey.lighten-4 {
+  background-color: #1A2027!important;
+}
+
 .light-blue-text.text-darken-4 {
   color: #73859d !important;
 }
@@ -75,4 +79,10 @@ input {
 .card-panel {
   background-color: #192534!important;
   color: #a4a4a4;
+}
+
+table.highlight>tbody>tr:hover{background-color:rgba(242, 242, 242, 0.1)}
+
+.tab {
+  background-color: #253344 !important;
 }
