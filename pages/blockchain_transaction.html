@@ -423,7 +423,11 @@
 
 			setTimeout(function () {
 				var instance = M.Tabs.init(document.getElementById('tab_menu'));
-				instance.select('tab_outputs');
+				if (is_overt == true) {
+					instance.select('tab_inputs');
+				} else {
+					instance.select('tab_outputs');
+				}
 			}, 100)
 		}
 		loaded = true;
