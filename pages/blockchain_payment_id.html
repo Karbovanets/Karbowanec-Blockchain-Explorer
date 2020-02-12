@@ -76,7 +76,7 @@
     }
 
     function getTransactionCells(transaction) {
-        return '<td style="word-break: break-all; word-wrap: break-word;">' + formatPaymentLink(transaction.hash) + '</td>' +
+        return '<td style="word-break: break-all; word-wrap: break-word;">' + formatTransactionLink(transaction.hash) + '</td>' +
             '<td>' + getReadableCoins(transaction.fee, 4, true) + '</td>' +
             '<td>' + getReadableCoins(transaction.amount_out, 4, true) + '</td>' +
             '<td>' + formatBytes(parseInt(transaction.size)) + '</td>';

@@ -150,7 +150,7 @@
 					console.log(txs);
 					updateText('transactions_count', txs.length);
 					for (var i = 0; i < txs.length; i++) {
-						$("#found_txs").append('<li class="collection-item">'+ formatPaymentLink(txs[i]) +'</li>'); 
+						$("#found_txs").append('<li class="collection-item">'+ formatTransactionLink(txs[i]) +'</li>'); 
 					}
 
                 }

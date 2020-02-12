@@ -32,9 +32,6 @@ $(function () {
     });
 });
 
-function getTransactionUrl(id) {
-    return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
-}
 
 $.fn.update = function (txt) {
     var el = this[0];
@@ -97,6 +94,14 @@ function formatBlockLink(hash) {
     return '<a href="' + getBlockchainUrl(hash) + '">' + hash + '</a>';
 }
 
+function formatTransactionLink(hash) {
+    return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
+}
+
+function formatAddressLink(address) {
+    return '<a href="' + getAddressUrl(address) + '">' + address + '</a>';
+}
+
 function getReadableCoins(coins, digits, withoutSymbol) {
     var amount = (parseInt(coins || 0) / coinUnits).toFixed(digits || coinUnits.toString().length - 1);
     return amount + (withoutSymbol ? '' : (' ' + symbol));
@@ -119,10 +124,6 @@ function formatBytes(a, b) {
         e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
         f = Math.floor(Math.log(a) / Math.log(c));
     return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f]
-}
-
-function formatPaymentLink(hash) {
-    return '<a href="' + getTransactionUrl(hash) + '">' + hash + '</a>';
 }
 
 function pulseLiveUpdate() {
@@ -214,6 +215,14 @@ function routePage(loadedCallback) {
 
 function getBlockchainUrl(id) {
     return blockchainExplorer.replace('{id}', id);
+}
+
+function getTransactionUrl(id) {
+    return transactionExplorer.replace('{symbol}', symbol.toLowerCase()).replace('{id}', id);
+}
+
+function getAddressUrl(id) {
+    return addressExplorer.replace('{id}', id);
 }
 
 function getinfo() {

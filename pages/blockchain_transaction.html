@@ -606,7 +606,7 @@
 						if (result.declarations[i].signature_valid === true) {
 							var addrRow = document.createElement('tr');
 							var addr_type = result.declarations[i].address === result.sender ? 'Sender' : 'Recipient';
-							addrRow.innerHTML = '<td><strong>' + result.declarations[i].address + '</strong></td>' +
+							addrRow.innerHTML = '<td><strong>' + formatAddressLink(result.declarations[i].address) + '</strong></td>' +
 							'<td><strong>' + getReadableCoins(result.declarations[i].received_amount) + '</strong></td>' +
 							'<td><strong>' + addr_type + '</strong></td>' +
 							'<td class="center-align"><strong><i class="fas fa-check-circle green-text"></i></strong></td>';

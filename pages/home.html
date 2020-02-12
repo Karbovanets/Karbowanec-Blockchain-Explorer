@@ -840,7 +840,7 @@
 							'<td>' + getReadableCoins(tx.amount_out, 4, true) + '</td>' +
 							'<td>' + getReadableCoins(tx.fee, 4, true) + '</td>' +
 							'<td>' + formatBytes(parseInt(tx.size)) + '</td>' +
-							'<td>' + formatPaymentLink(tx.hash) + '</td>';
+							'<td>' + formatTransactionLink(tx.hash) + '</td>';
 						row.innerHTML = columns;
 						$(txsRows).append(row);
 						$(row).find('.mtx-ago').timeago('update', new Date(tx.receive_time * 1000)
