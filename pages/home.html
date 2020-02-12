@@ -286,10 +286,6 @@
 		$('select').formSelect();
 	});
 
-	$(document).ready(function(){
-    	$('.tooltipped').tooltip();
-	});
-
 	currentPage = {
 		destroy: function () {
 			if (xhrGetBlocks) xhrGetBlocks.abort();
@@ -337,6 +333,7 @@
 					renderInitialBlocks()
 				).then(function () {
 					refreshChart();
+					$('.tooltipped').tooltip();
 				});
 			}
 			if (currHeight + blocksPerPage < lastStats.last_known_block_index) {
