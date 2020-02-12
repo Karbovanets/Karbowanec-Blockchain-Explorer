@@ -83,40 +83,48 @@
 	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Height: <span id="networkHeight" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-bars fa-fw"></i> Height: <span id="networkHeight" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-eye-slash fa-fw"></i> Covert transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
-						(<span id="emissionPercent"></span>)</span>
+				<i class="fas fa-eye fa-fw"></i> Overt transactions: <span id="overtTransactions" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				<i class="fas fa-id-badge fa-fw"></i> Searchable addresses: <span id="overtAddresses" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
 	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-lock fa-fw"></i> Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
 			</li>		
 			<li class="collection-item">
-				Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-tachometer-alt fa-fw"></i> Hashrate: <span id="networkHashrate" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Est. T: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-hourglass-start fa-fw"></i> Est. T: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				<i class="fas fa-hourglass-end fa-fw"></i> Avg. T: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
 	<div class="col m4 l4 s12">
 		<ul class="collection hoverable">
 			<li class="collection-item">
-				Reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-coins fa-fw"></i> Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span></span>
 			</li>
 			<li class="collection-item">
-				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-university fa-fw"></i> Emission: <span class="value light-blue-text text-darken-4"><span id="emissionPercent"></span></span>
 			</li>
 			<li class="collection-item">
-				Avg. T: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
+				<i class="fas fa-money-bill-wave-alt fa-fw"></i> Reward: <span id="currentReward" class="value light-blue-text text-darken-4"></span>
+			</li>
+			<li class="collection-item">
+				<i class="fas fa-donate fa-fw"></i> Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
 			</li>
 		</ul>
 	</div>
@@ -340,6 +348,8 @@
 	function renderLastStats() {
 		updateText('networkHeight', lastStats.height.toString());
 		updateText('networkTransactions', lastStats.transactions_count.toString());
+		updateText('overtTransactions', lastStats.overt_transactions_count.toString());
+		updateText('overtAddresses', lastStats.overt_searchable_addresses_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 		updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.', '')), 2));
 		updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.', '')) /
