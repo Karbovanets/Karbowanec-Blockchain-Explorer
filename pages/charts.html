@@ -1,0 +1,222 @@
+<style>
+	#loading_spinner {
+		position: absolute;
+		top: 300px;
+		font-size: 48px;
+		color: Dodgerblue;
+		width: 100%;
+		line-height: 100%;
+		text-align: center;
+	}
+
+</style>
+
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+		<div class="card-action grey lighten-5">
+			<h2 class="light-blue-text text-darken-4"><i class="fas fa-chart-area"></i> Historical charts</h2>
+		</div>
+		<div class="card-content">
+			
+			<div id="chart_container" style="height: 500px; min-width: 310px"></div>
+			<div id="loading_spinner" class="text-center"><i class="fas fa-circle-notch fa-spin"></i></div>
+		</div>
+	</div>
+</div>
+<script src="js/highstock.js"></script>
+<script src="js/moment.min.js"></script>
+<script>
+Difficulties = [],
+Heights = [],
+Rewards = [],
+Sizes = [],
+Supplies = [],
+Dates = [],
+Transactions = []
+
+currentPage = {
+		destroy: function () {
+			
+		},
+		init: function () {
+			
+		},
+		update: function () {
+			
+		}
+	};
+
+var start_height = 1;
+var end_height = lastStats.height - 1;
+		
+function renderChart() {
+	var xhrGetStats;
+	if (xhrGetStats) xhrGetStats.abort();
+	xhrGetStats = $.ajax({
+		url: api + '/json_rpc',
+		method: "POST",
+		data: JSON.stringify({
+			jsonrpc: "2.0",
+			id: "explorer_range_stats",
+			method: "getstatsinrange",
+			params: {
+				start_height: start_height,
+				end_height: end_height
+			}
+		}),
+		dataType: 'json',
+		cache: 'false',
+		success: function (data) {
+			console.log("Fetching data on node took " + data.result.duration + " s.");
+			data.result.stats.forEach(function (e) {
+				var timestamp = e.timestamp * 1000;
+
+				var d_a = [];
+				d_a.push(timestamp);
+				d_a.push(e.difficulty);
+				Difficulties.push(d_a);
+				
+				var h_a = [];
+				h_a.push(timestamp);
+				h_a.push(e.height);
+				Heights.push(h_a);
+
+				var r_a = [];
+				r_a.push(timestamp);
+				r_a.push(parseFloat(getReadableCoins(e.reward, 4)));
+				Rewards.push(r_a);
+
+				var z_a = [];
+				z_a.push(timestamp);
+				z_a.push(e.block_size);
+				Sizes.push(z_a);
+
+				var s_a = [];
+				s_a.push(timestamp);
+				s_a.push(parseFloat(getReadableCoins(e.already_generated_coins, 2)));
+				Supplies.push(s_a);
+
+				var t_a = [];
+				t_a.push(timestamp);
+				t_a.push(e.transactions_count);
+				Transactions.push(t_a);
+
+			});
+			
+			createChart();
+		}
+	});
+}
+
+/**
+ * Create the chart when all data is loaded
+ * @returns {undefined}
+ */
+function createChart() {
+
+  Highcharts.stockChart('chart_container', {
+
+	rangeSelector: {
+		selected: 5,
+		enabled: true
+	},
+
+	yAxis: [
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }},
+				{ labels: { enabled: false}, title: { text: null }}
+			],
+
+	tooltip: {
+			shared: true,
+			formatter: function() {
+				var s = '';
+
+				$.each(this.points, function(i, point) {
+					s += '<br/><span style="color:' + point.color + '">\u25CF</span>: ' + point.series.name + ': ' + (i==3 ? formatBytes(point.y) : point.y);
+					if(i==2 || i==4) s+= ' KRB';
+				});
+
+				return s;
+			},
+	},
+
+	plotOptions: {
+		series: {
+				label: {
+					connectorAllowed: false
+				},
+				marker: {
+					enabled: false,
+					size: 2
+				}		  
+		}
+	},
+
+	series: [   
+				{
+				name: 'Difficulty',
+				data: [].concat(Difficulties),
+				yAxis: 0,
+				color: '#7cb5ec',
+				type: 'areaspline',
+				fillOpacity: 0.3
+				}, {
+				name: 'Height',
+				data: [].concat(Heights),
+				type: 'spline',
+				color: '#b6b6b6'
+				}, {
+				name: 'Reward',
+				data: [].concat(Rewards),
+				type: 'spline',
+				yAxis: 1,
+				color: '#b21016'
+				}, {
+				name: 'Block Size',
+				data: [].concat(Sizes),
+				type: 'spline',
+				yAxis: 2,
+				color: 'rgba(247,163,92,0.3)'
+				}, {
+				name: 'Supply',
+				data: [].concat(Supplies),
+				type: 'spline',
+				yAxis: 3,
+				color: '#a349a4'
+				}, {
+				name: 'Transactions',
+				data: [].concat(Transactions),
+				type: 'spline',
+				yAxis: 4,
+				color: '#90ed7d'
+				}
+	],
+
+	responsive: {
+		rules: [{
+				condition: {
+					maxWidth: 500
+				},
+				chartOptions: {
+					legend: {
+						layout: 'horizontal',
+						align: 'center',
+						verticalAlign: 'bottom'
+					}
+				}
+		}]
+	}
+ });
+
+ $('#loading_spinner').hide();
+
+}
+
+renderChart();
+</script>
