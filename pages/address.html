@@ -1,8 +1,3 @@
-<style>
-	#keys_container p {
-		color: black;
-	}
-</style>
 <div style="height: 10px; clear: both;"></div>
 <div class="row">
 	<div class="col s12">
@@ -19,11 +14,21 @@
 			</div>
 			<div id="validation_result" class="card-action">
 				<div class="row">
+					<div class="col s12 l12">					
+						<ul class="collection with-header">
+							<li class="collection-header"><p id="verified"><i class="fas fa-2x"></i> <span></span></p></li>
+							<li class="collection-item"><i class="fas fa-key fa-fw"></i> View Public Key: <span id="viewPublicKey"></span></li>
+							<li class="collection-item"><i class="fas fa-key fa-fw"></i> Spend Public Key: <span id="spendPublicKey"></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col s12 l12">
-						<p id="verified"><i class="fas fa-2x"></i> <span></span></p>
-						<div id="keys_container">
-							<p>View Public Key: <span id="viewPublicKey"></span></p>
-							<p>Spend Public Key: <span id="spendPublicKey"></span></p>
+						<div id="address_overt_transactions">
+							<ul class="collection with-header" id="found_txs">
+								<li class="collection-header"><strong 
+									id="transactions_count"></strong> transaction(s) found with this address among recipients or declared as sender</li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -37,21 +42,20 @@
         <p>
             This is all we can say about this address. If you wanted to check this address' balance 
             or look up its history, we regret to upset you, but in Karbo this is impossible thanks to CryptoNote technology.
-        </p>
-        <p> 
-            Balance and history of the particular address are hidden. Anonymity is implemented by <em>ring signatures</em> to hide the sender and <em>one-time addresses</em> that are hiding the recipient.
-        </p>
-        <p>
-            Unique one-time addresses and ring signatures of transactions are providing resistance to blockchain analysis.
 
-            Every transaction only increases entropy and creates additional obstacles for those who wish to dig into financial operations with Karbo.
-        </p>
+            Balance and history of the particular address are hidden. Anonymity is implemented by <em>ring signatures</em> to hide the sender and unique <em>one-time addresses</em> that are hiding the recipient.
+		</p>
+		
+		<p>
+			However, sender can disclose his and recepient's addresses in <strong><em>overt transaction</em></strong>, such transactions will be listed here. Those may, or may be not all transactions of this address.
+		</p>
+
     </div>
   </div>
 </div>
 
 <script>
-    var xhrValidateAddress;
+    var xhrValidateAddress, xhrGetTsx;
     var address = urlParam('address');
     $('#address').text(address);
 	var viewPublicKey = $("#viewPublicKey");
@@ -95,8 +99,6 @@
 					M.toast({html: data.error.message, classes: 'red'}, 5000);
 				} else {
 					var res = data.result;
-					result_container.removeClass("light-green lighten-5");
-					result_container.removeClass("red lighten-4");
 					result.removeClass("teal-text text-darken-4");
 					result.removeClass("red-text text-darken-4");
 					result_icon.removeClass("fa-check");
@@ -104,15 +106,16 @@
 					var isvalid = JSON.parse(res.is_valid);
 					if (isvalid) {
 						result_text.text("Address is valid");
-						result_container.addClass("light-green lighten-5");
 						result.addClass("teal-text text-darken-2");
 						result_icon.addClass("fa-check");
 						keys_container.show();
 						viewPublicKey.text(res.view_public_key);
 						spendPublicKey.text(res.spend_public_key);
+
+						getTransactions(address);
+
 					} else {
 						result_text.text("Address is invalid!");
-						result_container.addClass("red lighten-4");
 						result.addClass("red-text text-darken-4");
 						result_icon.addClass("fa-times");
 						keys_container.hide();
@@ -122,4 +125,38 @@
 			}
 		});
 	}
+
+	function getTransactions(address) {
+        if (xhrGetTsx) xhrGetTsx.abort();
+        txsByPaymentId = $.parseJSON(sessionStorage.getItem('txsByPaymentId'));
+        if (txsByPaymentId) {
+            renderTransactions(txsByPaymentId);
+        } else {
+            xhrGetTsx = $.ajax({
+                url: api + '/json_rpc',
+                method: "POST",
+                data: JSON.stringify({
+                    jsonrpc: "2.0",
+                    id: "explorer_get_o_txs_by_address",
+                    method: "getoverttransactionhashesbyaddress",
+                    params: {
+                        address: address
+                    }
+                }),
+                dataType: 'json',
+                cache: 'false',
+                success: function (data) {
+					var txs = data.result.transactionHashes;
+					console.log(txs);
+					updateText('transactions_count', txs.length);
+					for (var i = 0; i < txs.length; i++) {
+						$("#found_txs").append('<li class="collection-item">'+ formatPaymentLink(txs[i]) +'</li>'); 
+					}
+
+                }
+            });
+        }
+        sessionStorage.removeItem('txsByPaymentId');
+    }
+
 </script>
