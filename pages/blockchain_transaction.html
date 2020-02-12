@@ -136,6 +136,7 @@
 												<th><i class="fas fa-envelope"></i>&nbsp;Address</th>
 												<th><i class="fas fa-money-bill-wave-alt"></i>&nbsp;Amount <small>(change)</small></th>
 												<th><i class="fas fa-layer-group"></i>&nbsp;Type</th>
+												<th><i class="fas fa-stamp"></i>&nbsp;Valid</th>
 											</tr>
 										</thead>
 										<tbody id="declaration_rows">
@@ -602,22 +603,33 @@
 					console.log(result);
 					var $declarationRows = $('#declaration_rows');
 					for (var i = 0; i < result.declarations.length; i++) {
-						var addrRow = document.createElement('tr');
-						var addr_type = result.declarations[i].address === result.sender ? 'Sender' : 'Recipient';
-						addrRow.innerHTML = '<td><strong>' + result.declarations[i].address + '</strong></td>' +
-						'<td><strong>' + getReadableCoins(result.declarations[i].received_amount) + '</strong></td>' +
-						'<td><strong>' + addr_type + '</strong></td>';
-						$declarationRows.append(addrRow);
+						if (result.declarations[i].signature_valid === true) {
+							var addrRow = document.createElement('tr');
+							var addr_type = result.declarations[i].address === result.sender ? 'Sender' : 'Recipient';
+							addrRow.innerHTML = '<td><strong>' + result.declarations[i].address + '</strong></td>' +
+							'<td><strong>' + getReadableCoins(result.declarations[i].received_amount) + '</strong></td>' +
+							'<td><strong>' + addr_type + '</strong></td>' +
+							'<td class="center-align"><strong><i class="fas fa-check-circle green-text"></i></strong></td>';
+							$declarationRows.append(addrRow);
 
-						var outs = result.declarations[i].outputs;
-						for (var j = 0; j < outs.length; j++) {
-							var outputRow = document.createElement('tr');
-							outputRow.innerHTML =
-							'<td><i class="fas fa-key"></i>&nbsp;Key ' + outs[j].target.data.key + '</td>' +
-							'<td>' + getReadableCoins(outs[j].amount) + '</td>' +
-							'<td>' + outs[j].target.type + '</td>';
-							$(outputRow).addClass('overt-output-row');
-							$declarationRows.append(outputRow);
+							var outs = result.declarations[i].outputs;
+							for (var j = 0; j < outs.length; j++) {
+								var outputRow = document.createElement('tr');
+								outputRow.innerHTML =
+								'<td><i class="fas fa-key"></i>&nbsp;Key ' + outs[j].target.data.key + '</td>' +
+								'<td>' + getReadableCoins(outs[j].amount) + '</td>' +
+								'<td>' + outs[j].target.type + '</td>' +
+								'<td>' + '</td>';
+								$(outputRow).addClass('overt-output-row');
+								$declarationRows.append(outputRow);
+							}
+						} else {
+							var addrRow = document.createElement('tr');
+							addrRow.innerHTML = '<td><strong>' + result.declarations[i].address + '</strong></td>' +
+							'<td><strong>?</strong></td>' +
+							'<td><strong>?</strong></td>' +
+							'<td class="center-align"><strong><i class="fas fa-times-circle red-text"></i></strong></td>';
+							$declarationRows.append(addrRow);
 						}
 
 					}
