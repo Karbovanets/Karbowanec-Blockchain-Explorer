@@ -345,7 +345,7 @@
 
 	function renderLastStats() {
 		updateText('networkHeight', lastStats.height.toString());
-		updateText('networkTransactions', lastStats.transactions_count.toString());
+		updateText('networkTransactions', (lastStats.transactions_count - lastStats.overt_transactions_count).toString());
 		updateText('overtTransactions', lastStats.overt_transactions_count.toString());
 		updateText('overtAddresses', lastStats.overt_searchable_addresses_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
