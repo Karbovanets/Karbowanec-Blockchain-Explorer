@@ -48,7 +48,7 @@ nav .switch label .lever::after {
   color: #a4a4a4!important;
  }
 
-input {
+input, textarea {
   color: #a4a4a4!important;
 }
 
