@@ -163,12 +163,12 @@
 		}
 		return maxEl;
 	}
-
-	window.NODES_STAT_MAP = new Map(nodesStat);
+	
 	window.commonHeight;
 	window.commonHash;
 	window.commonVersion;
 	window.commonDifficulty;
+	nodesStat = [];
 	Heights = [];
 	Hashes = [];
 	nextDifficulties = [];
@@ -180,7 +180,9 @@
 	currentPage = {
 		destroy: function () {},
 		init: function () {
-			getNodes();
+
+			getNodes()
+
 			updateStats();
 		},
 		update: function () {
@@ -190,16 +192,39 @@
 
 	var nodesRefreshed = 0;
 
+	function getNodes() {
+		var jqxhr = $.getJSON( "api/nodes.json", function() {
+		
+		})
+		.done(function(data) {
+			console.log( "Got nodes..." );
+			for (var key in data) {
+				if (data.hasOwnProperty(key)) {
+					var item = data[key];
+					nodesStat.push(item);
+				}
+			}
+
+			initNodes();
+		})
+		.fail(function() {
+			console.log( "Error getting list of nodes..." );
+		})
+		.always(function() {
+			console.log( "Complete getting list of nodes..." );
+		});	
+	}
+
 	function updateStats() {
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/sec');
 		updateText('networkDifficultyRounded', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 	}
 
-	function getNodes() {
+	function initNodes() {
 		var now = new Date();
 		nodesStat.forEach(function (node) {
 
-			var url = node[0];
+			var url = node;
 			var purl;
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
@@ -274,7 +299,7 @@
 		var now = new Date();
 		nodesStat.forEach(function (node) {
 
-			var url = node[0];
+			var url = node;
 			var purl;
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
