@@ -123,12 +123,42 @@
 									<th class="sorttable_numeric"><i class="fas fa-flag"></i>&nbsp;Version</th>
 									<th><i class="fas fa-clock"></i>&nbsp;Start time</th>
 									<th><i class="fas fa-hourglass-end"></i>&nbsp;Uptime</th>
+									<th><i class="fas fa-donate"></i>&nbsp;Fee</th>
 								</tr>
 							</thead>
 							<colgroup width="300"></colgroup>
 							<colgroup width="100"></colgroup>
 							<colgroup width="500"></colgroup>
 							<tbody id="nodes_rows"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12">
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<div class="input-field">
+											<input id="node_address" name="node" type="url" class="validate">
+											<label for="node_address">Node URL</label>
+										</div>
+									</td>
+									<td width="180">
+										<button id="submit_node_button" class="btn light-blue darken-3" href="#">
+											Submit&nbsp;node&nbsp;<i class="material-icons right">send</i>
+										</button>
+									</td>
+								</tr>
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -163,12 +193,12 @@
 		}
 		return maxEl;
 	}
-
-	window.NODES_STAT_MAP = new Map(nodesStat);
+	
 	window.commonHeight;
 	window.commonHash;
 	window.commonVersion;
 	window.commonDifficulty;
+	nodesStat = [];
 	Heights = [];
 	Hashes = [];
 	nextDifficulties = [];
@@ -180,26 +210,66 @@
 	currentPage = {
 		destroy: function () {},
 		init: function () {
-			getNodes();
+
+			getNodes()
+
 			updateStats();
 		},
 		update: function () {
 			updateStats();
 		}
 	};
+	
+	$('#submit_node_button').click(function (e) {
+		var url = document.getElementById('node_address').value;
+		submitNode(url);
+		e.preventDefault();
+	});
 
 	var nodesRefreshed = 0;
+
+	function getNodes() {
+		var jqxhr = $.getJSON( "api/nodes.json", function() {
+		
+		})
+		.done(function(data) {
+			console.log( "Got nodes..." );
+			for (var key in data) {
+				if (data.hasOwnProperty(key)) {
+					var item = data[key];
+					nodesStat.push(item);
+				}
+			}
+
+			$.when(
+				initNodes()
+			).then(function () {
+
+				setTimeout(function () {
+					setFees();
+				}, 100);
+
+			});
+
+		})
+		.fail(function() {
+			console.log( "Error getting list of nodes..." );
+		})
+		.always(function() {
+			console.log( "Complete getting list of nodes..." );
+		});	
+	}
 
 	function updateStats() {
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/sec');
 		updateText('networkDifficultyRounded', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 	}
 
-	function getNodes() {
+	function initNodes() {
 		var now = new Date();
 		nodesStat.forEach(function (node) {
 
-			var url = node[0];
+			var url = node;
 			var purl;
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
@@ -250,7 +320,8 @@
 					nname + '>' + data.incoming_connections_count + '</td><td id=out-' + nname + '>' + data
 					.outgoing_connections_count + '</td><td class="version" id=ver-' + nname + '>' + data
 					.version + '</td><td class="date-time">' + startTime +
-					'</td><td id="uptime-'+ nname +'">' + uptime + '</td></tr>');
+					'</td><td id="uptime-'+ nname +'">' + uptime + '</td>' +
+					'<td id="fee-'+ nname +'">' + "-" + '</td></tr>');
 				Versions.push(data.version);
 				nextDifficulties.push(parseInt(data.difficulty));
 				totalNodes++;
@@ -258,6 +329,47 @@
 				updateText('totalNodes', totalNodes);
 
 				setCommons();
+			});
+		});
+	}
+
+	function setFees() {
+		console.log("Getting nodes fees...");
+
+		nodesStat.forEach(function (node) {
+			var url = node;
+			var purl;
+			if (window.location.protocol == 'https:') {
+				var pattern = /^((https):\/\/)/;
+				if (!pattern.test(url)) {
+					purl = '/api/?mode=get&url=' + url;
+				} else {
+					purl = url;
+				}
+			} else {
+				purl = url;
+			}
+
+			var nurl = new URL(url);
+			var nname = nurl.hostname;
+
+			$.ajax({
+				url: purl + '/feeaddress',
+				dataType: 'json',
+				type: 'GET',
+				cache: 'false'
+			}).done(function (data, success) {
+				updateText('fee-' + nname, "free");
+				if (data.fee_address !== "") {
+					updateText('fee-' + nname, "0.25%");
+				}
+				if (!isNaN(data.fee_amount)) {
+					var nodeFee = data.fee_amount;
+					console.log("fee for " + nname + ": " + nodeFee);
+					updateText('fee-' + nname,  parseFloat(getReadableCoins(nodeFee, 12, true)).toString() + "\xa0KRB");
+				}
+			}).fail(function() {
+				console.log( "Error getting node's fee: " + nname );
 			});
 		});
 	}
@@ -274,7 +386,7 @@
 		var now = new Date();
 		nodesStat.forEach(function (node) {
 
-			var url = node[0];
+			var url = node;
 			var purl;
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
@@ -391,8 +503,24 @@
 			if (nodeHash != commonHash) {
 				row.find('.hash').addClass("red-text text-darken-4");
 			}
-
-			
 		}
+	}
+
+	function submitNode(url) {
+	$.ajax({
+			type: 'POST',
+			data: { 'node': url },
+			url: 'api/submit_node.php',
+			dataType: 'json',
+			//async: 'false',
+			cache: 'false',
+			success: function(data) {
+				M.toast({html: data.result});
+			},
+			error: function() {
+				M.toast({html: "Error submitting node"});
+			}
+		});
+
 	}
 </script>
