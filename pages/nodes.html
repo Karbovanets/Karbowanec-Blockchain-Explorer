@@ -220,9 +220,28 @@
 		}
 	};
 	
+	function isValidHttpUrl(string) {
+		let url;
+
+		try {
+			url = new URL(string);
+		} catch (_) {
+			return false;  
+		}
+
+		return url.protocol === "http:" || url.protocol === "https:";
+	}
+	
 	$('#submit_node_button').click(function (e) {
 		var url = document.getElementById('node_address').value;
-		submitNode(url);
+		
+		if (isValidHttpUrl(url)) {
+			submitNode(url);
+		}
+		else {
+			M.toast({html: "Invalid node URL"});
+		}
+		
 		e.preventDefault();
 	});
 
