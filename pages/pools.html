@@ -238,7 +238,7 @@
 		if (window.location.protocol == 'https:') {
 			var pattern = /^((https):\/\/)/;
 			if (!pattern.test(url)) {
-				url = '/api/?mode=get&url=' + url;
+				url = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
 			}
 		}
 
@@ -654,7 +654,7 @@
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
 				if (!pattern.test(url)) {
-					url = '/api/?mode=get&url=' + url;
+					url = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
 				}
 			}
 

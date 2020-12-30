@@ -39,12 +39,12 @@
 <div class="row">
 	<div class="col s12">
 		<div class="row">
-			<div class="col s12 m12 l2">
+			<div class="col s12 m12 l1">
 				<div class="card hoverable">
 					<div class="card-content">
 						<div class="d-flex no-block">
 							<div class="m-r-12">
-								<span>Last block height</span>
+								<span>Height</span>
 								<h6 class="light-blue-text text-darken-4"><strong id="commonHeight"></strong></h6>
 							</div>
 						</div>
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col s12 m12 l2">
+			<div class="col s12 m12 l3">
 				<div class="card hoverable">
 					<div class="card-content">
 						<div class="d-flex no-block">
@@ -130,35 +130,6 @@
 							<colgroup width="100"></colgroup>
 							<colgroup width="500"></colgroup>
 							<tbody id="nodes_rows"></tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col s12">
-		<div class="card hoverable">
-			<div class="card-content">
-				<div class="row">
-					<div class="col s12">
-						<table>
-							<tbody>
-								<tr>
-									<td>
-										<div class="input-field">
-											<input id="node_address" name="node" type="url" class="validate">
-											<label for="node_address">Node URL</label>
-										</div>
-									</td>
-									<td width="180">
-										<button id="submit_node_button" class="btn light-blue darken-3" href="#">
-											Submit&nbsp;node&nbsp;<i class="material-icons right">send</i>
-										</button>
-									</td>
-								</tr>
-							</tbody>
 						</table>
 					</div>
 				</div>
@@ -231,19 +202,6 @@
 
 		return url.protocol === "http:" || url.protocol === "https:";
 	}
-	
-	$('#submit_node_button').click(function (e) {
-		var url = document.getElementById('node_address').value;
-		
-		if (isValidHttpUrl(url)) {
-			submitNode(url);
-		}
-		else {
-			M.toast({html: "Invalid node URL"});
-		}
-		
-		e.preventDefault();
-	});
 
 	var nodesRefreshed = 0;
 
@@ -293,7 +251,7 @@
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
 				if (!pattern.test(url)) {
-					purl = '/api/?mode=get&url=' + url;
+					purl = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
 				} else {
 					purl = url;
 				}
@@ -410,7 +368,7 @@
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
 				if (!pattern.test(url)) {
-					purl = '/api/?mode=get&url=' + url;
+					purl = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
 				} else {
 					purl = url;
 				}
@@ -523,23 +481,5 @@
 				row.find('.hash').addClass("red-text text-darken-4");
 			}
 		}
-	}
-
-	function submitNode(url) {
-	$.ajax({
-			type: 'POST',
-			data: { 'node': url },
-			url: 'api/submit_node.php',
-			dataType: 'json',
-			//async: 'false',
-			cache: 'false',
-			success: function(data) {
-				M.toast({html: data.result});
-			},
-			error: function() {
-				M.toast({html: "Error submitting node"});
-			}
-		});
-
 	}
 </script>
