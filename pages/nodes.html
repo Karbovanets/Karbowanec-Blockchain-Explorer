@@ -39,7 +39,7 @@
 <div class="row">
 	<div class="col s12">
 		<div class="row">
-			<div class="col s12 m12 l1">
+			<div class="col s12 m12 l2">
 				<div class="card hoverable">
 					<div class="card-content">
 						<div class="d-flex no-block">
@@ -51,26 +51,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="col s12 m12 l5">
+			<div class="col s12 m12 l7">
 				<div class="card hoverable">
 					<div class="card-content">
 						<div class="d-flex no-block">
 							<div class="m-r-12">
 								<span>Last block hash</span>
 								<h6><strong style="font-family: Inconsolata, monospace; word-wrap: break-word; line-height: 90%;" id="commonHash" class="light-blue-text text-darken-4"></strong></h6>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col s12 m12 l2">
-				<div class="card hoverable">
-					<div class="card-content">
-						<div class="d-flex no-block">
-							<div class="m-r-12">
-								<span>Network hashrate</span>
-								<h6 class="light-blue-text text-darken-4"><strong id="networkHashrate"></strong></h6>
 							</div>
 						</div>
 					</div>
@@ -88,18 +75,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="col s12 m12 l1">
-				<div class="card hoverable">
-					<div class="card-content">
-						<div class="d-flex no-block">
-							<div class="m-r-12">
-								<span>Nodes</span>
-								<h6 class="light-blue-text text-darken-4"><strong id="totalNodes"></strong></h6>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -112,7 +87,7 @@
 						<table id="nodesTable" class="highlight centered sortable">
 							<thead>
 								<tr>
-									<th><i class="fas fa-network-wired"></i>&nbsp;Nodes</th>
+									<th><i class="fas fa-network-wired"></i>&nbsp;Nodes (<span id="totalNodes"></span>)</th>
 									<th class="sorttable_numeric"><i class="fas fa-list-ol"></i>&nbsp;Height</th>
 									<th class="sorttable_numeric"><i class="fas fa-hashtag"></i>&nbsp;Hash</th>
 									<th class="sorttable_numeric"><i class="fas fa-bars"></i>&nbsp;Known</th>
@@ -244,7 +219,6 @@
 	}
 
 	function updateStats() {
-		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval) + '/sec');
 		updateText('networkDifficultyRounded', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 	}
 
@@ -257,7 +231,7 @@
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
 				if (!pattern.test(url)) {
-					purl = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
+					purl = 'https://karbo.io/proxy/?mode=get&url=' + url;
 				} else {
 					purl = url;
 				}
@@ -374,7 +348,7 @@
 			if (window.location.protocol == 'https:') {
 				var pattern = /^((https):\/\/)/;
 				if (!pattern.test(url)) {
-					purl = 'https://karbo.cloud/proxy/?mode=get&url=' + url;
+					purl = 'https://karbo.io/proxy/?mode=get&url=' + url;
 				} else {
 					purl = url;
 				}
