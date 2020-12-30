@@ -193,7 +193,7 @@
 		
 		})
 		.done(function(data) {
-			console.log( "Got nodes..." );
+			//console.log( "Got nodes..." );
 			for (var key in data) {
 				if (data.hasOwnProperty(key)) {
 					var item = data[key];
@@ -216,7 +216,7 @@
 			console.log( "Error getting list of nodes..." );
 		})
 		.always(function() {
-			console.log( "Complete getting list of nodes..." );
+			//console.log( "Complete getting list of nodes..." );
 		});	
 	}
 
@@ -293,7 +293,7 @@
 	}
 
 	function setFees() {
-		console.log("Getting nodes fees...");
+		//console.log("Getting nodes fees...");
 
 		nodesStat.forEach(function (node) {
 			var url = node;
@@ -324,11 +324,11 @@
 				}
 				if (!isNaN(data.fee_amount)) {
 					var nodeFee = data.fee_amount;
-					console.log("fee for " + nname + ": " + nodeFee);
+					//console.log("fee for " + nname + ": " + nodeFee);
 					updateText('fee-' + nname,  parseFloat(getReadableCoins(nodeFee, 12, true)).toString() + "\xa0KRB");
 				}
 			}).fail(function() {
-				console.log( "Error getting node's fee: " + nname );
+				//console.log( "Error getting node's fee: " + nname );
 			});
 		});
 	}
