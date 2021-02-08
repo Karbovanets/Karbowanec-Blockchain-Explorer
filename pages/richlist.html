@@ -31,6 +31,16 @@
 </div>
 
 <div class="row">
+    <div class="col s12 s12">
+      <div class="card-panel">
+        <p>
+			Total declared: <strong id="total_declared">0.00 KRB</strong>
+		</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
 	<div class="col s12">
 		<div class="card hoverable">
 			<div class="card-content">
@@ -55,11 +65,42 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h3 class="light-blue-text text-darken-4"><i class="fas fa-piggy-bank"></i> Boast with your stash</h3>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<form id="check_funds_form">
+							<div class="input-field col s12">
+								<input id="public_address" type="text" class="validate">
+								<label for="public_address">Address</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="signature" class="materialize-textarea"></textarea>
+								<label for="signature">Reserve proof</label>
+							</div>
+							<div class="input-field col s12">
+								<a id="verify" class="waves-effect waves-light btn light-blue darken-4"><i class="fas fa-check"></i> Submit</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script src="js/sorttable.js"></script>
 <script>
 	var xhrCheckReserve;
 
-	Richlist = [];
+	var Richlist = [];
+
+	var Total = 0;
    
 	currentPage = {
 		destroy: function () {
@@ -130,16 +171,97 @@
 					var spent = res.spent;
 					var balance = declared - spent;
 
+					Total += balance;
+
 					$('#riches_rows').append('<tr><td>' + 
 						(isvalid ? '<i class="fas fa-check-circle green-text"></i>' : '<i class="fas fa-times-circle red-text"></i>') +
 						'</td><td>' + address + '</td>' + 
-						'<td>' + (isvalid ? getReadableCoins(declared, 2, false) : '-') + '</td>' +
-						'<td>' + (isvalid ? getReadableCoins(spent, 2, false) : '-') + '</td>' +
-						'<td>' + (isvalid ? getReadableCoins(balance, 2, false) : '-') + '</td></tr>'
+						'<td>' + (isvalid ? getReadableCoins(declared, 2, true) : '-') + '</td>' +
+						'<td>' + (isvalid ? getReadableCoins(spent, 2, true) : '-') + '</td>' +
+						'<td>' + (isvalid ? getReadableCoins(balance, 2, true) : '-') + '</td></tr>'
 					);
+
+					updateText('total_declared', getReadableCoins(Total, 2, false));
 				}
 			}});
 		});
+	}
+
+	var signature = $("#signature");
+	var address = $("#public_address");
+
+	$("#verify").click(function () {
+		if (!signature.val() || !address.val()) {
+			M.toast({html: 'Fill at least Address and Reserve proof fields!', classes: 'red'}, 5000);
+			return;
+		}
+
+		for(var i = 0; i < Richlist.length; i++)
+		{
+			if(Richlist[i].address == address.val())
+			{
+				// TODO: implement replacement with new reserve proof
+				M.toast({html: 'This address already is on the list', classes: 'red'}, 5000);
+				return;
+			}
+		}
+
+		checkReserve();
+	});
+
+	function checkReserve() {
+		var height = lastStats.last_known_block_index;
+
+		xhrCheckReserve = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_check_funds",
+				method: "checkreserveproof",
+				params: {
+					message: "",
+					address: address.val(),
+					signature: signature.val(),
+					height: height
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				if (data.error) {
+					M.toast({html: data.error.message, classes: 'red'}, 5000);
+				} else {
+					var res = data.result;			
+					var isvalid = JSON.parse(res.good);
+					if (isvalid) {
+						var rich = JSON.stringify({ address: address.val(), reserve_proof: signature.val() });
+						submitRich(rich);
+					} else {
+						M.toast({html: 'Reserve proof is invalid!', classes: 'red'}, 5000);
+					}
+				}
+			}
+		});
+	}
+
+	function submitRich(rich) {
+	$.ajax({
+			type: 'POST',
+			data: { 'rich': rich },
+			url: 'api/submit_richlist.php',
+			dataType: 'json',
+			//async: 'false',
+			cache: 'false',
+			success: function(data) {
+				M.toast({html: data.result});
+				location.reload(); 
+			},
+			error: function() {
+				M.toast({html: "Error submitting richlist entry"});
+			}
+		});
+
 	}
 
 </script>
