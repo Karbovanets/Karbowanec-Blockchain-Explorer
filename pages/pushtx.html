@@ -1,0 +1,89 @@
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="blue-text text-darken-4"><i class="fas fa-broadcast-tower"></i>  Broadcast Transaction</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<form id="push_tx_form">
+							<div class="input-field col s12">
+								<textarea id="transaction" class="materialize-textarea"></textarea>
+								<label for="transaction">Transaction Hex</label>
+							</div>
+							<div class="input-field col s12">
+								<a id="push" class="waves-effect waves-light btn light-blue darken-4"><i class="fas fa-paper-plane"></i> Broadcast</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col s12">
+
+		<p>This page allows you to paste a raw transaction in hex format (i.e. characters 0-9, a-f) and broadcast it over the network.</p>
+
+	</div>
+<div>
+
+<script>
+	var xhrPushTx;
+	var transaction = $("#transaction");
+	
+	currentPage = {
+		destroy: function () {
+			if (xhrPushTx) xhrPushTx.abort();
+		},
+		init: function () {
+			$('.tooltipped').tooltip();
+			M.updateTextFields();
+		},
+		update: function () {}
+	};
+
+	$("#push").click(function () {
+		if (!transaction.val()) {
+			M.toast({html: 'Please fill transaction hex field', classes: 'red'}, 5000);
+			return;
+		}
+		pushTransaction();
+	});
+
+	function pushTransaction() {
+		if (xhrPushTx) xhrPushTx.abort();
+		xhrPushTx = $.ajax({
+			url: api + '/sendrawtransaction',
+			method: "POST",
+			data: JSON.stringify({
+				tx_as_hex: transaction.val()
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+
+				console.log(data);
+
+				if (data.error) {
+					M.toast({html: data.error.message, classes: 'red'}, 5000);
+				} else {
+					var res = data.status;
+					
+					if (data.status == "Failed") {
+						M.toast({html: "Failed to broadcast transaction: it must be invalid", classes: 'red'}, 5000);
+					} else if (data.status == "Not relayed") {
+						M.toast({html: "Failed to broadcast transaction: not relayed", classes: 'red'}, 5000);
+					} else if (data.status == "OK") {
+						M.toast({html: "Transaction broadcasted successfuly, check mempool", classes: 'green'}, 5000);
+					}
+				}
+			}
+		});
+	}
+	
+</script>
