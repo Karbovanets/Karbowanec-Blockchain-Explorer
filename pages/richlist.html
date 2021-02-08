@@ -1,0 +1,145 @@
+<style>
+	#keys_container p {
+		color: black;
+	}
+</style>
+<div style="height: 10px; clear: both;"></div>
+
+<div class="row">
+    <div class="col s12 s12">
+		<h2 class="light-blue-text text-darken-4"><i class="material-icons">leaderboard</i> Karbo voluntary richlist</h2>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col s12 s12">
+      <div class="card-panel">
+        <p>
+			Karbo is fundamentally private, it is based in the Cryptonote protocol.
+        
+            Balance and history of the particular address are hidden.
+        
+			Therefore, it is impossible to create full richlist. But... 
+		</p>
+		
+		<p>
+			Those who wants can boast here their riches by submitting their public address and reserve proof. So here they are:
+		</p>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 table-responsive">
+						<table id="rich_table" class="highlight centered sortable">
+							<thead>
+								<tr>
+									<th><i class="far fa-check-square"></i> Valid</th>
+									<th><i class="fas fa-user"></i> Address</th>
+									<th class="sorttable_numeric"><i class="fas fa-wallet"></i> Declared</th>
+									<th class="sorttable_numeric"><i class="fas fa-paper-plane"></i> Spent</th>
+									<th class="sorttable_numeric"><i class="fas fa-balance-scale"></i> Balance</th>
+								</tr>
+							</thead>
+							<tbody id="riches_rows"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/sorttable.js"></script>
+<script>
+	var xhrCheckReserve;
+
+	Richlist = [];
+   
+	currentPage = {
+		destroy: function () {
+			if (xhrCheckReserve) xhrCheckReserve.abort();
+		},
+		init: function () {
+			$('.tooltipped').tooltip();
+			sorttable.makeSortable(document.getElementById("rich_table"));
+			fetchRiches();
+		},
+		update: function () {}
+	};
+
+	function fetchRiches() {
+			var jqxhr = $.getJSON( "api/richlist.json", function() {
+		})
+		.done(function(data) {
+			for (var key in data) {
+				if (data.hasOwnProperty(key)) {
+					var item = data[key];
+					Richlist.push(item);
+				}
+			}
+
+			$.when(
+				renderRichlist()
+			).then(function () {
+				
+			});
+
+		})
+		.fail(function() {
+			console.log( "Error getting richlist from file..." );
+		});	
+	}
+
+	function renderRichlist() {
+		Richlist.forEach(function (rich) {
+			var address = rich.address;
+			var proof = rich.reserve_proof;
+			var height = lastStats.last_known_block_index;
+			
+			xhrCheckReserve = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_check_funds",
+				method: "checkreserveproof",
+				params: {
+					message: "",
+					address: address,
+					signature: proof,
+					height: height
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				if (data.error) {
+					// do nothing
+				} else {
+					var res = data.result;
+
+					var isvalid = JSON.parse(res.good);
+
+					var declared = res.total;
+					var spent = res.spent;
+					var balance = declared - spent;
+
+					$('#riches_rows').append('<tr><td>' + 
+						(isvalid ? '<i class="fas fa-check-circle green-text"></i>' : '<i class="fas fa-times-circle red-text"></i>') +
+						'</td><td>' + address + '</td>' + 
+						'<td>' + (isvalid ? getReadableCoins(declared, 2, false) : '-') + '</td>' +
+						'<td>' + (isvalid ? getReadableCoins(spent, 2, false) : '-') + '</td>' +
+						'<td>' + (isvalid ? getReadableCoins(balance, 2, false) : '-') + '</td></tr>'
+					);
+				}
+			}});
+		});
+	}
+
+</script>

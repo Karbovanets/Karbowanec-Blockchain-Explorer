@@ -52,24 +52,27 @@
 					</form>
 					<ul class="right">
 						<li>
-							<a class="hot_link menu waves-effect waves-block waves-light translation-button"
-								data-page="home.html" href="#">
+							<a class="tooltipped hot_link menu waves-effect waves-block waves-light translation-button"
+								data-page="home.html" href="#" data-position="bottom" data-tooltip="Explorer">
 								<i class="material-icons">explore</i>
 							</a>
 						</li>
 						<li>
-							<a class="hot_link menu" data-page="pools.html" href="#pools">
+							<a class="tooltipped hot_link menu waves-effect waves-block waves-light translation-button"
+								data-page="pools.html" href="#pools" data-position="bottom" data-tooltip="Mining pools.">
 								<i class="material-icons">pool</i>
 							</a>
 						</li>
 						<li>
-							<a class="hot_link menu" data-page="nodes.html" href="#nodes">
+							<a class="tooltipped hot_link menu waves-effect waves-block waves-light translation-button"
+								data-page="nodes.html" href="#nodes" data-position="bottom" data-tooltip="Public nodes.">
 								<i class="material-icons">cloud</i>
 							</a>
 						</li>
 						<li>
-							<a class="hot_link menu" data-page="charts.html" href="#charts">
-								<i class="material-icons">bar_chart</i>
+							<a class="tooltipped hot_link menu waves-effect waves-block waves-light translation-button"
+								data-page="richlist.html" href="#richlist" data-position="bottom" data-tooltip="Richlist of those who voluntary published their riches.">
+								<i class="material-icons">leaderboard</i>
 							</a>
 						</li>
 						<li>
@@ -278,6 +281,11 @@
 			$('#close_nav_search').hide();
 		}, 300)
 	});
+
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+
 </script>
 </body>
 </html>
