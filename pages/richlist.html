@@ -200,9 +200,7 @@
 		{
 			if(Richlist[i].address == address.val())
 			{
-				// TODO: implement replacement with new reserve proof
-				M.toast({html: 'This address already is on the list', classes: 'red'}, 5000);
-				return;
+				// replace with new reserve proof in php backend
 			}
 		}
 
@@ -255,7 +253,7 @@
 			cache: 'false',
 			success: function(data) {
 				M.toast({html: data.result});
-				location.reload(); 
+				//location.reload(); 
 			},
 			error: function() {
 				M.toast({html: "Error submitting richlist entry"});
