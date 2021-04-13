@@ -102,6 +102,15 @@ function getReadableCoins(coins, digits, withoutSymbol) {
     return amount + (withoutSymbol ? '' : (' ' + symbol));
 }
 
+parseFloatString = function(str) {
+    return parseFloat(str.replace(',','.').replace(' ','')) || 0;
+};
+
+function formatAmount(amount) {
+    var fa = parseFloatString(amount) * Math.pow(10, coinUnits.toString().length - 1);
+    return fa.toFixed(0);
+}
+
 function formatDate(time) {
     if (!time) return '';
     return new Date(parseInt(time) * 1000).toLocaleString();

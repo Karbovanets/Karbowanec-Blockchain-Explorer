@@ -1,0 +1,69 @@
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-exchange-alt"></i>  Amount converter</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+                        
+						<form id="validate_address_form">
+							<div class="input-field col s6">
+								Atomic units
+								<input id="atomic_units" type="text" class="validate">
+							</div>
+							<div class="input-field col s6">
+								Human readable
+								<input id="human_readable" type="text" class="validate">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+    <div class="col s12 s12">
+      <div class="card-panel">
+        <p>
+            Here you can convert Karbo amount in atomic units to human readable format and vice versa.
+        </p>
+    </div>
+  </div>
+</div>
+
+<script>
+	currentPage = {
+		destroy: function () {
+			
+		},
+		init: function () {
+			$('.tooltipped').tooltip();
+		},
+		update: function () {}
+	};
+
+    $('#atomic_units').on('input',function(e) { 
+		convertToHumanReadable();
+	});
+	
+	$('#human_readable').on('input',function(e) { 
+		convertToAtomicUnits();
+	});
+
+	convertToHumanReadable = function() {
+		var au = parseInt(document.getElementById('atomic_units').value);
+		var hr = getReadableCoins(au, 12, true);
+		$('#human_readable').val(hr);
+	};
+	
+	convertToAtomicUnits = function() {
+		var hr = document.getElementById('human_readable').value;
+		var au = formatAmount(hr);
+		$('#atomic_units').val(au);
+	}
+
+</script>
