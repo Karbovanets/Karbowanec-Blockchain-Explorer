@@ -1,0 +1,114 @@
+<div style="height: 10px; clear: both;"></div>
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><i class="fas fa-exchange-alt"></i>  Payment Id generator &amp; encode/decode</h2>
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<p>Press the button to generate random PaymentID or enter Payment ID to decode it:</p>
+						<div class="form-group">
+							<input class="form-control input-lg" type="text" id="paymentid" maxlength="64">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-action">
+				<button onclick="generate()" class="waves-effect waves-light btn light-blue darken-4">Generate PaymentID</button>
+				<button onclick="decode()" class="waves-effect waves-light btn light-blue darken-4">Decode PaymentID</button> 
+			</div>
+			<div class="card-content">
+				<div class="row">
+					<div class="col s12 l12">
+						<p>Enter short memo to encode it (ASCII only):</p>
+						<div class="form-group">
+						  <input class="form-control input-lg" type="text" id="text2encode" maxlength="32">
+						</div>			
+					</div>
+				</div>
+			</div>
+			<div class="card-action">
+				<button onclick="encode()" class="waves-effect waves-light btn light-blue darken-4">Encode in PaymentID</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+    <div class="col s12 s12">
+      <div class="card-panel">
+		<p>Payment ID is optional transaction attachment that is usually used to identify transactions. 
+			Because of anonymity of Karbo transactions, without Payment ID you will not be able to distinguish them.
+			You can generate random Payment IDs and give them to each user who is to send you some Karbo.
+			This way you can tie payments to users.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+	currentPage = {
+		destroy: function () {
+			
+		},
+		init: function () {
+			$('.tooltipped').tooltip();
+		},
+		update: function () {}
+	};
+
+    function generate() {
+		function generateHexString(length) {
+  			var ret = "";
+			while (ret.length < length) {
+				ret += Math.random().toString(16).substring(2);
+  			}
+  			return ret.substring(0,length);
+		}
+
+		// PaymentID
+		document.getElementById("paymentid").value = generateHexString(64);
+	}
+
+	function encode() {
+		var toenconde = document.getElementById("text2encode").value;
+		if (toenconde.length < 32) {
+			var padding = Array(32).join('0');
+			toenconde = pad(padding,toenconde,true);
+		}
+		document.getElementById("paymentid").value = a2hex(toenconde);
+	}
+
+	function decode() {
+		var decoded = hex2a(document.getElementById("paymentid").value);
+		document.getElementById("text2encode").value = decoded;
+	}
+
+	function pad(pad, str, padLeft) {
+		if (typeof str === 'undefined') 
+			return pad;
+		if (padLeft) {
+			return (pad + str).slice(-pad.length);
+		} else {
+			return (str + pad).substring(0, pad.length);
+		}
+	}
+
+	function a2hex(str) {
+		var arr = [];
+		for (var i = 0, l = str.length; i < l; i ++) {
+			var hex = Number(str.charCodeAt(i)).toString(16);
+			arr.push(hex);
+		}
+		return arr.join('');
+	}
+
+	function hex2a(hexx) {
+		var hex = hexx.toString();//force conversion
+		var str = '';
+		for (var i = 0; i < hex.length; i += 2)
+			str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+		return str;
+	}
+
+</script>
