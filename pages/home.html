@@ -244,6 +244,7 @@
 								<th><i class="far fa-hdd"></i> Size</th>
 								<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
 								<th><i class="fas fa-exchange-alt"></i> Txs</th>
+								<th><i class="fas fa-file-signature"></i> Miner</th>
 							</tr>
 						</thead>
 						<tbody id="blocks_rows">
@@ -758,9 +759,7 @@
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
 		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_fee, 6, false)));
-
-		var miner_str = block.miner.substring(0,7) + "...";
-
+		var miner_str = typeof block.miner == "undefined" ? "N/A" : block.miner == "unknown" ? block.miner : block.miner.substring(0,7) + "…";
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
@@ -853,13 +852,15 @@
 		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
+		var miner_str = typeof block.miner == "undefined" ? "N/A" : block.miner == "unknown" ? block.miner : block.miner.substring(0,7) + "…";
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
 			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
 			'<td class="blk-diff">' + block.difficulty + '</td>' +
-			'<td>' + block.transactions_count + '</td>';
+			'<td>' + block.transactions_count + '</td>' +
+			'<td>' + miner_str + '</td>';
 
 		row.innerHTML = columns;
 
