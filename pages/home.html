@@ -297,7 +297,6 @@
 <script>
 	var block,
 		Difficulties = [],
-		MinFees = [],
 		Blocks = [],
 		Rewards = [],
 		Txses = [],
@@ -389,7 +388,7 @@
 			10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
-		updateText('minimumFee', getReadableCoins(lastStats.min_fee, 6));
+		updateText('minimumFee', getReadableCoins(lastStats.min_fee, 2));
 	}
 
 	var xhrGetBlocks;
@@ -705,7 +704,6 @@
 
 	function clearArrays() {
 		Difficulties = [];
-		MinFees = [];
 		Blocks = [];
 		Rewards = [];
 		Txses = [];
@@ -1015,22 +1013,6 @@
 				pointHitRadius: 5,
 				type: 'line'
 			}, {
-				data: [].concat(MinFees).reverse(),
-				yAxisID: "MinFee",
-				label: "Minimum fee",
-				backgroundColor: "rgba(237,28,36,0)",
-				borderColor: '#ED1C24',
-				borderWidth: 1,
-				pointColor: "#ED1C24",
-				pointBorderColor: "#ED1C24",
-				pointHighlightFill: "#ED1C24",
-				pointBackgroundColor: "#ED1C24",
-				pointBorderWidth: 1,
-				pointRadius: 2,
-				pointHoverRadius: 3,
-				pointHitRadius: 5,
-				type: 'line'
-			}, {
 				data: [].concat(Txses).reverse(),
 				yAxisID: "Transactions",
 				label: "Transactions",
@@ -1069,7 +1051,7 @@
 			},
 			title: {
 				display: false,
-				text: 'Network difficulty, Blocks info and Min. fee',
+				text: 'Network difficulty, Blocks info',
 				fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;"
 			},
 			legend: {
@@ -1154,24 +1136,6 @@
 							display: false
 						},
 						display: false
-					}, {
-						id: 'MinFee',
-						type: 'linear',
-						position: 'right',
-						scaleLabel: {
-							display: true,
-							labelString: 'Minimum fee'
-						},
-						gridLines: {
-							display: false
-						},
-						ticks: {
-							fontSize: 8,
-							display: true,
-							suggestedMin: 0.001,
-							suggestedMax: 0.1
-						},
-						display: true
 					}, {
 						id: 'Solvetimes',
 						type: 'linear',
@@ -1259,7 +1223,6 @@
 			times = [],
 			heights = [],
 			txsnr = [],
-			mfees = [],
 			lapses = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
@@ -1268,7 +1231,6 @@
 			var txses = row.data("json").transactions_count;
 			var size = row.data("json").cumulative_size;
 			var time = row.attr('data-dt');
-			var mfee = row.attr('data-min-fee');
 			var lapse = row.data("json").solvetime;
 
 			labels.push(label);
@@ -1276,7 +1238,6 @@
 			txsnr.push(txses);
 			sizes.push(size);
 			times.push(time);
-			mfees.push(mfee);
 			lapses.push(lapse);
 		}
 
@@ -1284,7 +1245,6 @@
 			diffChart.data.labels = times.reverse();
 			diffChart.data.datasets[0].data = labels.reverse();
 			diffChart.data.datasets[1].data = diffs.reverse();
-			diffChart.data.datasets[2].data = mfees.reverse();
 			diffChart.data.datasets[3].data = txsnr.reverse();
 			diffChart.data.datasets[4].data = sizes.reverse();
 			diffChart.data.datasets[5].data = lapses.reverse();
@@ -1298,7 +1258,6 @@
 		diffChart.data.labels = [].concat(DateTimes).reverse();
 		diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
 		diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
-		diffChart.data.datasets[2].data = [].concat(MinFees).reverse();
 		diffChart.data.datasets[3].data = [].concat(Txses).reverse();
 		diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
 		diffChart.data.datasets[5].data = [].concat(Solvetimes).reverse();
