@@ -1028,16 +1028,7 @@
 				borderWidth: 0,
 				pointHitRadius: 5,
                 type: 'bar'
-            }, {
-				data: [].concat(Solvetimes).reverse(),
-				yAxisID: "Solvetimes",
-				label: "Solve time, s",
-				backgroundColor: "rgba(255,192,0,0.1)",
-				borderColor: '#FFC000',
-				borderWidth: 0,
-				pointHitRadius: 5,
-				type: 'bar'
-			}]
+            }]
 		};
 		var options = {
 			responsive: true,
@@ -1134,22 +1125,6 @@
 							display: false
 						},
 						display: false
-					}, {
-						id: 'Solvetimes',
-						type: 'linear',
-						position: 'right',
-						scaleLabel: {
-							display: false,
-							labelString: 'Solve time'
-						},
-						gridLines: {
-							display: false
-						},
-						ticks: {
-							fontSize: 9,
-							display: false
-						},
-						display: false
 					}
 				],
 				xAxes: [{
@@ -1221,7 +1196,6 @@
 			times = [],
 			heights = [],
 			txsnr = [],
-			lapses = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
@@ -1229,14 +1203,12 @@
 			var txses = row.data("json").transactions_count;
 			var size = row.data("json").cumulative_size;
 			var time = row.attr('data-dt');
-			var lapse = row.data("json").solvetime;
 
 			labels.push(label);
 			diffs.push(diff);
 			txsnr.push(txses);
 			sizes.push(size);
 			times.push(time);
-			lapses.push(lapse);
 		}
 
 		if (diffChart != undefined) {
@@ -1245,7 +1217,6 @@
 			diffChart.data.datasets[1].data = diffs.reverse();
 			diffChart.data.datasets[2].data = txsnr.reverse();
 			diffChart.data.datasets[3].data = sizes.reverse();
-			diffChart.data.datasets[4].data = lapses.reverse();
 
 			diffChart.update();
 		}
@@ -1258,7 +1229,6 @@
 		diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
 		diffChart.data.datasets[2].data = [].concat(Txses).reverse();
 		diffChart.data.datasets[3].data = [].concat(Sizes).reverse();
-		diffChart.data.datasets[4].data = [].concat(Solvetimes).reverse();
 
 		diffChart.update();
 	}
