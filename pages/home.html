@@ -754,7 +754,6 @@
 		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
 			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
 		row.setAttribute('data-dt', dateTime);
-		row.setAttribute('data-min-fee', parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		var columns =
 			'<td>' + block.height + '</td>' +
 			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
@@ -765,7 +764,6 @@
 			'<td>' + block.transactions_count + '</td>';
 
 		Difficulties.push(parseInt(block.difficulty));
-		MinFees.push(parseFloat(getReadableCoins(block.min_fee, 6, false)));
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.transactions_count));
 		Sizes.push(parseInt(block.cumulative_size));
