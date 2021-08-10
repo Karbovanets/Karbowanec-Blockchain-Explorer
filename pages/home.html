@@ -1023,7 +1023,6 @@
                 yAxisID: "Sizes",
                 label: "Size, bytes",
                 backgroundColor: "rgba(198,255,0,0.5)",
-                data: [].concat(Solvetimes).reverse(),
                 borderColor: '#99D9EA',
 				borderWidth: 0,
 				pointHitRadius: 5,
@@ -1196,6 +1195,7 @@
 			times = [],
 			heights = [],
 			txsnr = [],
+			lapses = [];
 		for (var i = 0; i < brows.length; i++) {
 			var row = $(brows[i]);
 			var label = row.data("json").height;
