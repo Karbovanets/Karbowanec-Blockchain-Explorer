@@ -1243,9 +1243,9 @@
 			diffChart.data.labels = times.reverse();
 			diffChart.data.datasets[0].data = labels.reverse();
 			diffChart.data.datasets[1].data = diffs.reverse();
-			diffChart.data.datasets[3].data = txsnr.reverse();
-			diffChart.data.datasets[4].data = sizes.reverse();
-			diffChart.data.datasets[5].data = lapses.reverse();
+			diffChart.data.datasets[2].data = txsnr.reverse();
+			diffChart.data.datasets[3].data = sizes.reverse();
+			diffChart.data.datasets[4].data = lapses.reverse();
 
 			diffChart.update();
 		}
@@ -1256,9 +1256,9 @@
 		diffChart.data.labels = [].concat(DateTimes).reverse();
 		diffChart.data.datasets[0].data = [].concat(Blocks).reverse();
 		diffChart.data.datasets[1].data = [].concat(Difficulties).reverse();
-		diffChart.data.datasets[3].data = [].concat(Txses).reverse();
-		diffChart.data.datasets[4].data = [].concat(Sizes).reverse();
-		diffChart.data.datasets[5].data = [].concat(Solvetimes).reverse();
+		diffChart.data.datasets[2].data = [].concat(Txses).reverse();
+		diffChart.data.datasets[3].data = [].concat(Sizes).reverse();
+		diffChart.data.datasets[4].data = [].concat(Solvetimes).reverse();
 
 		diffChart.update();
 	}
