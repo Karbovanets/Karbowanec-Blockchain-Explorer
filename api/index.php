@@ -11,6 +11,7 @@ if ($mode =="post" && isset($_POST)) {
 	$postData = file_get_contents('php://input');
 
 	header('Content-Type: application/json');
+	header('Access-Control-Allow-Origin: *');
 
 	foreach($_POST as $key=>$value) { 
 		$fields_string .= $key.'='.$value.'&'; 
@@ -37,6 +38,7 @@ if ($mode =="post" && isset($_POST)) {
 	} else {
 		header('Content-Type: text/html; charset=utf-8');
 	}
+	header('Access-Control-Allow-Origin: *');
 	
 	$ch = curl_init();  
 	curl_setopt($ch, CURLOPT_URL, $geturl);
