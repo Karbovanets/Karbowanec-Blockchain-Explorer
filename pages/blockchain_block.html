@@ -23,17 +23,13 @@
 				Timestamp: <span id="block_timestamp"></span> &bull; <span id="block_time"></span> (<time id="block-timeago"></time>)
 			</li>
 			<li class="collection-item">
+				<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="&laquo;major version&raquo;.&laquo;minor version&raquo;"></i>
+				Version: <span id="block_version"></span>
+			</li>
+			<li class="collection-item">
 				<i class="fas fa-link fa-fw tooltipped" data-position="top" data-tooltip="The hash of the previous block."></i> 
 				Previous block hash: <a id="prev_hash" title="Previous block"><span id="block_prev_hash"
 				style="word-break: break-all; word-wrap: break-word;"></span></a>
-			</li>
-			<li class="collection-item">
-				<i class="fas fa-stamp fa-fw tooltipped" data-position="top" data-tooltip="A piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements."></i> 
-				Proof of work: <span id="block_pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
-			</li>
-			<li class="collection-item">
-				<i class="fas fa-flag fa-fw tooltipped" data-position="top" data-tooltip="&laquo;major version&raquo;.&laquo;minor version&raquo;"></i>
-				Version: <span id="block_version"></span>
 			</li>
 			<li class="collection-item">
 				<i class="fas fa-lock-open fa-fw tooltipped" data-position="top" data-tooltip="How difficult it is to find a solution for the block. More specifically, it`s mathematical expectation for number of hashes someone needs to calculate in order to find a correct nonce value solving the block."></i>
@@ -44,12 +40,20 @@
 				Cumulative difficulty: <span id="block_cumulative_difficulty"></span>
 			</li>
 			<li class="collection-item">
-			<i class="fas fa-coins fa-fw tooltipped" data-position="top" data-tooltip="Cumulative amount of coins issued by all the blocks in blockchain from the genesis and up to this block."></i>
+				<i class="fas fa-stamp fa-fw tooltipped" data-position="top" data-tooltip="A piece of data which is difficult (costly, time-consuming) to produce but easy for others to verify and which satisfies certain requirements."></i> 
+				Proof of work: <span id="block_pow_hash" style="word-break: break-all; word-wrap: break-word;"></span>
+			</li>
+			<li class="collection-item">
+				<i class="fas fa-coins fa-fw tooltipped" data-position="top" data-tooltip="Cumulative amount of coins issued by all the blocks in blockchain from the genesis and up to this block."></i>
 				Total coins in the network: <span id="block_totalCoins"></span>
 			</li>
 			<li class="collection-item">
 				<i class="fas fa-archive fa-fw tooltipped" data-position="top" data-tooltip="Cumulative number of transactions in the blockchain, from the genesis block and up to this block."></i>
 				Total transactions in the network: <span id="block_totalTransactions"></span>
+			</li>
+			<li class="collection-item">
+				<i class="fas fa-file-signature fa-fw tooltipped" data-position="top" data-tooltip="Miner's signature"></i>
+				Signature: <span id="block_MinerSignature" style="word-break: break-all; word-wrap: break-word;"></span>
 			</li>
 		</ul>
 	</div>
@@ -97,7 +101,6 @@
 			</li>
 		</ul>
 	</div>
-				
 </div>
 <div class="row">
 	<div class="col s12">
@@ -203,6 +206,8 @@
 		updateText('block_reward', getReadableCoins(block.reward));
 		updateText('block_totalCoins', getReadableCoins(block.alreadyGeneratedCoins));
 		updateText('block_totalTransactions', block.alreadyGeneratedTransactions);
+		updateText('block_MinerSignature', block.minerSignature);
+
 		renderTransactions(block.transactions);
 
 		// if this block is orphan make its height a link to the main chain block
