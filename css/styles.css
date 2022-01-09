@@ -63,7 +63,7 @@ nav #menu-right {
 }
 
 .header-search {
-    margin: 10px auto 0 280px;
+    margin: 10px auto 0 200px;
     width: calc(100% - 600px);
     height: 40px;
     display: inline-block;
