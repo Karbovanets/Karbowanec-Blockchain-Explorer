@@ -242,15 +242,9 @@
 					<li>Emission: &infin;</li>
 					<li>initial supply: 10,000,000,000,000,000,000 atomic units, or 10&nbsp;million krb.</li>
 					<li>Tail emission: ~2% inflation p.a.</li>
-					<li>Block reward:
-						<li>Initial emission:
-							R = (S - A)/2<sup>18</sup><br/>
-							where 'S' initial supply and 'A' is already generated coins
-						</li>
-						<li>Tail emission:
-							R = (A / 100 * 2) / B<br/>
-							where 'B' est. nr of blocks p.a.
-						</li>
+					<li>Block reward: slight change every block according to formula<br/>
+						<strong>R = max((S - A)/2<sup>18</sup>, (A / 100 * 2) / B)</strong><br/>
+						where 'S' initial supply and 'A' is already generated coins, 'B' est. nr of blocks p.a.
 					</li>
 				</ul>
 
@@ -259,7 +253,7 @@
 	</div>
 	<div class="footer-copyright">
 		<div class="container">
-			&copy; 2017-2020 <strong>Karbo Developers</strong>
+			&copy; 2017-2022 <strong>Karbo Developers</strong>
 		</div>
 	</div>
 </footer>
