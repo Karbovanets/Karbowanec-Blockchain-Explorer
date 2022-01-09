@@ -235,16 +235,23 @@
 				<ul class="text-info">
 					<li>Ticker: KRB</li>
 					<li>Symbol: Ҝ &ndash; Ka with vertical stroke</li>
-					<li>Proof-of-Work algorithm: CryptoNight</li>
+					<li>Proof-of-Work algorithm: Signed yespower-blake256</li>
 					<li>Block time: 240 seconds</li>
 					<li>Difficulty: retarget each block</li>
-					<li>Block reward: slight decrease every block
-						R = (S - A)/2<sup>18</sup><br/>
-						where 'S' initial supply and 'A' is already generated coins
-					</li>
 					<li>Divisible: up to 10<sup>12</sup> atomic units (up to 12 decimal places)</li>
-					<li>Emission: &infin;, initial supply of 10,000,000,000,000,000,000 atomic units, or 10 million krb.</li>
-					<li>Tail emission: ~2% inflation per year.</li>
+					<li>Emission: &infin;</li>
+					<li>initial supply: 10,000,000,000,000,000,000 atomic units, or 10&nbsp;million krb.</li>
+					<li>Tail emission: ~2% inflation p.a.</li>
+					<li>Block reward:
+						<li>Initial emission:
+							R = (S - A)/2<sup>18</sup><br/>
+							where 'S' initial supply and 'A' is already generated coins
+						</li>
+						<li>Tail emission:
+							R = (A / 100 * 2) / B<br/>
+							where 'B' est. nr of blocks p.a.
+						</li>
+					</li>
 				</ul>
 
 			</div>
