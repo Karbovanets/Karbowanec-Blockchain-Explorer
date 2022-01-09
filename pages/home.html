@@ -89,8 +89,7 @@
 				Transactions: <span id="networkTransactions" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span>
-						(<span id="emissionPercent"></span>)</span>
+				Supply: <span class="value light-blue-text text-darken-4"><span id="totalCoins"></span></span>
 			</li>
 		</ul>
 	</div>
@@ -384,8 +383,6 @@
 		updateText('networkTransactions', lastStats.transactions_count.toString());
 		updateText('networkDifficulty', getReadableDifficultyString(lastStats.difficulty, 2).toString());
 		updateText('totalCoins', getReadableCoins(parseInt(lastStats.already_generated_coins.replace('.', '')), 2));
-		updateText('emissionPercent', (parseInt(lastStats.already_generated_coins.replace('.', '')) /
-			10000000000000000000 * 100).toFixed(4) + "%");
 		updateText('currentReward', getReadableCoins(lastStats.next_reward, 4));
 		updateText('networkHashrate', getReadableHashRateString(lastStats.difficulty / blockTargetInterval));
 		updateText('avgNetworkHashrate', getReadableHashRateString((lastStats.cumulative_difficulty - 5917824089773719) / (lastStats.height - 700000) / blockTargetInterval));
