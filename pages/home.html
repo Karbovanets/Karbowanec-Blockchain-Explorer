@@ -115,7 +115,10 @@
 				Min. fee: <span id="minimumFee" class="value light-blue-text text-darken-4"></span>
 			</li>
 			<li class="collection-item">
-				Avg. T: <span id="avgSolveTime" class="value light-blue-text text-darken-4"></span>
+				Avg. T: <span class="value"><span id="avgSolveTime" class="light-blue-text text-darken-4 tooltipped"
+					data-position="bottom" data-tooltip="Current average blocks interval (based on blocks shown below)"></span> / 
+					<span id="avgAllTime" class="light-blue-text text-darken-4 tooltipped"
+					data-position="bottom" data-tooltip="All time average blocks interval"></span></span>
 			</li>
 		</ul>
 	</div>
@@ -803,6 +806,7 @@
 		$("time.timeago").timeago();
 		calcAvgHashRate();
 		calcAvgSolveTime();
+		calcAvgAllTime();
 	}
 
 	function getAltBlocks() {
@@ -897,15 +901,15 @@
 	}
 
 	function calcAvgSolveTime() {
-		ts = Timestamps.concat([]);
-		ts.sort();
-		var avg_solve_time = 0;
-		var solveTime = 0;
-		for (var i = 1; i < ts.length; i++) {
-			solveTime += ts[i] - ts[i - 1];
-		}
-		avg_solve_time = solveTime / (ts.length - 1);
+		var avg_solve_time = Solvetimes.reduce((a, b) => a + b, 0) / Solvetimes.length;
 		updateText('avgSolveTime', getReadableTime(avg_solve_time));
+	}
+
+	function calcAvgAllTime() {
+		var first = 1464595534;
+		var curr = Timestamps[0];
+		var avgAllTime = (curr - first) / lastStats.height;
+		updateText('avgAllTime', getReadableTime(avgAllTime));
 	}
 
 	//  MemPool Transactions
