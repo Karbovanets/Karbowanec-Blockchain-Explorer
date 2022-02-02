@@ -99,7 +99,9 @@
 				Difficulty: <span id="networkDifficulty" class="value light-blue-text text-darken-4"></span>
 			</li>		
 			<li class="collection-item">
-				Hashrate: <span class="value"><span id="networkHashrate" class="light-blue-text text-darken-4"></span> (Avg: <span id="avgNetworkHashrate" class="light-blue-text text-darken-4"></span>)</span>
+				Hashrate: <span class="value"><span id="networkHashrate" class="light-blue-text text-darken-4 tooltipped"
+					data-position="bottom" data-tooltip="Current hashrate (based on blocks shown below)"></span> <span class="tooltipped" data-position="bottom" data-tooltip="Average all-time hashrate (for current algo)">
+					(Avg. <span id="avgNetworkHashrate" class="light-blue-text text-darken-4"></span>)</span></span>
 			</li>
 			<li class="collection-item">
 				Est. T: <span id="blockSolveTime" class="value light-blue-text text-darken-4"></span>
@@ -118,7 +120,7 @@
 				Avg. T: <span class="value"><span id="avgSolveTime" class="light-blue-text text-darken-4 tooltipped"
 					data-position="bottom" data-tooltip="Current average blocks interval (based on blocks shown below)"></span> / 
 					<span id="avgAllTime" class="light-blue-text text-darken-4 tooltipped"
-					data-position="bottom" data-tooltip="All time average blocks interval"></span></span>
+					data-position="bottom" data-tooltip="All-time average blocks interval"></span></span>
 			</li>
 		</ul>
 	</div>
