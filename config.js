@@ -1,5 +1,5 @@
 var api = 'https://karbo.club/services/node_web';
-var apiList = ["http://51.15.52.31:32348", "https://node.karbo.org:32448"];
+var apiList = ["https://node.karbo.org:32448/", "https://node2.karbo.org:32448/"];
 
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
