@@ -272,6 +272,10 @@ function toHexString(byteArray) {
         (output + ('0' + elem.toString(16)).slice(-2)), '');
 }
 
+/* utf.js - UTF-8 <=> UTF-16 convertion
+ *
+ * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
+ */
 function Utf8ArrayToStr(array) {
     var out, i, len, c;
     var char2, char3;
