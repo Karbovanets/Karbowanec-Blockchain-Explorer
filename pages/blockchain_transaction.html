@@ -95,8 +95,8 @@
 				<li class="collection-item">
 					<i class="fas fa-paperclip" fa-fw tooltipped" data-position="top" data-tooltip="An arbitrary amount of arbitrary data can be added in a transaction.
 					The extra field contains data with a high level structure. Several fields are predefined, such as public key, or extra nonce."></i> 
-					Extra (raw): <span id="transaction.extra_raw"
-					style="word-break: break-all; word-wrap: break-word;"></span>
+					Extra (raw): <code id="transaction.extra_raw"
+					style="word-break: break-all; word-wrap: break-word;"></code>
 				</li>
 				<li class="collection-item">
 					<i class="fa fa-key fa-fw tooltipped" data-position="top" data-tooltip="The transaction Public Key, R, is in the extra part of the transaction data structure."></i>
@@ -104,7 +104,9 @@
 				</li>
 				<li id="transaction_extra_nonce" style="display: none;" class="collection-item">
 					<i class="fas fa-puzzle-piece fa-fw tooltipped" data-position="top" data-tooltip="Extra nonce."></i>
-					Extra nonce: <span id="transaction.extra_nonce"></span>
+					Extra nonce: <code id="transaction.extra_nonce" style="word-break: break-all; word-wrap: break-word;"></code>
+					<br />Decoded:
+					<span id="transaction.extra_nonce_text"></span>
 				</li>
 			</ul>
 		</div>
@@ -294,6 +296,7 @@
 		}
 	}
 
+
 	function renderTransaction(transaction) {
 		updateText('transaction.hash', transaction.hash);
 		if (transaction.inBlockchain) {
@@ -338,6 +341,9 @@
 		if (typeof transaction.extra.nonce !== 'undefined' && transaction.extra.nonce.length > 0) {
 			$("#transaction_extra_nonce").show();
 			updateText('transaction.extra_nonce', toHexString(transaction.extra.nonce));
+			// decode extra nonce to a readable text if any
+			updateText('transaction.extra_nonce_text',Utf8ArrayToStr(new Uint16Array(transaction.extra.nonce)));
+
 		} else {
 			$("#transaction_extra_nonce").hide();
 		}
