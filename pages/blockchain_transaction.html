@@ -312,7 +312,6 @@
 		} else {
 			$('#transaction_fee').hide();
 		}
-
 		updateText('transaction.mixin', transaction.mixin);
 		if (!transaction.mixin) {
 			$('#div_transaction_mixin').hide();
@@ -322,7 +321,7 @@
 		if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId !=
 			0000000000000000000000000000000000000000000000000000000000000000) {
 			$('.transaction_payment_id').show();
-			$('#transactionPaymentId').html('<a href="/?hash=' + transaction.paymentId + '#blockchain_payment_id">' +
+			$('#transactionPaymentId').html('<a href="/?hash=' + transaction.paymentId + '#payment_id">' +
 			transaction.paymentId + '</a>');
 			updateText('transaction.paymentIdDecifer', hex2a(transaction.paymentId));
 		} else {
@@ -337,17 +336,14 @@
 		updateText('transaction.unlock_time', transaction.unlockTime);
 		updateText('transaction.public_key', transaction.extra.publicKey);
 		updateText('transaction.extra_raw', transaction.extra.raw);
-
 		if (typeof transaction.extra.nonce !== 'undefined' && transaction.extra.nonce.length > 0) {
 			$("#transaction_extra_nonce").show();
 			updateText('transaction.extra_nonce', toHexString(transaction.extra.nonce));
 			// decode extra nonce to a readable text if any
 			updateText('transaction.extra_nonce_text',Utf8ArrayToStr(new Uint16Array(transaction.extra.nonce)));
-
 		} else {
 			$("#transaction_extra_nonce").hide();
 		}
-
 		if (!transaction.inBlockchain) {
 			$('.tx_block').hide();
 			$('#tx_unconfirmed').show();
@@ -356,11 +352,9 @@
 			$('#tx_unconfirmed').hide();
 			refresh = true;
 		}
-
 		updateTextLinkable('block.hash', formatBlockLink(transaction.blockHash));
 		updateText('block.height', transaction.blockIndex);
 		updateText('signatures_count', transaction.signaturesSize);
-
 		if (!loaded) {
 			console.log("rendering inputs...");
 			renderInputs(transaction.inputs);
