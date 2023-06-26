@@ -253,7 +253,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col s12">
+	<div class="col s12 l12">
+		<div class="card-panel">
 		<p>Here you can prove that you paid the receiver with the <em>Private Transaction Key</em> (which you can obtain from
 			the wallet), the transaction ID and the receiver's address.</p>
 		<p>Outputs that belong to receiver's address will be highlighted.</p>
@@ -263,6 +264,7 @@
 
 		<p>You can also check that payment was made to your address in given transaction with your <em>Private View Key</em>.
 			Alternatively the <em>Tracking Key</em> from GUI wallet can be used.</p>
+		</div>
 	</div>
 </div>
 <script>
@@ -520,7 +522,7 @@
 			$('#div_transaction_mixin').show();
 		}
 		if (typeof transaction.paymentId !== 'undefined' && transaction.paymentId !=
-			0000000000000000000000000000000000000000000000000000000000000000) {
+			"0000000000000000000000000000000000000000000000000000000000000000") {
 			$('.transaction_payment_id').show();
 			$('#transactionPaymentId').html('<a href="/?hash=' + transaction.paymentId + '#blockchain_payment_id">' +
 			transaction.paymentId + '</a>');
