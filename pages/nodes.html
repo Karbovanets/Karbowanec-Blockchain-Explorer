@@ -114,10 +114,20 @@
 </div>
 
 <div class="row">
-	<div class="col s12">
-		<p>Submit your nodes by pull request on <a target="_blank"
-			href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer">
-			<i class="fab fa-github"></i> GitHub repository</a></p>
+	<div class="col s12 l12">
+		<div class="card-panel">
+
+			<p>
+				Only nodes with https protocol support are listed here.
+
+				Refer to <a href="https://docs.karbo.org/#/?id=user-guides">guides</a> how to run your node either behind reverse proxy or with native SSL support.
+			</p>
+
+			<p>Submit your nodes by pull request on <a target="_blank"
+				href="https://github.com/Karbovanets/Karbowanec-Blockchain-Explorer">
+				<i class="fab fa-github"></i> GitHub repository</a></p>
+
+		</div>
 	</div>
 </div>
 
@@ -183,7 +193,7 @@
 			return false;  
 		}
 
-		return url.protocol === "http:" || url.protocol === "https:";
+		return /*url.protocol === "http:" || */url.protocol === "https:";
 	}
 
 	var nodesRefreshed = 0;
@@ -229,23 +239,12 @@
 		nodesStat.forEach(function (node) {
 
 			var url = node;
-			var purl;
-			if (window.location.protocol == 'https:') {
-				var pattern = /^((https):\/\/)/;
-				if (!pattern.test(url)) {
-					purl = 'https://explorer.karbo.io/api/?mode=get&url=' + url;
-				} else {
-					purl = url;
-				}
-			} else {
-				purl = url;
-			}
-
+			
 			var nurl = new URL(url);
 			var nname = nurl.hostname;
 
 			$.ajax({
-				url: purl + '/getinfo',
+				url: url + '/getinfo',
 				dataType: 'json',
 				type: 'GET',
 				cache: 'false'
@@ -297,23 +296,11 @@
 
 		nodesStat.forEach(function (node) {
 			var url = node;
-			var purl;
-			if (window.location.protocol == 'https:') {
-				var pattern = /^((https):\/\/)/;
-				if (!pattern.test(url)) {
-					purl = 'https://explorer.karbo.io/api/?mode=get&url=' + url;
-				} else {
-					purl = url;
-				}
-			} else {
-				purl = url;
-			}
-
 			var nurl = new URL(url);
 			var nname = nurl.hostname;
 
 			$.ajax({
-				url: purl + '/feeaddress',
+				url: url + '/feeaddress',
 				dataType: 'json',
 				type: 'GET',
 				cache: 'false'
@@ -346,23 +333,11 @@
 		nodesStat.forEach(function (node) {
 
 			var url = node;
-			var purl;
-			if (window.location.protocol == 'https:') {
-				var pattern = /^((https):\/\/)/;
-				if (!pattern.test(url)) {
-					purl = 'https://explorer.karbo.io/api/?mode=get&url=' + url;
-				} else {
-					purl = url;
-				}
-			} else {
-				purl = url;
-			}
-
 			var nurl = new URL(url);
 			var nname = nurl.hostname;
 
 			$.ajax({
-				url: purl + '/getinfo',
+				url: url + '/getinfo',
 				dataType: 'json',
 				type: 'GET',
 				cache: 'false',
