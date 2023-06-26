@@ -3,6 +3,10 @@ var transactionExplorer = "./?hash={id}#transaction";
 var paymentIdExplorer = "./?hash={id}#payment_id";
 var addressExplorer = "./?address={id}#address";
 
+var currentPage;
+var lastStats;
+var nodeStatus;
+
 $(function () {
     $("head").append('<link id="theme" type="text/css" rel="stylesheet" href="' + whiteTheme + '">');
 
@@ -67,10 +71,6 @@ function updateTextLinkable(elementId, text) {
     }
     return el;
 }
-
-var currentPage;
-var lastStats;
-var nodeStatus;
 
 function getReadableHashRateString(hashrate) {
     var i = 0;
@@ -173,6 +173,7 @@ function floatToString(float) {
 }
 
 function nodeInfo() {
+    $('#node_url').html(api);
     if (nodeStatus) {
         $('#node_connection').html('Online').addClass('text-success').removeClass('text-danger');
         $('#node_height').html(parseInt(lastStats['height']));
@@ -244,10 +245,6 @@ function getinfo() {
             getinfo();
         });
 }
-
-$(function () {
-    getinfo();
-});
 
 // Blockexplorer functions
 urlParam = function (name) {
@@ -451,4 +448,12 @@ jQuery(function ($) {
             return false;
         });
     });
+});
+
+
+$(function () {
+    let randInt = Math.floor(Math.random() * Math.floor(apiList.length));
+    api = apiList[randInt];
+    
+    getinfo();
 });
