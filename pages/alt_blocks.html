@@ -1,0 +1,158 @@
+<style>
+	.card-action h2 {
+    	font-size: 1.25rem;
+        margin: 0;
+	}
+	
+	td.date-time {
+		padding: 2px;
+		line-height: 90%;
+	}
+
+	table.mempool-table td.date-time {
+		padding-top: 10px;
+	}
+
+	table.mempool-table {
+		min-width: 1178px;
+	}
+
+</style>
+
+<div style="height: 10px; clear: both;"></div>
+
+<div class="row">
+	<div class="col s12">
+		<div class="card hoverable">
+			<div class="card-action grey lighten-5">
+				<h2 class="light-blue-text text-darken-4"><span class="tooltipped"
+					data-position="bottom" data-tooltip="Alternative blocks stored in current node's memory.">
+					<i class="fas fa-share-alt"></i> Alt. blocks</span></h2>
+			</div>
+			<div class="card-content">
+				<div id="empty_alt_blocks" style="display: none;">
+					<p>No alt. blocks.</p>
+				</div>
+				<div id="alt_blocks" style="display: block;">
+					<div class="row">
+						<div class="col s12 table-responsive">
+							<table class="highlight centered">
+								<thead>
+									<tr>
+										<th><i class="fas fa-bars"></i> Height</th>
+										<th><i class="far fa-clock"></i> Date, time &amp; age</th>
+										<th><i class="fas fa-paw"></i> Block hash</th>
+										<th><i class="far fa-hdd"></i> Size</th>
+										<th><i class="fas fa-unlock-alt"></i> Difficulty</th>
+										<th><i class="fas fa-exchange-alt"></i> Txs</th>
+									</tr>
+								</thead>
+								<tbody id="alt_blocks_rows">
+				
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var alt_blocks;
+
+	currentPage = {
+		destroy: function () {
+			if (xhrGetBlocks) xhrGetBlocks.abort();
+		},
+		init: function () {
+			getAltBlocks();
+			alt_blocks = lastStats.alt_blocks_count;
+		},
+		update: function () {
+			if (alt_blocks !== lastStats.alt_blocks_count) {
+				getAltBlocks();
+				alt_blocks = lastStats.alt_blocks_count;
+			}
+		}
+	};
+
+	function getAltBlocks() {
+		return $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc: "2.0",
+				id: "explorer_alt_blocks",
+				method: "getaltblockslist",
+				params: {
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function (data) {
+				renderAltBlocks(data.result.alt_blocks);
+
+				if (data.result.alt_blocks.length == 0) {
+					$('#alt_blocks').hide();
+					$('#empty_alt_blocks').show();
+				} else {
+					$('#alt_blocks').show();
+					$('#empty_alt_blocks').hide();
+				}
+			}
+		});
+	};
+
+
+	function getAltBlockRowElement(block, jsonString) {
+		var row = document.createElement('tr');
+		row.setAttribute('data-json', jsonString);
+		row.setAttribute('data-height', block.height);
+		row.setAttribute('id', 'altBlockRow_' + block.height);
+		row.setAttribute('title', block.hash);
+		var dateTime = block.timestamp === 0 ? new Date(1464595200 * 1000).toISOString() : new Date(block.timestamp * 1000)
+			.toISOString(); // quirk not to show 1970 and freeze chart because in genesis tx there's 0 instead of timestamp
+		row.setAttribute('data-dt', dateTime);
+		var columns =
+			'<td>' + block.height + '</td>' +
+			'<td class="date-time">' + formatDate(block.timestamp) + '<br />(<time class="timeago" datetime="' + dateTime + '"></time>)</td>' +
+			'<td>' + formatBlockLink(block.hash) + '</td>' +
+			'<td>' + formatBytes(parseInt(block.cumulative_size)) + '</td>' +
+			'<td class="blk-diff">' + block.difficulty + '</td>' +
+			'<td>' + block.transactions_count + '</td>';
+
+		row.innerHTML = columns;
+
+		return row;
+	}
+
+	function renderAltBlocks(blocksResults) {
+		var $blocksRows = $('#alt_blocks_rows');
+		for (var i = 0; i < blocksResults.length; i++) {
+			var block = blocksResults[i];
+			var blockJson = JSON.stringify(block);
+			var existingRow = document.getElementById('altBlockRow_' + block.height);
+			if (existingRow && existingRow.getAttribute('data-json') !== blockJson) {
+				$(existingRow).replaceWith(getAltBlockRowElement(block, blockJson));
+			} else if (!existingRow) {
+				var blockElement = getAltBlockRowElement(block, blockJson);
+				var inserted = false;
+				var rows = $blocksRows.children().get();
+				for (var f = 0; f < rows.length; f++) {
+					var bHeight = parseInt(rows[f].getAttribute('data-height'));
+					if (bHeight < block.height) {
+						inserted = true;
+						$(rows[f]).before(blockElement);
+						break;
+					}
+				}
+				if (!inserted) {
+					$blocksRows.append(blockElement);
+				}
+			}
+		}
+		$("time.timeago").timeago();
+	}
+</script>
