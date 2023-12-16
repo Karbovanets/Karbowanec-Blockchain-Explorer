@@ -34,6 +34,17 @@
 			padding: 0 10px;
 		}
 	}
+
+	#nodesTable th {
+		font-size: 12px;
+		white-space: nowrap;
+	}
+	#nodesTable th i {
+		font-size: 15px;
+	}
+	#nodesTable th:first-child {
+		text-align: left;
+	}
 </style>
 <div style="height: 10px; clear: both;"></div>
 <div class="row">
@@ -272,7 +283,7 @@
 				}
 				$('#nodes_rows').append('<tr><td id=node-' + nname + '><a target=blank href="' + url +
 					'/getinfo">' + nname + '</a></td><td class="height" id=nodeHeight-' + nname + '>' +
-					nodeHeight + '</td><td class="break-word hash" id=nodeHash-' + nname + '>' +
+					nodeHeight + '</td><td class="hash" id=nodeHash-' + nname + '>' +
 					nodeHash + '</td><td id=known-' + nname + '>' + data.last_known_block_index +
 					'</td><td class="difficulty" id=diff-' + nname + '>' + data.difficulty +
 					'</td><td class="alt_blocks" id=alts-' + nname + '>' + data.alt_blocks_count +
