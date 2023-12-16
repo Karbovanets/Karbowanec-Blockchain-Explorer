@@ -90,12 +90,13 @@
 									<th><i class="fas fa-network-wired"></i>&nbsp;Nodes (<span id="totalNodes"></span>)</th>
 									<th class="sorttable_numeric"><i class="fas fa-list-ol"></i>&nbsp;Height</th>
 									<th class="sorttable_numeric"><i class="fas fa-hashtag"></i>&nbsp;Hash</th>
-									<th class="sorttable_numeric"><i class="fas fa-bars"></i>&nbsp;Known</th>
+									<th class="sorttable_numeric"><i class="fas fa-binoculars"></i>&nbsp;Known</th>
 									<th class="sorttable_numeric"><i class="fas fa-unlock-alt"></i>&nbsp;Difficulty</th>
+									<th class="sorttable_numeric"><i class="fas fa-code-branch"></i>&nbsp;Alt. Blocks</th>
 									<th class="sorttable_numeric"><i class="fas fa-plug"></i>&nbsp;RPC</th>
 									<th class="sorttable_numeric"><i class="fas fa-arrow-circle-down"></i>&nbsp;INC</th>
 									<th class="sorttable_numeric"><i class="fas fa-arrow-circle-up"></i>&nbsp;OUT</th>
-									<th class="sorttable_numeric"><i class="fas fa-flag"></i>&nbsp;Version</th>
+									<th class="sorttable_numeric"><i class="fas fa-check-circle"></i>&nbsp;Version</th>
 									<th><i class="fas fa-clock"></i>&nbsp;Start time</th>
 									<th><i class="fas fa-hourglass-end"></i>&nbsp;Uptime</th>
 									<th><i class="fas fa-donate"></i>&nbsp;Fee</th>
@@ -274,6 +275,7 @@
 					nodeHeight + '</td><td class="break-word hash" id=nodeHash-' + nname + '>' +
 					nodeHash + '</td><td id=known-' + nname + '>' + data.last_known_block_index +
 					'</td><td class="difficulty" id=diff-' + nname + '>' + data.difficulty +
+					'</td><td class="alt_blocks" id=alts-' + nname + '>' + data.alt_blocks_count +
 					'</td><td id=rpc-' + nname + '>' + rpcCount + '</td><td id=inc-' +
 					nname + '>' + data.incoming_connections_count + '</td><td id=out-' + nname + '>' + data
 					.outgoing_connections_count + '</td><td class="version" id=ver-' + nname + '>' + data
@@ -364,6 +366,7 @@
 					updateText('nodeHash-' + nname, nodeHash);
 					updateText('known-' + nname, data.last_known_block_index);
 					updateText('diff-' + nname, data.difficulty);
+					updateText('alts-' + nname, data.alt_blocks_count);
 					updateText('rpc-' + nname, rpcCount);
 					updateText('inc-' + nname, data.incoming_connections_count);
 					updateText('out-' + nname, data.outgoing_connections_count);
