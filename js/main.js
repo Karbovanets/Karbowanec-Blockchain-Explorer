@@ -102,6 +102,15 @@ function getReadableCoins(coins, digits, withoutSymbol) {
     return amount + (withoutSymbol ? '' : (' ' + symbol));
 }
 
+function correctOverflow(value) {
+    const MAX_UINT64 = BigInt("18446744073709551616"); // 2^64
+    let num = BigInt(value);
+    if (num < 0) {
+        num += MAX_UINT64;  // Correct the negative overflow
+    }
+    return num.toString();  // Return as string to avoid BigInt issues in JSON
+}
+
 parseFloatString = function(str) {
     return parseFloat(str.replace(',','.').replace(' ','')) || 0;
 };
