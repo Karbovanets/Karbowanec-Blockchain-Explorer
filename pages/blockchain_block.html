@@ -109,7 +109,7 @@
 				<h3 class="light-blue-text text-darken-4">
 					<i class="fas fa-exchange-alt tooltipped" data-position="top" 
 					data-tooltip="Number of transactions in the block, including coinbase transaction (which transfers block reward to the miner)."></i> 
-					Тransactions <span class="badge light-blue darken-3 white-text" id="block_transactions"></span></h3>
+					Transactions <span class="badge light-blue darken-3 white-text" id="block_transactions"></span></h3>
 			</div>
 			<div class="card-content">
 				<div class="row">
@@ -204,7 +204,7 @@
 		updateText('block_baseReward', getReadableCoins(block.baseReward));
 		updateText('block_transactionsFee', getReadableCoins(block.totalFeeAmount));
 		updateText('block_reward', getReadableCoins(block.reward));
-		updateText('block_totalCoins', getReadableCoins(block.alreadyGeneratedCoins));
+		updateText('block_totalCoins', getReadableCoins(correctOverflow(block.alreadyGeneratedCoins)));
 		updateText('block_totalTransactions', block.alreadyGeneratedTransactions);
 		if (block.majorVersion >= 5) {
 			document.getElementById("blockSignatureContainer").style.display = 'block';
